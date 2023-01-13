@@ -1,4 +1,4 @@
-package main.java;
+package main.java.model;
 
 public class Client {
     String name;
@@ -7,4 +7,8 @@ public class Client {
     Account checkingAccount = new CheckingAccount();
     Account savingsAccount = new SavingsAccount();
     Account paymentsAccount = new PaymentsAccount();
+
+    public String getName() {
+        return name;
+    }
 }
