@@ -2,7 +2,11 @@ package main.java.view;
 
 import main.java.model.Client;
 
-public class BankView implements Viewable{
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class BankView implements Viewable{ //singleton?
 
     @Override
     public void showGreetingsMessage() {
@@ -12,7 +16,7 @@ public class BankView implements Viewable{
     @Override
     public void showStartMenu() {
         System.out.println("escolha uma opção:");
-        System.out.println("1 - abrir nova conta");
+        System.out.println("1 - cadastrar novo cliente");
         System.out.println("2 - efetuar login");
         System.out.println("3 - sair");
     }
@@ -29,11 +33,24 @@ public class BankView implements Viewable{
 
     @Override
     public void showFarewellMessage() {
-
+        System.out.println("Até logo!");
     }
 
     @Override
     public int getOptionFromUser() {
-        return 0;
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    public Map.Entry<String, String> getCredentials() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("digite seu CPF: ");
+        String cpf = scanner.nextLine();
+
+        System.out.print("digite sua senha: ");
+        String password = scanner.nextLine();
+
+        return new AbstractMap.SimpleEntry<>(cpf, password);
     }
 }
