@@ -1,10 +1,11 @@
 package main.java;
 
 import main.java.model.Bank;
+import main.java.view.BankView;
 
 public class Main {
     public static void main(String[] args) {
         Bank bank = new Bank(); // dar nome ao banco?
-        bank.run();
+        bank.run(new BankView());
     }
 }
