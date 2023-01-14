@@ -15,7 +15,7 @@ public abstract class Client {
     }
 
     boolean deposit(Account account, BigDecimal value) {
-        if (!(account instanceof Depositable)) {
+        if (!(account instanceof DepositAccount)) {
             // throw exception
         }
 
