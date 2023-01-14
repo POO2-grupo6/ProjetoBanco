@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 
 public abstract class Client {
     String name;
+    String registrationId;
     private String password; // encrypted?
     // birthday?
     CheckingAccount checkingAccount;
     InvestmentAccount investmentAccount;
 
-    protected Client(String name, String password) {
+    protected Client(String name, String registrationId, String password) {
         this.name = name;
+        this.registrationId = registrationId;
         this.password = password;
     }
 

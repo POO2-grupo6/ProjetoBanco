@@ -1,6 +1,8 @@
 package main.java.model;
 
 import main.java.view.BankView;
+import main.java.view.ClientView;
+import main.java.view.JuridicalPersonClientView;
 import main.java.view.NaturalPersonClientView;
 
 import java.util.HashSet;
@@ -15,30 +17,33 @@ public class Bank { // talvez criar BankController
 
         while (true) {
             bankView.showStartMenu();
-
             int option = bankView.getOptionFromUser();
 
             switch (option) {
-                case 1:     // fazer enum? cadastrar novo cliente PF
+                case 1: {    // fazer enum? cadastrar novo cliente PF
                     boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
+
+                    if (successfullyRegistered) {  // acho que mensagem ficaria melhor no próprio registerNewClient
+                        System.out.println("Cliente cadastrado com sucesso!");
+                    } else {
+                        System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
+                    }
+
+                    break;
+                }
+                case 2: {    // fazer enum? cadastrar novo cliente PJ
+                    boolean successfullyRegistered = this.registerNewClient(new JuridicalPersonClientView());
 
                     if (successfullyRegistered) {
                         System.out.println("Cliente cadastrado com sucesso!");
                     } else {
                         System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
                     }
-                    break;
-                case 2:     // fazer enum? cadastrar novo cliente PJ
-                    boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
 
-                    if (successfullyRegistered) {
-                        System.out.println("Cliente cadastrado com sucesso!");
-                    } else {
-                        System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
-                    }
                     break;
+                }
                 case 3:     // logar
-                    Map.Entry<String, String> credentials = bankView.getCredentials();
+                    Map.Entry<String, String> credentials = ClientView.getCredentials();
 
                     Client client = getClientFromCredentials(credentials);
 
@@ -50,16 +55,16 @@ public class Bank { // talvez criar BankController
                     login(client);
                     break;
                 case 4:     // sair
+                    bankView.showFarewellMessage();
                     return;
                 default:
                     System.out.println("Opção inválida, tente novamente.");
             }
         }
 
-        bankView.showFarewellMessage();
     }
 
-    boolean registerNewClient(NaturalPersonClientView clientView) {
+    private boolean registerNewClient(ClientView clientView) {
         Client client = clientView.buildANewClient();
         return this.clients.add(client);
     }
@@ -68,7 +73,7 @@ public class Bank { // talvez criar BankController
         BankView bankView = new BankView();
 
         while (true) {
-            bankView.showLoggedMenu(client);
+            bankView.showLoggedMenu(client.getName());
 
             int option = bankView.getOptionFromUser();
 
@@ -90,7 +95,7 @@ public class Bank { // talvez criar BankController
     private Client getClientFromCredentials(Map.Entry<String, String> credentials) {
 
         Client client = this.clients.stream().
-                                     filter(c -> c.cpf.equals(credentials.getKey())).
+                                     filter(c -> c.registrationId.equals(credentials.getKey())).
                                      findAny().
                                      orElse(null);
 

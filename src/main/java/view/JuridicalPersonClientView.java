@@ -1,19 +1,23 @@
 package main.java.view;
 
-import java.util.AbstractMap;
-import java.util.Map;
+import main.java.model.Client;
+import main.java.model.JuridicalPersonClient;
+
 import java.util.Scanner;
 
-public class JuridicalPersonClientView {
-    public Map.Entry<String, String> getCredentials() {
+public class JuridicalPersonClientView implements ClientView {
+    public Client buildANewClient() {
         Scanner scanner = new Scanner(System.in);
+
+        System.out.print("digite o nome: ");
+        String name = scanner.nextLine();
 
         System.out.print("digite o CNPJ: ");
         String cnpj = scanner.nextLine();
 
-        System.out.print("digite a senha: ");
+        System.out.print("escolha uma senha: ");
         String password = scanner.nextLine();
 
-        return new AbstractMap.SimpleEntry<>(cnpj, password);
+        return new JuridicalPersonClient(name, cnpj, password);
     }
 }
