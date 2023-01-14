@@ -9,9 +9,10 @@ public class BankView { //singleton?
 
     public void showStartMenu() {
         System.out.println("escolha uma opção:");
-        System.out.println("1 - cadastrar novo cliente");
-        System.out.println("2 - efetuar login");
-        System.out.println("3 - sair");
+        System.out.println("1 - cadastrar novo cliente pessoa física");
+        System.out.println("2 - cadastrar novo cliente pessoa jurídica");
+        System.out.println("3 - efetuar login");
+        System.out.println("4 - sair");
     }
 
     public void showLoggedMenu(String name) {

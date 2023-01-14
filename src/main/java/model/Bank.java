@@ -11,7 +11,6 @@ public class Bank { // talvez criar BankController
     Set<Client> clients = new HashSet<>();
 
     public void run(BankView bankView) {
-
         bankView.showGreetingsMessage();
 
         while (true) {
@@ -20,7 +19,7 @@ public class Bank { // talvez criar BankController
             int option = bankView.getOptionFromUser();
 
             switch (option) {
-                case 1:     // fazer enum? cadastrar novo cliente
+                case 1:     // fazer enum? cadastrar novo cliente PF
                     boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
 
                     if (successfullyRegistered) {
@@ -29,7 +28,16 @@ public class Bank { // talvez criar BankController
                         System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
                     }
                     break;
-                case 2:     // logar
+                case 2:     // fazer enum? cadastrar novo cliente PJ
+                    boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
+
+                    if (successfullyRegistered) {
+                        System.out.println("Cliente cadastrado com sucesso!");
+                    } else {
+                        System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
+                    }
+                    break;
+                case 3:     // logar
                     Map.Entry<String, String> credentials = bankView.getCredentials();
 
                     Client client = getClientFromCredentials(credentials);
@@ -41,12 +49,14 @@ public class Bank { // talvez criar BankController
 
                     login(client);
                     break;
-                case 3:     // sair
+                case 4:     // sair
                     return;
                 default:
                     System.out.println("Opção inválida, tente novamente.");
             }
         }
+
+        bankView.showFarewellMessage();
     }
 
     boolean registerNewClient(NaturalPersonClientView clientView) {
