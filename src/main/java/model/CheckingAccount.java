@@ -1,7 +1,7 @@
 package main.java.model;
 
-import java.math.BigDecimal;
-
-public class CheckingAccount extends Account {
-    BigDecimal overdraftLimit = BigDecimal.ZERO;
+public class CheckingAccount extends Account implements Depositable {
+    public CheckingAccount(int accountNumber) {
+        super(accountNumber);
+    }
 }

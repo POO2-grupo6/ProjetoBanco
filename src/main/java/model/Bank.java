@@ -1,7 +1,7 @@
 package main.java.model;
 
 import main.java.view.BankView;
-import main.java.view.ClientView;
+import main.java.view.NaturalPersonClientView;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class Bank { // talvez criar BankController
 
             switch (option) {
                 case 1:     // fazer enum? cadastrar novo cliente
-                    boolean successfullyRegistered = this.registerNewClient(new ClientView());
+                    boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
 
                     if (successfullyRegistered) {
                         System.out.println("Cliente cadastrado com sucesso!");
@@ -49,7 +49,7 @@ public class Bank { // talvez criar BankController
         }
     }
 
-    boolean registerNewClient(ClientView clientView) {
+    boolean registerNewClient(NaturalPersonClientView clientView) {
         Client client = clientView.buildANewClient();
         return this.clients.add(client);
     }

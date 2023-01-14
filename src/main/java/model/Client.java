@@ -1,20 +1,33 @@
 package main.java.model;
 
-import java.util.Objects;
+import java.math.BigDecimal;
 
-public class Client {
+public abstract class Client {
     String name;
-    String cpf;
-    String password;
+    private String password; // encrypted?
     // birthday?
-    Account checkingAccount = new CheckingAccount();
-    Account savingsAccount = new SavingsAccount();
-    Account paymentsAccount = new PaymentsAccount();
+    CheckingAccount checkingAccount;
+    InvestmentAccount investmentAccount;
 
-    public Client(String name, String cpf, String password) {
+    protected Client(String name, String password) {
         this.name = name;
-        this.cpf = cpf;
         this.password = password;
+    }
+
+    boolean deposit(Account account, BigDecimal value) {
+        if (!(account instanceof Depositable)) {
+            // throw exception
+        }
+
+        if (account instanceof AccountThatPaysInterest) {
+            AccountThatPaysInterest accountThatPaysInterest = (AccountThatPaysInterest) account;
+            BigDecimal valueWithInterest = value.multiply(accountThatPaysInterest.getInterest());
+            accountThatPaysInterest.addToBalance(valueWithInterest);
+        } else {
+            account.addToBalance(value);
+        }
+
+        return true;
     }
 
     public String getName() {
@@ -23,18 +36,5 @@ public class Client {
 
     boolean passwordIsEqualTo(String string) {
         return this.password.equals(string);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(cpf, client.cpf);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cpf);
     }
 }
