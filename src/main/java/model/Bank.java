@@ -78,13 +78,19 @@ public class Bank { // talvez criar BankController
             int option = bankView.getOptionFromUser();
 
             switch (option) {
-                case 1: //depositar
+                case 1: // abrir conta
                     break;
                 case 2: // sacar
                     break;
-                case 3: // transferir
+                case 3: // depositar
                     break;
-                case 4: // deslogar
+                case 4: // transferir
+                    return;
+                case 5: // investir
+                    break;
+                case 6: // consultar saldo
+                    break;
+                case 7: // deslogar
                     return;
                 default:
                     System.out.println("Opção inválida, tente novamente.");
