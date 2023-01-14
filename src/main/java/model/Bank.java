@@ -49,7 +49,7 @@ public class Bank { // talvez criar BankController
 
                     if (client == null) {
                         System.out.println("Credenciais incorretas, tente novamente.");
-                        return;
+                        break;
                     }
 
                     login(client);

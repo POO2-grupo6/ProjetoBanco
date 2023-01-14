@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class BankView { //singleton?
     public void showGreetingsMessage() {
-        System.out.println("Ola! Seja bem-vindo ao Banco!");
+        System.out.println("Olá! Seja bem-vindo ao Banco!");
     }
 
     public void showStartMenu() {
+        System.out.println();
         System.out.println("escolha uma opção:");
         System.out.println("1 - cadastrar novo cliente pessoa física");
         System.out.println("2 - cadastrar novo cliente pessoa jurídica");
@@ -16,6 +17,7 @@ public class BankView { //singleton?
     }
 
     public void showLoggedMenu(String name) {
+        System.out.println();
         System.out.println("Olá, " + name + "!");
         System.out.println("escolha uma opção:");
         System.out.println("1 - abrir conta");
