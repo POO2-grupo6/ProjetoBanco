@@ -48,7 +48,7 @@ public abstract class Client {
         this.investmentAccount = investmentAccount;
     }
 
-    boolean deposit(Account account, BigDecimal value) {
+    public void deposit(Account account, BigDecimal value) {
         if (!(account instanceof DepositAccount)) {
             throw new DestinationAccountNotADepositAccountException();
         }
@@ -60,8 +60,6 @@ public abstract class Client {
         } else {
             account.addToBalance(value);
         }
-
-        return true;
     }
 
     public void withdraw(Account account, BigDecimal value) {
@@ -71,6 +69,14 @@ public abstract class Client {
     public void transfer(Account sourceAccount, Account destinationAccount, BigDecimal value) {
         sourceAccount.removeFromBalance(value);
         destinationAccount.addToBalance(value);
+    }
+
+    public void invest(BigDecimal value) {
+        this.transfer(this.checkingAccount, this.investmentAccount, value);
+    }
+
+    public void withdrawFromInvestment(BigDecimal value) {
+        this.withdraw(this.investmentAccount, value);
     }
 
     public boolean passwordIsEqualTo(String string) {

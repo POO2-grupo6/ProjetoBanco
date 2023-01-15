@@ -89,15 +89,14 @@ public class BankView { //singleton?
     }
 
     public BigDecimal getValueFromUser() {
+        System.out.print("informe o valor: R$ ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextBigDecimal();
     }
 
     public int getDestinationAccountNumberFromUser() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.print("informe o número da conta de destino: ");
-
+        Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
 }

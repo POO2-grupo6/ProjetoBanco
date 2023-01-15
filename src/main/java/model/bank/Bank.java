@@ -111,10 +111,11 @@ public class Bank { // talvez criar BankController
                     client.withdraw(client.getCheckingAccount(), valueToWithdraw);
                     break;
                 }
-                case 5:  // sacar da conta-poupança
+                case 5: {  // sacar da conta-poupança
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdraw(client.getSavingsAccount(), valueToWithdraw);
                     break;
+                }
                 case 6: {  // transferir a partir da conta-corrente
                     int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
                     Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
@@ -127,7 +128,7 @@ public class Bank { // talvez criar BankController
                     client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
                     break;
                 }
-                case 7:  // transferir a partir da conta-poupança
+                case 7: {  // transferir a partir da conta-poupança
                     int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
                     Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
 
@@ -138,11 +139,25 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToTransfer = bankView.getValueFromUser();
                     client.transfer(client.getSavingsAccount(), destinationAccount, valueToTransfer);
                     break;
+                }
                 case 8:  // depositar
+                    int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+                    Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+
+                    if (destinationAccount == null) {
+                        throw new AccountNotFoundException();
+                    }
+
+                    BigDecimal valueToDeposit = bankView.getValueFromUser();
+                    client.deposit(destinationAccount, valueToDeposit);
                     break;
                 case 9:  // investir
+                    BigDecimal valueToInvest = bankView.getValueFromUser();
+                    client.invest(valueToInvest);  // tem que ver se as contas sao nulas
                     break;
                 case 10:  // resgatar investimento
+                    BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                    client.withdrawFromInvestment(valueToWithdraw);
                     break;
                 case 11:  // consultar saldo da conta-corrente
                     break;
