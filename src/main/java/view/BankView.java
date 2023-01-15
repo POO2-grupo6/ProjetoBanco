@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class BankView { //singleton?
@@ -85,5 +86,18 @@ public class BankView { //singleton?
         } else {
             this.showFailedClientRegistrationMessage();
         }
+    }
+
+    public BigDecimal getValueFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextBigDecimal();
+    }
+
+    public int getDestinationAccountNumberFromUser() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("informe o número da conta de destino: ");
+
+        return scanner.nextInt();
     }
 }

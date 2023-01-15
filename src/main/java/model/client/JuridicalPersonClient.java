@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.model.client;
 
 public class JuridicalPersonClient extends Client {
     public JuridicalPersonClient(String name, String registrationId, String password) {

@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.model.account;
 
 import java.math.BigDecimal;
 
@@ -6,7 +6,7 @@ public class SavingsAccount extends AccountThatPaysInterest implements DepositAc
     static final BigDecimal SAVINGS_ACCOUNT_INTEREST = BigDecimal.valueOf(0.01);
 
 
-    protected SavingsAccount(int accountNumber) {
+    public SavingsAccount(int accountNumber) {
         super(accountNumber, SAVINGS_ACCOUNT_INTEREST);
     }
 }

@@ -1,4 +1,4 @@
-package main.java.model;
+package main.java.model.bank;
 
 public class ClientCanNotOpenSavingsAccountException extends RuntimeException {
     @Override

@@ -1,4 +1,11 @@
-package main.java.model;
+package main.java.model.client;
+
+import main.java.model.account.DepositAccount;
+import main.java.model.bank.DestinationAccountNotADepositAccountException;
+import main.java.model.account.InvestmentAccount;
+import main.java.model.account.Account;
+import main.java.model.account.AccountThatPaysInterest;
+import main.java.model.account.CheckingAccount;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,6 +24,30 @@ public abstract class Client {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public CheckingAccount getCheckingAccount() {
+        return checkingAccount;
+    }
+
+    public void setCheckingAccount(CheckingAccount checkingAccount) {
+        this.checkingAccount = checkingAccount;
+    }
+
+    public InvestmentAccount getInvestmentAccount() {
+        return investmentAccount;
+    }
+
+    public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+        this.investmentAccount = investmentAccount;
+    }
+
     boolean deposit(Account account, BigDecimal value) {
         if (!(account instanceof DepositAccount)) {
             throw new DestinationAccountNotADepositAccountException();
@@ -33,11 +64,16 @@ public abstract class Client {
         return true;
     }
 
-    public String getName() {
-        return name;
+    public void withdraw(Account account, BigDecimal value) {
+        account.removeFromBalance(value);
     }
 
-    boolean passwordIsEqualTo(String string) {
+    public void transfer(Account sourceAccount, Account destinationAccount, BigDecimal value) {
+        sourceAccount.removeFromBalance(value);
+        destinationAccount.addToBalance(value);
+    }
+
+    public boolean passwordIsEqualTo(String string) {
         return this.password.equals(string);
     }
 

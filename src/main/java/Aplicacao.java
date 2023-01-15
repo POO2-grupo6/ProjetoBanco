@@ -1,6 +1,6 @@
 package main.java;
 
-import main.java.model.Bank;
+import main.java.model.bank.Bank;
 import main.java.view.BankView;
 
 public class Aplicacao {

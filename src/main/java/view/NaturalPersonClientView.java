@@ -1,7 +1,7 @@
 package main.java.view;
 
-import main.java.model.Client;
-import main.java.model.NaturalPersonClient;
+import main.java.model.client.Client;
+import main.java.model.client.NaturalPersonClient;
 
 import java.util.Scanner;
 

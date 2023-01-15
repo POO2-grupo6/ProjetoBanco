@@ -1,10 +1,18 @@
-package main.java.model;
+package main.java.model.bank;
 
+import main.java.model.account.Account;
+import main.java.model.account.CheckingAccount;
+import main.java.model.account.InvestmentAccount;
+import main.java.model.client.Client;
+import main.java.model.client.JuridicalPersonClient;
+import main.java.model.client.NaturalPersonClient;
+import main.java.model.account.SavingsAccount;
 import main.java.view.BankView;
 import main.java.view.ClientView;
 import main.java.view.JuridicalPersonClientView;
 import main.java.view.NaturalPersonClientView;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -68,72 +76,79 @@ public class Bank { // talvez criar BankController
         BankView bankView = new BankView();
 
         while (true) {
-
-            System.out.println("escolha uma opção:");
-            System.out.println(" 1 - abrir conta-corrente");
-            System.out.println(" 2 - abrir conta-poupança");
-            System.out.println(" 3 - abrir conta-investimento");
-            System.out.println(" 4 - sacar da conta-corrente");
-            System.out.println(" 5 - sacar da conta-poupança");
-            System.out.println(" 6 - transferir a partir da conta-corrente");
-            System.out.println(" 7 - transferir a partir da conta-poupança");
-            System.out.println(" 8 - depositar");
-            System.out.println(" 9 - investir");  // equivalente a transferencia de conta corrente para conta investimento
-            System.out.println("10 - resgatar investimento");  // equivalente a transferencia de conta investimento para conta corrente
-            System.out.println("11 - consultar saldo da conta-corrente");
-            System.out.println("12 - consultar saldo da conta-poupança");
-            System.out.println("13 - consultar saldo da conta-investimento");
-            System.out.println("14 - consultar saldo total");
-            System.out.println("15 - deslogar");
-
-
             bankView.showLoggedMenuForNaturalPersons(client.getName());
 
             int option = bankView.getOptionFromUser();
             switch (option) {
                 case 1: // abrir conta-corrente
-                    if (client.checkingAccount == null) {
-                        client.checkingAccount = new CheckingAccount(this.numberOfAccounts + 1);
-                        this.numberOfAccounts++;
+                    if (client.getCheckingAccount() == null) {
+                        client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
+                        this.numberOfAccounts++;  // poderia ter sido usado ++number, mas acho desnecessário
                     } else {
                         throw new AccountAlreadyExistsException();
                     }
                     break;
                 case 2:  // abrir conta-poupança
-                    if (client.savingsAccount == null) {
-                        client.savingsAccount = new SavingsAccount(this.numberOfAccounts + 1);
+                    if (client.getSavingsAccount() == null) {
+                        client.setSavingsAccount(new SavingsAccount(this.numberOfAccounts + 1));
                         this.numberOfAccounts++;
                     } else {
                         throw new AccountAlreadyExistsException();
                     }
                     break;
                 case 3:  // abrir conta-investimento
-                    if (client.investmentAccount == null) {
-                        client.investmentAccount = new InvestmentAccount(this.numberOfAccounts + 1,
-                                                                         InvestmentAccount.INTEREST_FOR_NATURAL_PERSONS);
+                    if (client.getInvestmentAccount() == null) {
+                        client.setInvestmentAccount(new InvestmentAccount(this.numberOfAccounts + 1,
+                                                                          InvestmentAccount.INTEREST_FOR_NATURAL_PERSONS));
 
                         this.numberOfAccounts++;
                     } else {
                         throw new AccountAlreadyExistsException();
                     }
                     break;
-                case 4:  // sacar da conta-corrente
+                case 4: {  // sacar da conta-corrente
+                    BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                    client.withdraw(client.getCheckingAccount(), valueToWithdraw);
                     break;
-                case 5:  // depositar
+                }
+                case 5:  // sacar da conta-poupança
+                    BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                    client.withdraw(client.getSavingsAccount(), valueToWithdraw);
                     break;
-                case 6:  // transferir
-                    return;
-                case 7:  // investir
+                case 6:  // transferir a partir da conta-corrente
+                    int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+
+//                    Client destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+
+//                    client.transfer(client.getCheckingAccount(), );
                     break;
-                case 8:  // consultar saldo
+                case 7:  // transferir a partir da conta-poupança
                     break;
-                case 9:  // deslogar
+                case 8:  // depositar
+                    break;
+                case 9:  // investir
+                    break;
+                case 10:  // resgatar investimento
+                    break;
+                case 11:  // consultar saldo da conta-corrente
+                    break;
+                case 12:  // consultar saldo da conta-poupança
+                    break;
+                case 13:  // consultar saldo da conta-investimento
+                    break;
+                case 14:  // consultar saldo total
+                    break;
+                case 15:  // deslogar
                     return;
                 default:
                     bankView.showInvalidOptionMessage();
             }
         }
     }
+
+//    private Client getAccountFromAccountNumber(int destinationAccountNumber) {
+//        clients.stream().filter(client -> client.)
+//    }
 
     void loginJuridicalPerson(JuridicalPersonClient client) {
         BankView bankView = new BankView();
@@ -144,17 +159,17 @@ public class Bank { // talvez criar BankController
             int option = bankView.getOptionFromUser();
             switch (option) {
                 case 1: // abrir conta-corrente
-                    if (client.checkingAccount == null) {
-                        client.checkingAccount = new CheckingAccount(this.numberOfAccounts + 1);
+                    if (client.getCheckingAccount() == null) {
+                        client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
                         this.numberOfAccounts++;
                     } else {
                         throw new AccountAlreadyExistsException();
                     }
                     break;
                 case 3:  // abrir conta-investimento
-                    if (client.investmentAccount == null) {
-                        client.investmentAccount = new InvestmentAccount(this.numberOfAccounts + 1,
-                                                                         InvestmentAccount.INTEREST_FOR_JURIDICAL_PERSONS);
+                    if (client.getInvestmentAccount() == null) {
+                        client.setInvestmentAccount(new InvestmentAccount(this.numberOfAccounts + 1,
+                                                                          InvestmentAccount.INTEREST_FOR_JURIDICAL_PERSONS));
 
                         this.numberOfAccounts++;
                     } else {
@@ -180,7 +195,7 @@ public class Bank { // talvez criar BankController
     }
 
     private Client getClientFromCredentials(Map.Entry<String, String> credentials) {
-        Predicate<Client> validClient = client -> client.registrationId.equals(credentials.getKey()) &&
+        Predicate<Client> validClient = client -> client.getRegistrationId().equals(credentials.getKey()) &&
                                                   client.passwordIsEqualTo(credentials.getValue());
 
         return this.clients.stream().
