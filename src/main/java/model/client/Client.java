@@ -79,6 +79,10 @@ public abstract class Client {
         this.withdraw(this.investmentAccount, value);
     }
 
+    public BigDecimal getBalanceFromAccount(Account account) {
+        return account.getBalance();
+    }
+
     public boolean passwordIsEqualTo(String string) {
         return this.password.equals(string);
     }

@@ -99,4 +99,8 @@ public class BankView { //singleton?
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
+
+    public void showBalance(BigDecimal balance) {
+        System.out.format("O saldo é de R$ %,.2f", balance);
+    }
 }

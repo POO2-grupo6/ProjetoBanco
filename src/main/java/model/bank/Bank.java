@@ -159,11 +159,19 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdrawFromInvestment(valueToWithdraw);
                     break;
-                case 11:  // consultar saldo da conta-corrente
+                case 11: {  // consultar saldo da conta-corrente
+                    BigDecimal balance = client.getBalanceFromAccount(client.getCheckingAccount());
+                    bankView.showBalance(balance);
                     break;
-                case 12:  // consultar saldo da conta-poupança
+                }
+                case 12: {  // consultar saldo da conta-poupança
+                    BigDecimal balance = client.getBalanceFromAccount(client.getSavingsAccount());
+                    bankView.showBalance(balance);
                     break;
+                }
                 case 13:  // consultar saldo da conta-investimento
+                    BigDecimal balance = client.getBalanceFromAccount(client.getInvestmentAccount());
+                    bankView.showBalance(balance);
                     break;
                 case 14:  // consultar saldo total
                     break;
