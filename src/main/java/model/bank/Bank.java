@@ -15,6 +15,7 @@ import main.java.view.NaturalPersonClientView;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -80,21 +81,23 @@ public class Bank { // talvez criar BankController
 
             int option = bankView.getOptionFromUser();
             switch (option) {
-                case 1: // abrir conta-corrente
-                    if (client.getCheckingAccount() == null) {
-                        client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
-                        this.numberOfAccounts++;  // poderia ter sido usado ++number, mas acho desnecessário
-                    } else {
+                case 1: // abrir conta-corrente; extrair para método em Client, "openCheckingAccount"; informar número da conta préexistente
+                    if (client.getCheckingAccount() != null) {
                         throw new AccountAlreadyExistsException();
                     }
+
+                    client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
+                    this.numberOfAccounts++;  // poderia ter sido usado ++number, mas acho desnecessário
+                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
                     break;
                 case 2:  // abrir conta-poupança
-                    if (client.getSavingsAccount() == null) {
-                        client.setSavingsAccount(new SavingsAccount(this.numberOfAccounts + 1));
-                        this.numberOfAccounts++;
-                    } else {
+                    if (client.getSavingsAccount() != null) {
                         throw new AccountAlreadyExistsException();
                     }
+
+                    client.setSavingsAccount(new SavingsAccount(this.numberOfAccounts + 1));
+                    this.numberOfAccounts++;
+                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
                     break;
                 case 3:  // abrir conta-investimento
                     if (client.getInvestmentAccount() == null) {
@@ -102,6 +105,7 @@ public class Bank { // talvez criar BankController
                                                                           InvestmentAccount.INTEREST_FOR_NATURAL_PERSONS));
 
                         this.numberOfAccounts++;
+                        bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
                     } else {
                         throw new AccountAlreadyExistsException();
                     }
@@ -109,11 +113,15 @@ public class Bank { // talvez criar BankController
                 case 4: {  // sacar da conta-corrente
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdraw(client.getCheckingAccount(), valueToWithdraw);
+                    BigDecimal newBalance = client.getCheckingAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
                 }
                 case 5: {  // sacar da conta-poupança
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdraw(client.getSavingsAccount(), valueToWithdraw);
+                    BigDecimal newBalance = client.getSavingsAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
                 }
                 case 6: {  // transferir a partir da conta-corrente
@@ -126,6 +134,9 @@ public class Bank { // talvez criar BankController
 
                     BigDecimal valueToTransfer = bankView.getValueFromUser();
                     client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
+
+                    BigDecimal newBalance = client.getCheckingAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
                 }
                 case 7: {  // transferir a partir da conta-poupança
@@ -138,6 +149,9 @@ public class Bank { // talvez criar BankController
 
                     BigDecimal valueToTransfer = bankView.getValueFromUser();
                     client.transfer(client.getSavingsAccount(), destinationAccount, valueToTransfer);
+
+                    BigDecimal newBalance = client.getSavingsAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
                 }
                 case 8:  // depositar
@@ -151,13 +165,20 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToDeposit = bankView.getValueFromUser();
                     client.deposit(destinationAccount, valueToDeposit);
                     break;
-                case 9:  // investir
+                case 9: {  // investir
                     BigDecimal valueToInvest = bankView.getValueFromUser();
                     client.invest(valueToInvest);  // tem que ver se as contas sao nulas
+
+                    BigDecimal newBalance = client.getInvestmentAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
+                }
                 case 10:  // resgatar investimento
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdrawFromInvestment(valueToWithdraw);
+
+                    BigDecimal newBalance = client.getInvestmentAccount().getBalance();
+                    bankView.showSuccessfulOperationMessage(newBalance);
                     break;
                 case 11: {  // consultar saldo da conta-corrente
                     BigDecimal balance = client.getBalanceFromAccount(client.getCheckingAccount());
@@ -189,16 +210,18 @@ public class Bank { // talvez criar BankController
     private Account getAccountFromAccountNumber(int destinationAccountNumber) {
         Account destinationAccount;
 
-        destinationAccount = this.clients.stream().
+        destinationAccount = this.clients.stream().  // talvez um map de client -> account, account, depois filtra os null
                                           map(Client::getCheckingAccount).
-                                          filter(account -> account.getAccountNumber() == destinationAccountNumber).
+                                          filter(Objects::nonNull).
+                                          filter(checkingAccount -> checkingAccount.getAccountNumber() == destinationAccountNumber).
                                           findAny().
                                           orElse(null);
 
         if (destinationAccount == null) {
             destinationAccount = this.clients.stream().
                                               map(Client::getInvestmentAccount).
-                                              filter(account -> account.getAccountNumber() == destinationAccountNumber).
+                                              filter(Objects::nonNull).
+                                              filter(investmentAccount -> investmentAccount.getAccountNumber() == destinationAccountNumber).
                                               findAny().
                                               orElse(null);
         }
@@ -210,6 +233,7 @@ public class Bank { // talvez criar BankController
             destinationAccount = this.clients.stream().
                                               filter(NaturalPersonClient.class::isInstance).
                                               map(NaturalPersonClient.class::cast).
+                                              filter(client -> client.getSavingsAccount() != null).
                                               filter(predicate).
                                               map(NaturalPersonClient::getSavingsAccount).
                                               findAny().

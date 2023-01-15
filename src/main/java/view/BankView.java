@@ -101,7 +101,17 @@ public class BankView { //singleton?
     }
 
     public void showBalance(BigDecimal balance) {
-        System.out.format("O saldo é de R$ %,.2f", balance);
+        System.out.format("O saldo é de R$ %,.2f.", balance);
         System.out.println();
+    }
+
+    public void showSuccessfulAccountOpeningMessage(int accountNumber) {
+        System.out.println("A conta foi aberta com sucesso! O número da conta é:");
+        System.out.println(accountNumber);
+        System.out.println("Guarde este dado.");
+    }
+
+    public void showSuccessfulOperationMessage(BigDecimal newBalance) {
+        System.out.format("Operação realizada com sucesso. O novo saldo da conta é de R$ %,.2f.", newBalance);
     }
 }
