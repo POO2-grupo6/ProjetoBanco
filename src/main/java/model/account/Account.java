@@ -6,10 +6,15 @@ import java.math.BigDecimal;
 
 public abstract class Account {
     int accountNumber;
+
     BigDecimal balance = BigDecimal.ZERO;
 
     protected Account(int accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public int getAccountNumber() {
+        return accountNumber;
     }
 
     public BigDecimal getBalance() {

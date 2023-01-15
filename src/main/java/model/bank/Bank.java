@@ -117,12 +117,17 @@ public class Bank { // talvez criar BankController
                     break;
                 case 6:  // transferir a partir da conta-corrente
                     int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+                    Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
 
-//                    Client destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+                    if (destinationAccount == null) {
+                        throw new AccountNotFoundException();
+                    }
 
-//                    client.transfer(client.getCheckingAccount(), );
+                    BigDecimal valueToTransfer = bankView.getValueFromUser();
+                    client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
                     break;
                 case 7:  // transferir a partir da conta-poupança
+
                     break;
                 case 8:  // depositar
                     break;
@@ -146,9 +151,38 @@ public class Bank { // talvez criar BankController
         }
     }
 
-//    private Client getAccountFromAccountNumber(int destinationAccountNumber) {
-//        clients.stream().filter(client -> client.)
-//    }
+    private Account getAccountFromAccountNumber(int destinationAccountNumber) {
+        Account destinationAccount;
+
+        destinationAccount = this.clients.stream().
+                                          map(Client::getCheckingAccount).
+                                          filter(account -> account.getAccountNumber() == destinationAccountNumber).
+                                          findAny().
+                                          orElse(null);
+
+        if (destinationAccount == null) {
+            destinationAccount = this.clients.stream().
+                                              map(Client::getInvestmentAccount).
+                                              filter(account -> account.getAccountNumber() == destinationAccountNumber).
+                                              findAny().
+                                              orElse(null);
+        }
+
+        if (destinationAccount == null) {
+            Predicate<NaturalPersonClient> predicate = client -> client.getSavingsAccount().
+                                                                        getAccountNumber() == destinationAccountNumber;
+
+            destinationAccount = this.clients.stream().
+                                              filter(NaturalPersonClient.class::isInstance).
+                                              map(NaturalPersonClient.class::cast).
+                                              filter(predicate).
+                                              map(NaturalPersonClient::getSavingsAccount).
+                                              findAny().
+                                              orElse(null);
+        }
+
+        return destinationAccount;
+    }
 
     void loginJuridicalPerson(JuridicalPersonClient client) {
         BankView bankView = new BankView();
