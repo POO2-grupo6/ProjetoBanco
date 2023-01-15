@@ -169,11 +169,14 @@ public class Bank { // talvez criar BankController
                     bankView.showBalance(balance);
                     break;
                 }
-                case 13:  // consultar saldo da conta-investimento
+                case 13: {  // consultar saldo da conta-investimento
                     BigDecimal balance = client.getBalanceFromAccount(client.getInvestmentAccount());
                     bankView.showBalance(balance);
                     break;
+                }
                 case 14:  // consultar saldo total
+                    BigDecimal balance = client.getTotalBalance();
+                    bankView.showBalance(balance);
                     break;
                 case 15:  // deslogar
                     return;

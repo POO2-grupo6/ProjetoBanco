@@ -83,6 +83,19 @@ public abstract class Client {
         return account.getBalance();
     }
 
+    public BigDecimal getTotalBalance() {
+        BigDecimal totalBalance = BigDecimal.ZERO;
+        if (this.checkingAccount != null) {
+            totalBalance = totalBalance.add(this.checkingAccount.getBalance());
+        }
+
+        if (this.investmentAccount != null) {
+            totalBalance = totalBalance.add(this.investmentAccount.getBalance());
+        }
+
+        return totalBalance;
+    }
+
     public boolean passwordIsEqualTo(String string) {
         return this.password.equals(string);
     }
