@@ -5,9 +5,9 @@ import main.java.model.bank.InsufficientFundsException;
 import java.math.BigDecimal;
 
 public abstract class Account {
-    int accountNumber;
+    private int accountNumber;
 
-    BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     protected Account(int accountNumber) {
         this.accountNumber = accountNumber;

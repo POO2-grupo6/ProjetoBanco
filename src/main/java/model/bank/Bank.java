@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 
 public class Bank { // talvez criar BankController
     private int numberOfAccounts = 0;
-    Set<Client> clients = new HashSet<>();
+    private Set<Client> clients = new HashSet<>();
 
     public void run(BankView bankView) {
         bankView.showGreetingsMessage();
@@ -73,7 +73,7 @@ public class Bank { // talvez criar BankController
         return this.clients.add(client);
     }
 
-    void loginNaturalPerson(NaturalPersonClient client) {
+    private void loginNaturalPerson(NaturalPersonClient client) {
         BankView bankView = new BankView();
 
         while (true) {
@@ -207,6 +207,50 @@ public class Bank { // talvez criar BankController
         }
     }
 
+    private void loginJuridicalPerson(JuridicalPersonClient client) {
+        BankView bankView = new BankView();
+
+        while (true) {
+            bankView.showLoggedMenuForJuridicalPersons(client.getName());
+
+            int option = bankView.getOptionFromUser();
+            switch (option) {
+                case 1: // abrir conta-corrente
+                    if (client.getCheckingAccount() == null) {
+                        client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
+                        this.numberOfAccounts++;
+                    } else {
+                        throw new AccountAlreadyExistsException();
+                    }
+                    break;
+                case 3:  // abrir conta-investimento
+                    if (client.getInvestmentAccount() == null) {
+                        client.setInvestmentAccount(new InvestmentAccount(this.numberOfAccounts + 1,
+                                InvestmentAccount.INTEREST_FOR_JURIDICAL_PERSONS));
+
+                        this.numberOfAccounts++;
+                    } else {
+                        throw new AccountAlreadyExistsException();
+                    }
+                    break;
+                case 4:  // sacar
+                    break;
+                case 5:  // depositar
+                    break;
+                case 6:  // transferir
+                    return;
+                case 7:  // investir
+                    break;
+                case 8:  // consultar saldo
+                    break;
+                case 9:  // deslogar
+                    return;
+                default:
+                    bankView.showInvalidOptionMessage();
+            }
+        }
+    }
+
     private Account getAccountFromAccountNumber(int destinationAccountNumber) {
         Account destinationAccount;
 
@@ -241,50 +285,6 @@ public class Bank { // talvez criar BankController
         }
 
         return destinationAccount;
-    }
-
-    void loginJuridicalPerson(JuridicalPersonClient client) {
-        BankView bankView = new BankView();
-
-        while (true) {
-            bankView.showLoggedMenuForJuridicalPersons(client.getName());
-
-            int option = bankView.getOptionFromUser();
-            switch (option) {
-                case 1: // abrir conta-corrente
-                    if (client.getCheckingAccount() == null) {
-                        client.setCheckingAccount(new CheckingAccount(this.numberOfAccounts + 1));
-                        this.numberOfAccounts++;
-                    } else {
-                        throw new AccountAlreadyExistsException();
-                    }
-                    break;
-                case 3:  // abrir conta-investimento
-                    if (client.getInvestmentAccount() == null) {
-                        client.setInvestmentAccount(new InvestmentAccount(this.numberOfAccounts + 1,
-                                                                          InvestmentAccount.INTEREST_FOR_JURIDICAL_PERSONS));
-
-                        this.numberOfAccounts++;
-                    } else {
-                        throw new AccountAlreadyExistsException();
-                    }
-                    break;
-                case 4:  // sacar
-                    break;
-                case 5:  // depositar
-                    break;
-                case 6:  // transferir
-                    return;
-                case 7:  // investir
-                    break;
-                case 8:  // consultar saldo
-                    break;
-                case 9:  // deslogar
-                    return;
-                default:
-                    bankView.showInvalidOptionMessage();
-            }
-        }
     }
 
     private Client getClientFromCredentials(Map.Entry<String, String> credentials) {

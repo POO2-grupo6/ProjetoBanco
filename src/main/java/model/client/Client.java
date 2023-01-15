@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public abstract class Client {
-    String name;
-    String registrationId;
+    private String name;
+    private String registrationId;
     private String password; // encrypted?
     // birthday?
-    CheckingAccount checkingAccount;
-    InvestmentAccount investmentAccount;
+    private CheckingAccount checkingAccount;
+    private InvestmentAccount investmentAccount;
 
     protected Client(String name, String registrationId, String password) {
         this.name = name;
