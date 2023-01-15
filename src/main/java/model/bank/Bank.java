@@ -115,7 +115,7 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToWithdraw = bankView.getValueFromUser();
                     client.withdraw(client.getSavingsAccount(), valueToWithdraw);
                     break;
-                case 6:  // transferir a partir da conta-corrente
+                case 6: {  // transferir a partir da conta-corrente
                     int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
                     Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
 
@@ -126,8 +126,17 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToTransfer = bankView.getValueFromUser();
                     client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
                     break;
+                }
                 case 7:  // transferir a partir da conta-poupança
+                    int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+                    Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
 
+                    if (destinationAccount == null) {
+                        throw new AccountNotFoundException();
+                    }
+
+                    BigDecimal valueToTransfer = bankView.getValueFromUser();
+                    client.transfer(client.getSavingsAccount(), destinationAccount, valueToTransfer);
                     break;
                 case 8:  // depositar
                     break;
