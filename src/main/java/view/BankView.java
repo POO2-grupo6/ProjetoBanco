@@ -16,17 +16,50 @@ public class BankView { //singleton?
         System.out.println("4 - sair");
     }
 
-    public void showLoggedMenu(String name) {
+    public void showLoggedMenuForNaturalPersons(String name) {
         System.out.println();
         System.out.println("Olá, " + name + "!");
         System.out.println("escolha uma opção:");
-        System.out.println("1 - abrir conta");
-        System.out.println("2 - sacar");
-        System.out.println("3 - depositar");
-        System.out.println("4 - transferir");
-        System.out.println("5 - investir");
-        System.out.println("6 - consultar saldo");
-        System.out.println("7 - deslogar");
+        System.out.println(" 1 - abrir conta-corrente");
+        System.out.println(" 2 - abrir conta-poupança");
+        System.out.println(" 3 - abrir conta-investimento");
+        System.out.println(" 4 - sacar da conta-corrente");
+        System.out.println(" 5 - sacar da conta-poupança");
+        System.out.println(" 6 - transferir a partir da conta-corrente");
+        System.out.println(" 7 - transferir a partir da conta-poupança");
+        System.out.println(" 8 - depositar");
+        System.out.println(" 9 - investir");  // equivalente a transferencia de conta corrente para conta investimento
+        System.out.println("10 - resgatar investimento");  // equivalente a transferencia de conta investimento para conta corrente
+        System.out.println("11 - consultar saldo da conta-corrente");
+        System.out.println("12 - consultar saldo da conta-poupança");
+        System.out.println("13 - consultar saldo da conta-investimento");
+        System.out.println("14 - consultar saldo total");
+        System.out.println("15 - deslogar");
+    }
+
+    public void showLoggedMenuForJuridicalPersons(String name) {
+        System.out.println();
+        System.out.println("É um prazer trabalhar com a empresa " + name + "!");
+        System.out.println("escolha uma opção:");
+        System.out.println(" 1 - abrir conta-corrente");
+        System.out.println(" 2 - abrir conta-investimento");
+        System.out.println(" 3 - sacar");
+        System.out.println(" 4 - transferir");
+        System.out.println(" 5 - depositar");
+        System.out.println(" 6 - investir");
+        System.out.println(" 7 - resgatar investimento");
+        System.out.println(" 8 - consultar saldo da conta-corrente");
+        System.out.println(" 9 - consultar saldo da conta-investimento");
+        System.out.println("10 - consultar saldo total");
+        System.out.println("11 - deslogar");
+    }
+
+    public void showSuccessfulClientRegistrationMessage() {
+        System.out.println("Cliente cadastrado com sucesso!");
+    }
+
+    public void showFailedClientRegistrationMessage() {
+        System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
     }
 
     public void showFarewellMessage() {
@@ -36,5 +69,21 @@ public class BankView { //singleton?
     public int getOptionFromUser() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+
+    public void showFailedLoginMessage() {
+        System.out.println("Credenciais incorretas, tente novamente.");
+    }
+
+    public void showInvalidOptionMessage() {
+        System.out.println("Opção inválida, tente novamente.");
+    }
+
+    public void showResultOfRegistrationAttempt(boolean successfullyRegistered) {
+        if (successfullyRegistered) {
+            this.showSuccessfulClientRegistrationMessage();
+        } else {
+            this.showFailedClientRegistrationMessage();
+        }
     }
 }

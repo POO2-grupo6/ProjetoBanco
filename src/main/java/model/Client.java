@@ -1,6 +1,7 @@
 package main.java.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class Client {
     String name;
@@ -18,7 +19,7 @@ public abstract class Client {
 
     boolean deposit(Account account, BigDecimal value) {
         if (!(account instanceof DepositAccount)) {
-            // throw exception
+            throw new DestinationAccountNotADepositAccountException();
         }
 
         if (account instanceof AccountThatPaysInterest) {
@@ -38,5 +39,18 @@ public abstract class Client {
 
     boolean passwordIsEqualTo(String string) {
         return this.password.equals(string);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return Objects.equals(registrationId, client.registrationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(registrationId);
     }
 }
