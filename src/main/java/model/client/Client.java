@@ -55,7 +55,7 @@ public abstract class Client {
 
         if (account instanceof AccountThatPaysInterest) {
             AccountThatPaysInterest accountThatPaysInterest = (AccountThatPaysInterest) account;
-            BigDecimal valueWithInterest = value.multiply(accountThatPaysInterest.getInterest());
+            BigDecimal valueWithInterest = value.multiply(BigDecimal.ONE.add(accountThatPaysInterest.getInterest()));
             accountThatPaysInterest.addToBalance(valueWithInterest);
         } else {
             account.addToBalance(value);
@@ -67,16 +67,30 @@ public abstract class Client {
     }
 
     public void transfer(Account sourceAccount, Account destinationAccount, BigDecimal value) {
-        sourceAccount.removeFromBalance(value);
-        destinationAccount.addToBalance(value);
+        if (!(destinationAccount instanceof DepositAccount)) {
+            throw new DestinationAccountNotADepositAccountException();
+        }
+
+        if (destinationAccount instanceof AccountThatPaysInterest) {
+            AccountThatPaysInterest accountThatPaysInterest = (AccountThatPaysInterest) destinationAccount;
+            BigDecimal valueWithInterest = value.multiply(BigDecimal.ONE.add(accountThatPaysInterest.getInterest()));
+            sourceAccount.removeFromBalance(value);
+            accountThatPaysInterest.addToBalance(valueWithInterest);
+        } else {
+            sourceAccount.removeFromBalance(value);
+            destinationAccount.addToBalance(value);
+        }
     }
 
     public void invest(BigDecimal value) {
-        this.transfer(this.checkingAccount, this.investmentAccount, value);
+        BigDecimal valueWithInterest = value.multiply(BigDecimal.ONE.add(this.investmentAccount.getInterest()));
+        this.checkingAccount.removeFromBalance(value);
+        this.investmentAccount.addToBalance(valueWithInterest);
     }
 
     public void withdrawFromInvestment(BigDecimal value) {
         this.withdraw(this.investmentAccount, value);
+        this.checkingAccount.addToBalance(value);
     }
 
     public BigDecimal getBalanceFromAccount(Account account) {

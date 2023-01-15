@@ -55,11 +55,11 @@ public class BankView { //singleton?
         System.out.println("11 - deslogar");
     }
 
-    public void showSuccessfulClientRegistrationMessage() {
+    private void showSuccessfulClientRegistrationMessage() {
         System.out.println("Cliente cadastrado com sucesso!");
     }
 
-    public void showFailedClientRegistrationMessage() {
+    private void showFailedClientRegistrationMessage() {
         System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
     }
 
@@ -111,7 +111,7 @@ public class BankView { //singleton?
         System.out.println("Guarde este dado.");
     }
 
-    public void showSuccessfulOperationMessage(BigDecimal newBalance) {
-        System.out.format("Operação realizada com sucesso. O novo saldo da conta é de R$ %,.2f.", newBalance);
+    public void showSuccessfulOperationMessage(BigDecimal newBalance) { // talvez separar em 2 mensagens
+        System.out.format("Operação realizada com sucesso. O novo saldo da conta é de R$ %,.2f.%n", newBalance);
     }
 }
