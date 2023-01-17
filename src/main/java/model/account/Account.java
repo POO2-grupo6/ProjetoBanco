@@ -5,7 +5,7 @@ import main.java.model.bank.InsufficientFundsException;
 import java.math.BigDecimal;
 
 public abstract class Account {
-    private int accountNumber;
+    private final int accountNumber;
 
     private BigDecimal balance = BigDecimal.ZERO;
 

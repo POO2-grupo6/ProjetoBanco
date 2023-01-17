@@ -14,7 +14,6 @@ public abstract class Client {
     private String name;
     private String registrationId;
     private String password; // encrypted?
-    // birthday?
     private CheckingAccount checkingAccount;
     private InvestmentAccount investmentAccount;
 

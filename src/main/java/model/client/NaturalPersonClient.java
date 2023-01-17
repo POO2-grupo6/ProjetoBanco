@@ -2,8 +2,10 @@ package main.java.model.client;
 
 import main.java.model.account.Account;
 
+import java.math.BigDecimal;
+
 public class NaturalPersonClient extends Client {
-    Account savingsAccount;
+    private Account savingsAccount;
 
     public NaturalPersonClient(String name, String registrationId, String password) {
         super(name, registrationId, password);
@@ -15,5 +17,11 @@ public class NaturalPersonClient extends Client {
 
     public void setSavingsAccount(Account savingsAccount) {
         this.savingsAccount = savingsAccount;
+    }
+
+    @Override
+    public BigDecimal getTotalBalance() {
+        BigDecimal savingsBalance = this.savingsAccount == null ? BigDecimal.ZERO : this.savingsAccount.getBalance();
+        return super.getTotalBalance().add(savingsBalance);
     }
 }
