@@ -1,6 +1,8 @@
 package main.java.model.client;
 
 import main.java.model.account.Account;
+import main.java.model.account.SavingsAccount;
+import main.java.model.bank.AccountAlreadyExistsException;
 
 import java.math.BigDecimal;
 
@@ -15,7 +17,7 @@ public class NaturalPersonClient extends Client {
         return savingsAccount;
     }
 
-    public void setSavingsAccount(Account savingsAccount) {
+    private void setSavingsAccount(Account savingsAccount) {
         this.savingsAccount = savingsAccount;
     }
 
@@ -23,5 +25,13 @@ public class NaturalPersonClient extends Client {
     public BigDecimal getTotalBalance() {
         BigDecimal savingsBalance = this.savingsAccount == null ? BigDecimal.ZERO : this.savingsAccount.getBalance();
         return super.getTotalBalance().add(savingsBalance);
+    }
+
+    public void openSavingsAccount(int accountNumber) {
+        if (this.getSavingsAccount() != null) {
+            throw new AccountAlreadyExistsException();
+        }
+
+        this.setSavingsAccount(new SavingsAccount(accountNumber));
     }
 }

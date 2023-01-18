@@ -1,16 +1,18 @@
 package main.java.model.client;
 
 import main.java.model.account.DepositAccount;
+import main.java.model.bank.AccountAlreadyExistsException;
 import main.java.model.bank.DestinationAccountNotADepositAccountException;
 import main.java.model.account.InvestmentAccount;
 import main.java.model.account.Account;
 import main.java.model.account.AccountThatPaysInterest;
 import main.java.model.account.CheckingAccount;
+import main.java.view.BankView;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public abstract class Client {
+public abstract class Client extends Person {
     private String name;
     private String registrationId;
     private String password; // encrypted?
@@ -47,20 +49,7 @@ public abstract class Client {
         this.investmentAccount = investmentAccount;
     }
 
-    public void deposit(Account account, BigDecimal value) {
-        if (!(account instanceof DepositAccount)) {
-            throw new DestinationAccountNotADepositAccountException();
-        }
-
-        if (account instanceof AccountThatPaysInterest) {
-            AccountThatPaysInterest accountThatPaysInterest = (AccountThatPaysInterest) account;
-            BigDecimal valueWithInterest = value.multiply(BigDecimal.ONE.add(accountThatPaysInterest.getInterest()));
-            accountThatPaysInterest.addToBalance(valueWithInterest);
-        } else {
-            account.addToBalance(value);
-        }
-    }
-
+    // deposit
     public void withdraw(Account account, BigDecimal value) {
         account.removeFromBalance(value);
     }
@@ -90,6 +79,14 @@ public abstract class Client {
     public void withdrawFromInvestment(BigDecimal value) {
         this.withdraw(this.investmentAccount, value);
         this.checkingAccount.addToBalance(value);
+    }
+
+    public void openCheckingAccount(int accountNumber) {  // acho que deveria estar em Client, passando o número da conta
+        if (this.getCheckingAccount() != null) {
+            throw new AccountAlreadyExistsException();
+        }
+
+        this.setCheckingAccount(new CheckingAccount(accountNumber));
     }
 
     public BigDecimal getBalanceFromAccount(Account account) {
@@ -124,5 +121,13 @@ public abstract class Client {
     @Override
     public int hashCode() {
         return Objects.hash(registrationId);
+    }
+
+    public void openInvestmentAccount(int accountNumber, BigDecimal interest) {
+        if (this.getInvestmentAccount() == null) {
+            this.setInvestmentAccount(new InvestmentAccount(accountNumber, interest));
+        } else {
+            throw new AccountAlreadyExistsException();
+        }
     }
 }

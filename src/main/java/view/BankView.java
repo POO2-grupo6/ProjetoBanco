@@ -14,7 +14,8 @@ public class BankView { //singleton?
         System.out.println("1 - cadastrar novo cliente pessoa física");
         System.out.println("2 - cadastrar novo cliente pessoa jurídica");
         System.out.println("3 - efetuar login");
-        System.out.println("4 - sair");
+        System.out.println("4 - depositar");
+        System.out.println("5 - sair");
     }
 
     public void showLoggedMenuForNaturalPersons(String name) {
@@ -113,5 +114,40 @@ public class BankView { //singleton?
 
     public void showSuccessfulOperationMessage(BigDecimal newBalance) { // talvez separar em 2 mensagens
         System.out.format("Operação realizada com sucesso. O novo saldo da conta é de R$ %,.2f.%n", newBalance);
+    }
+
+    public void showAccountTypeSelectionMenu(String name) {
+        System.out.println("Olá, " + name + "!");
+        System.out.println("Por favor escolha escolha uma opção:");
+        System.out.println("1 - depositar");
+        System.out.println("2 - acessar conta-corrente");
+        System.out.println("3 - acessar conta-poupança");
+        System.out.println("4 - acessar conta investimento");
+    }
+
+    public void showCheckingAccountMenu() {
+        System.out.println("escolha uma opção:");
+        System.out.println("1 - sacar");
+        System.out.println("2 - transferir");
+        System.out.println("3 - depositar nesta conta");
+        System.out.println("4 - consultar saldo");
+        System.out.println("5 - retornar ao menu anterior / escolher outro tipo de conta");
+    }
+
+    public void showSavingsAccountMenu() {
+        System.out.println("escolha uma opção:");
+        System.out.println("1 - sacar");
+        System.out.println("2 - transferir");
+        System.out.println("3 - depositar nesta conta");
+        System.out.println("4 - consultar saldo");
+        System.out.println("5 - retornar ao menu anterior / escolher outro tipo de conta");
+    }
+
+    public void showInvestmentAccountMenu() {
+        System.out.println("escolha uma opção:");
+        System.out.println("1 - investir");
+        System.out.println("2 - resgatar investimento");
+        System.out.println("3 - consultar saldo");
+        System.out.println("4 - retornar ao menu anterior / escolher outro tipo de conta");
     }
 }

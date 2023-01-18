@@ -18,7 +18,15 @@ a
 1src/main/java/view/JuridicalPersonClientView.java,2\d\2dd2a24583c9e4b0a901ae9172a293c65797655d
 _
 /src/main/java/view/NaturalPersonClientView.java,4\b\4b4cb8cf41f2c2ad776f8953ddf0ba801047f582
-P
- src/main/java/view/BankView.java,6\9\6916582702f8d71757cd950957e7793ce0bce5bf
 [
 +src/main/java/view/CheckingAccountView.java,d\a\da65938d15b952b54984eb697fa1bf6369443bbc
+w
+G.idea/sonarlint/issuestore/2/d/2dd2a24583c9e4b0a901ae9172a293c65797655d,a\3\a36e33d1f30d33026239f38fc99d9cb21123901b
+w
+G.idea/sonarlint/issuestore/d/a/da65938d15b952b54984eb697fa1bf6369443bbc,4\0\40333bd836f2a4c62be681a03dc3714c56427ab9
+w
+G.idea/sonarlint/issuestore/4/b/4b4cb8cf41f2c2ad776f8953ddf0ba801047f582,d\3\d3a619d388d699f98e50663ab106c526a9a10b09
+X
+(src/main/java/model/account/Account.java,f\3\f3ed0a951140ec0d6d740bf4151f1ba3d58582e3
+e
+5src/main/java/model/client/JuridicalPersonClient.java,8\2\824ab9e5bfb14c1b07bb361e56e3e4f78566f8b9
