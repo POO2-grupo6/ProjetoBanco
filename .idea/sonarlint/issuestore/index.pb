@@ -16,8 +16,6 @@ h
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 a
 1src/main/java/view/JuridicalPersonClientView.java,2\d\2dd2a24583c9e4b0a901ae9172a293c65797655d
-_
-/src/main/java/view/NaturalPersonClientView.java,4\b\4b4cb8cf41f2c2ad776f8953ddf0ba801047f582
 [
 +src/main/java/view/CheckingAccountView.java,d\a\da65938d15b952b54984eb697fa1bf6369443bbc
 w

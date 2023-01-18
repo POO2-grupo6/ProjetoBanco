@@ -1,8 +1,6 @@
 package main.java.model.bank;
 
 import main.java.model.account.Account;
-import main.java.model.account.CheckingAccount;
-import main.java.model.account.InvestmentAccount;
 import main.java.model.client.Client;
 import main.java.model.client.JuridicalPersonClient;
 import main.java.model.client.NaturalPersonClient;
@@ -33,16 +31,12 @@ public class Bank { // talvez criar BankController
             switch (option) {
                 case 1: {    // fazer enum? cadastrar novo cliente PF
                     boolean successfullyRegistered = this.registerNewClient(new NaturalPersonClientView());
-
                     bankView.showResultOfRegistrationAttempt(successfullyRegistered);
-
                     break;
                 }
                 case 2: {    // cadastrar novo cliente PJ
                     boolean successfullyRegistered = this.registerNewClient(new JuridicalPersonClientView());
-
                     bankView.showResultOfRegistrationAttempt(successfullyRegistered);
-
                     break;
                 }
                 case 3:     // logar
@@ -80,6 +74,8 @@ public class Bank { // talvez criar BankController
 
     private boolean registerNewClient(ClientView clientView) {
         Client client = clientView.buildANewClient();
+        client.openCheckingAccount(this.numberOfAccounts + 1);
+        this.numberOfAccounts++;
         return this.clients.add(client);
     }
 
@@ -87,7 +83,7 @@ public class Bank { // talvez criar BankController
         BankView bankView = new BankView();  // usar variável estática?
 
         while (true) {
-            bankView.showAccountTypeSelectionMenu(client.getName());
+            bankView.showAccountTypesForNaturalPersonsSelectionMenu(client.getName());
 
             int accountTypeOption = bankView.getOptionFromUser();
             switch (accountTypeOption) {
@@ -106,48 +102,112 @@ public class Bank { // talvez criar BankController
                     loginCheckingAccount(client, bankView);
                     break;
                 case 3:  // acessar conta-poupança
+                    if (client.getSavingsAccount() == null) {
+                        bankView.promptAccountOpening();
+
+                        int option = bankView.getOptionFromUser();
+
+                        if (option == 1) {
+                            // extrair para método
+                            client.openSavingsAccount(this.numberOfAccounts + 1);
+                            this.numberOfAccounts++;
+                            bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
+                        } else if (option == 2) {
+                            break;
+                        }
+                    }
+
                     loginSavingsAccount(client, bankView);
                     break;
                 case 4:  // acessar conta-investimento
                     loginInvestmentAccount(client, bankView);
                     break;
+                case 5:  // deslogar
+                    return;
                 default:
                     bankView.showInvalidOptionMessage();
             }
 
-            // bankView.showLoggedMenuForNaturalPersons(client.getName());
+//            bankView.showLoggedMenuForNaturalPersons(client.getName());
+//
+//            int option = bankView.getOptionFromUser();
+//            switch (option) {
+//                case 1: // abrir conta-corrente; extrair para método em Client, "openCheckingAccount"; informar número da conta préexistente
+//                    client.openCheckingAccount(this.numberOfAccounts + 1);
+//                    this.numberOfAccounts++;  // poderia ter sido usado ++number, mas acho desnecessário
+//                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);  // seria melhor pegar o número direto da conta? Esta mensagem deveria estar em Client?
+//                    break;
+//                case 2:  // abrir conta-poupança
+//                    client.openSavingsAccount(this.numberOfAccounts + 1);
+//                    this.numberOfAccounts++;
+//                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
+//                    break;
+//                case 3:  // abrir conta-investimento
+//                    client.openInvestmentAccount(this.numberOfAccounts + 1,
+//                                                 InvestmentAccount.INTEREST_FOR_NATURAL_PERSONS);
+//                    this.numberOfAccounts++;
+//                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
+//                    break;
+//                case 4: {  // sacar da conta-corrente
+//                    break;
+//                }
+//                case 5: {  // sacar da conta-poupança
+//                    break;
+//                }
+//                case 6: {  // transferir a partir da conta-corrente
+//                    break;
+//                }
+//                case 7: {  // transferir a partir da conta-poupança
+//                    break;
+//                }
+//                case 8:  // depositar
+//                    int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+//                    Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+//
+//                    if (destinationAccount == null) {
+//                        throw new AccountNotFoundException();
+//                    }
+//
+//                    BigDecimal valueToDeposit = bankView.getValueFromUser();
+//                    client.deposit(destinationAccount, valueToDeposit);
+//                    break;
+//                case 9: {  // investir
+//                    break;
+//                }
+//                case 10:  // resgatar investimento
+//                    break;
+//                case 11: {  // consultar saldo da conta-corrente
+//                    BigDecimal balance = client.getBalanceFromAccount(client.getCheckingAccount());
+//                    bankView.showBalance(balance);
+//                    break;
+//                }
+//                case 12: {  // consultar saldo da conta-poupança
+//                    break;
+//                }
+//                case 13: {  // consultar saldo da conta-investimento
+//                    break;
+//                }
+//                case 14:  // consultar saldo total
+//                    BigDecimal balance = client.getTotalBalance();
+//                    bankView.showBalance(balance);
+//                    break;
+//                case 15:  // deslogar
+//                    return;
+//                default:
+//                    bankView.showInvalidOptionMessage();
+//            }
+        }
+    }
 
-            int option = bankView.getOptionFromUser();
-            switch (option) {
-                case 1: // abrir conta-corrente; extrair para método em Client, "openCheckingAccount"; informar número da conta préexistente
-                    client.openCheckingAccount(this.numberOfAccounts + 1);
-                    this.numberOfAccounts++;  // poderia ter sido usado ++number, mas acho desnecessário
-                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);  // seria melhor pegar o número direto da conta? Esta mensagem deveria estar em Client?
-                    break;
-                case 2:  // abrir conta-poupança
-                    client.openSavingsAccount(this.numberOfAccounts + 1);
-                    this.numberOfAccounts++;
-                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
-                    break;
-                case 3:  // abrir conta-investimento
-                    client.openInvestmentAccount(this.numberOfAccounts + 1,
-                                                 InvestmentAccount.INTEREST_FOR_NATURAL_PERSONS);
-                    this.numberOfAccounts++;
-                    bankView.showSuccessfulAccountOpeningMessage(this.numberOfAccounts);
-                    break;
-                case 4: {  // sacar da conta-corrente
-                    break;
-                }
-                case 5: {  // sacar da conta-poupança
-                    break;
-                }
-                case 6: {  // transferir a partir da conta-corrente
-                    break;
-                }
-                case 7: {  // transferir a partir da conta-poupança
-                    break;
-                }
-                case 8:  // depositar
+    private void loginJuridicalPerson(JuridicalPersonClient client) {
+        BankView bankView = new BankView();  // usar variável estática?
+
+        while (true) {
+            bankView.showAccountTypesForJuridicalPersonsSelectionMenu(client.getName());
+
+            int accountTypeOption = bankView.getOptionFromUser();  // talvez mudar para loggedClientOptions() ou algo assim
+            switch (accountTypeOption) {
+                case 1:  // depositar
                     int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
                     Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
 
@@ -158,159 +218,22 @@ public class Bank { // talvez criar BankController
                     BigDecimal valueToDeposit = bankView.getValueFromUser();
                     client.deposit(destinationAccount, valueToDeposit);
                     break;
-                case 9: {  // investir
-                    BigDecimal valueToInvest = bankView.getValueFromUser();
-                    client.invest(valueToInvest);  // tem que ver se as contas sao nulas
-
-                    BigDecimal newBalance = client.getInvestmentAccount().getBalance();
-                    bankView.showSuccessfulOperationMessage(newBalance);
+                case 2:  // acessar conta-corrente
+                    loginCheckingAccount(client, bankView);
                     break;
-                }
-                case 10:  // resgatar investimento
-                    BigDecimal valueToWithdraw = bankView.getValueFromUser();
-                    client.withdrawFromInvestment(valueToWithdraw);
-
-                    BigDecimal newBalance = client.getInvestmentAccount().getBalance();
-                    bankView.showSuccessfulOperationMessage(newBalance);
+                case 3:  // acessar conta-investimento
+                    loginInvestmentAccount(client, bankView);
                     break;
-                case 11: {  // consultar saldo da conta-corrente
-                    BigDecimal balance = client.getBalanceFromAccount(client.getCheckingAccount());
-                    bankView.showBalance(balance);
-                    break;
-                }
-                case 12: {  // consultar saldo da conta-poupança
-                    BigDecimal balance = client.getBalanceFromAccount(client.getSavingsAccount());
-                    bankView.showBalance(balance);
-                    break;
-                }
-                case 13: {  // consultar saldo da conta-investimento
-                    BigDecimal balance = client.getBalanceFromAccount(client.getInvestmentAccount());
-                    bankView.showBalance(balance);
-                    break;
-                }
-                case 14:  // consultar saldo total
-                    BigDecimal balance = client.getTotalBalance();
-                    bankView.showBalance(balance);
-                    break;
-                case 15:  // deslogar
+                case 4:  // deslogar
                     return;
                 default:
                     bankView.showInvalidOptionMessage();
             }
-        }
-    }
 
-    private void loginInvestmentAccount(Client client, BankView bankView) {
-        bankView.showInvestmentAccountMenu();
 
-        int operationOption = bankView.getOptionFromUser();
-        switch (operationOption) {
-            case 1:  // investir
-                break;
-            case 2:  // resgatar investimento
-                break;
-            case 3:  // consultar saldo
-                break;
-            case 4:  // retornar ao menu anterior / escolher outro tipo de conta
-                break;
-            default:
-                bankView.showInvalidOptionMessage();
-        }
-    }
 
-    private void loginSavingsAccount(NaturalPersonClient client, BankView bankView) {
-        bankView.showSavingsAccountMenu();
+        /*
 
-        int operationOption = bankView.getOptionFromUser();
-        switch (operationOption) {
-            case 1: {  // sacar
-                BigDecimal valueToWithdraw = bankView.getValueFromUser();
-                client.withdraw(client.getSavingsAccount(), valueToWithdraw);
-                BigDecimal newBalance = client.getSavingsAccount().getBalance();
-                bankView.showSuccessfulOperationMessage(newBalance);
-                break;
-            }
-            case 2: {  // transferir
-                int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
-                Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
-
-                if (destinationAccount == null) {
-                    throw new AccountNotFoundException();
-                }
-
-                BigDecimal valueToTransfer = bankView.getValueFromUser();
-                client.transfer(client.getSavingsAccount(), destinationAccount, valueToTransfer);
-
-                BigDecimal newBalance = client.getSavingsAccount().getBalance();
-                bankView.showSuccessfulOperationMessage(newBalance);
-                break;
-            }
-            case 3:  // depositar nesta conta
-                Account destinationAccount = client.getSavingsAccount();
-
-                if (destinationAccount == null) {
-                    throw new AccountNotFoundException();
-                }
-
-                BigDecimal valueToDeposit = bankView.getValueFromUser();
-                client.deposit(destinationAccount, valueToDeposit);
-                break;
-            case 4:  // consultar saldo
-                break;
-            case 5:  // retornar ao menu anterior / escolher outro tipo de conta
-                break;
-            default:
-                bankView.showInvalidOptionMessage();
-        }
-    }
-
-    private void loginCheckingAccount(Client client, BankView bankView) {
-        bankView.showCheckingAccountMenu();
-
-        int operationOption = bankView.getOptionFromUser();
-        switch (operationOption) {
-            case 1: {  // sacar
-                BigDecimal valueToWithdraw = bankView.getValueFromUser();
-                client.withdraw(client.getCheckingAccount(), valueToWithdraw);
-                BigDecimal newBalance = client.getCheckingAccount().getBalance();
-                bankView.showSuccessfulOperationMessage(newBalance);
-                break;
-            }
-            case 2: {  // transferir
-                int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
-                Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
-
-                if (destinationAccount == null) {
-                    throw new AccountNotFoundException();
-                }
-
-                BigDecimal valueToTransfer = bankView.getValueFromUser();
-                client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
-
-                BigDecimal newBalance = client.getCheckingAccount().getBalance();
-                bankView.showSuccessfulOperationMessage(newBalance);
-                break;
-            }
-            case 3:  // depositar nesta conta
-                Account destinationAccount = client.getCheckingAccount();
-
-                if (destinationAccount == null) {
-                    throw new AccountNotFoundException();
-                }
-
-                BigDecimal valueToDeposit = bankView.getValueFromUser();
-                client.deposit(destinationAccount, valueToDeposit);
-                break;
-            case 4:  // consultar saldo
-                break;
-            case 5:  // retornar ao menu anterior / escolher outro tipo de conta
-                break;
-            default:
-                bankView.showInvalidOptionMessage();
-        }
-    }
-
-    private void loginJuridicalPerson(JuridicalPersonClient client) {
         BankView bankView = new BankView();
 
         while (true) {
@@ -403,7 +326,144 @@ public class Bank { // talvez criar BankController
                 default:
                     bankView.showInvalidOptionMessage();
             }
+
+            */
+
+
         }
+    }
+
+    private void loginInvestmentAccount(Client client, BankView bankView) {
+        bankView.showInvestmentAccountMenu();
+
+        int operationOption = bankView.getOptionFromUser();
+        switch (operationOption) {
+            case 1: {  // investir
+                BigDecimal valueToInvest = bankView.getValueFromUser();
+                client.invest(valueToInvest);  // tem que ver se as contas sao nulas
+                BigDecimal newBalance = client.getInvestmentAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            }
+            case 2:  // resgatar investimento
+                BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                client.withdrawFromInvestment(valueToWithdraw);
+
+                BigDecimal newBalance = client.getInvestmentAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            case 3:  // consultar saldo
+                BigDecimal balance = client.getBalanceFromAccount(client.getInvestmentAccount());
+                bankView.showBalance(balance);
+                break;
+            case 4:  // retornar ao menu anterior / escolher outro tipo de conta
+                return;
+            default:
+                bankView.showInvalidOptionMessage();
+        }
+
+        this.loginInvestmentAccount(client, bankView);
+    }
+
+    private void loginSavingsAccount(NaturalPersonClient client, BankView bankView) {
+        bankView.showSavingsAccountMenu();
+
+        int operationOption = bankView.getOptionFromUser();
+        switch (operationOption) {
+            case 1: {  // sacar
+                BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                client.withdraw(client.getSavingsAccount(), valueToWithdraw);
+                BigDecimal newBalance = client.getSavingsAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            }
+            case 2: {  // transferir
+                int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+                Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+
+                if (destinationAccount == null) {
+                    throw new AccountNotFoundException();
+                }
+
+                BigDecimal valueToTransfer = bankView.getValueFromUser();
+                client.transfer(client.getSavingsAccount(), destinationAccount, valueToTransfer);
+
+                BigDecimal newBalance = client.getSavingsAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            }
+            case 3:  // depositar nesta conta
+                Account destinationAccount = client.getSavingsAccount();
+
+                if (destinationAccount == null) {
+                    throw new AccountNotFoundException();
+                }
+
+                BigDecimal valueToDeposit = bankView.getValueFromUser();
+                client.deposit(destinationAccount, valueToDeposit);
+                break;
+            case 4:  // consultar
+                BigDecimal balance = client.getBalanceFromAccount(client.getSavingsAccount());
+                bankView.showBalance(balance);
+                break;
+            case 5:  // retornar ao menu anterior / escolher outro tipo de conta
+                return;
+            default:
+                bankView.showInvalidOptionMessage();
+        }
+
+        this.loginSavingsAccount(client, bankView);
+    }
+
+    private void loginCheckingAccount(Client client, BankView bankView) {
+        bankView.showCheckingAccountMenu();
+
+        int operationOption = bankView.getOptionFromUser();
+        switch (operationOption) {
+            case 1: {  // sacar
+                BigDecimal valueToWithdraw = bankView.getValueFromUser();
+                client.withdraw(client.getCheckingAccount(), valueToWithdraw);
+                BigDecimal newBalance = client.getCheckingAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            }
+            case 2: {  // transferir
+                int destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+                Account destinationAccount = getAccountFromAccountNumber(destinationAccountNumber);
+
+                if (destinationAccount == null) {
+                    throw new AccountNotFoundException();
+                }
+
+                BigDecimal valueToTransfer = bankView.getValueFromUser();
+                client.transfer(client.getCheckingAccount(), destinationAccount, valueToTransfer);
+
+                BigDecimal newBalance = client.getCheckingAccount().getBalance();
+                bankView.showSuccessfulOperationMessage(newBalance);
+                break;
+            }
+            case 3:  // depositar nesta conta
+                Account destinationAccount = client.getCheckingAccount();
+
+                if (destinationAccount == null) {
+                    throw new AccountNotFoundException();
+                }
+
+                BigDecimal valueToDeposit = bankView.getValueFromUser();
+                client.deposit(destinationAccount, valueToDeposit);
+                break;
+            case 4: {  // consultar saldo
+                BigDecimal balance = client.getBalanceFromAccount(client.getCheckingAccount());
+                bankView.showBalance(balance);
+                break;
+            }
+            case 5:  // retornar ao menu anterior / escolher outro tipo de conta
+                return;
+            default:
+                bankView.showInvalidOptionMessage();
+        }
+
+        loginCheckingAccount(client, bankView);
     }
 
     private Account getAccountFromAccountNumber(int destinationAccountNumber) {

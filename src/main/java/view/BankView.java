@@ -39,6 +39,27 @@ public class BankView { //singleton?
         System.out.println("15 - deslogar");
     }
 
+    public void showAccountTypesForNaturalPersonsSelectionMenu(String name) {
+        System.out.println();
+        System.out.println("Olá, " + name + "!");
+        System.out.println("Por favor escolha escolha uma opção:");
+        System.out.println("1 - depositar");
+        System.out.println("2 - acessar conta-corrente");
+        System.out.println("3 - acessar conta-poupança");
+        System.out.println("4 - acessar conta investimento");
+        System.out.println("5 - deslogar");
+    }
+
+    public void showAccountTypesForJuridicalPersonsSelectionMenu(String name) {
+        System.out.println();
+        System.out.println("É um prazer trabalhar com a empresa " + name + "!");
+        System.out.println("Por favor escolha escolha uma opção:");
+        System.out.println("1 - depositar");
+        System.out.println("2 - acessar conta-corrente");
+        System.out.println("3 - acessar conta investimento");
+        System.out.println("4 - deslogar");
+    }
+
     public void showLoggedMenuForJuridicalPersons(String name) {
         System.out.println();
         System.out.println("É um prazer trabalhar com a empresa " + name + "!");
@@ -60,7 +81,7 @@ public class BankView { //singleton?
         System.out.println("Cliente cadastrado com sucesso!");
     }
 
-    private void showFailedClientRegistrationMessage() {
+    private void showFailedClientRegistrationMessage() {  // clientAlreadyRegistered?
         System.out.println("Cliente já estava previamente cadastrado! Nenhuma alteração foi realizada.");
     }
 
@@ -116,16 +137,8 @@ public class BankView { //singleton?
         System.out.format("Operação realizada com sucesso. O novo saldo da conta é de R$ %,.2f.%n", newBalance);
     }
 
-    public void showAccountTypeSelectionMenu(String name) {
-        System.out.println("Olá, " + name + "!");
-        System.out.println("Por favor escolha escolha uma opção:");
-        System.out.println("1 - depositar");
-        System.out.println("2 - acessar conta-corrente");
-        System.out.println("3 - acessar conta-poupança");
-        System.out.println("4 - acessar conta investimento");
-    }
-
     public void showCheckingAccountMenu() {
+        System.out.println();
         System.out.println("escolha uma opção:");
         System.out.println("1 - sacar");
         System.out.println("2 - transferir");
@@ -135,6 +148,7 @@ public class BankView { //singleton?
     }
 
     public void showSavingsAccountMenu() {
+        System.out.println();
         System.out.println("escolha uma opção:");
         System.out.println("1 - sacar");
         System.out.println("2 - transferir");
@@ -144,10 +158,17 @@ public class BankView { //singleton?
     }
 
     public void showInvestmentAccountMenu() {
+        System.out.println();
         System.out.println("escolha uma opção:");
         System.out.println("1 - investir");
         System.out.println("2 - resgatar investimento");
         System.out.println("3 - consultar saldo");
         System.out.println("4 - retornar ao menu anterior / escolher outro tipo de conta");
+    }
+
+    public void promptAccountOpening() {
+        System.out.println("Esta conta ainda não existe. Deseja criá-la?");
+        System.out.println("1 - sim, e acessá-la");
+        System.out.println("2 - não, e voltar ao menu anterior");
     }
 }
