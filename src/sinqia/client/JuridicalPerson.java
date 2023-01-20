@@ -1,8 +1,12 @@
 package sinqia.client;
 
-public class JuridicalPerson extends Client {
-    private String cnpj;
+import sinqia.account.Account;
 
+public class JuridicalPerson extends Client {
+	
+    private String cnpj;
+	private Account[] accounts = new Account[2];
+    
     public JuridicalPerson(String name, String cnpj){
         super(name);
         this.cnpj = cnpj;
@@ -15,4 +19,13 @@ public class JuridicalPerson extends Client {
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
+    
+	public Account[] getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(Account[] accounts) {
+		this.accounts = accounts;
+	}
+    
 }

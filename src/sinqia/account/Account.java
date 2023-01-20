@@ -3,6 +3,7 @@ package sinqia.account;
 import java.math.BigDecimal;
 
 public class Account {
+	
     private Long accountNumber;
     private BigDecimal balance;
 
