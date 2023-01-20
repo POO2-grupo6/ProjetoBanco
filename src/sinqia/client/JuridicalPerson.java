@@ -7,6 +7,10 @@ public class JuridicalPerson extends Client {
     private String cnpj;
 	private Account[] accounts = new Account[2];
     
+	public JuridicalPerson(){
+        super();
+    }
+	
     public JuridicalPerson(String name, String cnpj){
         super(name);
         this.cnpj = cnpj;

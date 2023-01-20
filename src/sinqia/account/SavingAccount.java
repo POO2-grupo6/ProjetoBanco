@@ -10,7 +10,11 @@ public class SavingAccount extends Account {
 		super(accountNumber);
 	}
 	
-	public BigDecimal setInterest(BigDecimal value) {
+	public static BigDecimal getInterest() {
+		return INTEREST;
+	}
+
+	public BigDecimal calculateInterest(BigDecimal value) {
 		return value.multiply(INTEREST);
 	}
 	

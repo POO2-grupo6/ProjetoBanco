@@ -7,6 +7,9 @@ public class NaturalPerson extends Client {
 	private String cpf;
 	private Account[] accounts = new Account[3];
 
+    public NaturalPerson() {
+    }
+	
     public NaturalPerson(String name, String cpf) {
         super(name);
         this.cpf = cpf;

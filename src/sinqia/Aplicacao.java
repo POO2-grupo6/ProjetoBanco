@@ -1,9 +1,17 @@
 package sinqia;
 
+import java.util.Locale;
+
 public class Aplicacao {
-    public static void main(String[] args) {
-        System.out.println("Bem-vindo ao Banco Digital! Para começar faça o seu cadastro ou realize o login!\n" +
-                "1 - cadastrar " +
-                "2 - fazer login");
-    }
+
+	public static void main(String[] args) {
+
+		Locale.setDefault(new Locale("pt", "BR"));
+		
+		Bank bank = new Bank();
+		
+		bank.loadMainMenu();
+		
+	}
+	
 }
