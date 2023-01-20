@@ -1,6 +1,8 @@
 package sinqia.client;
 
-public class Client {
+import java.util.Objects;
+
+public class Client{
 	
 	private String name;
 	private String password;
@@ -35,6 +37,24 @@ public class Client {
 
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(registrationId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		return Objects.equals(this.registrationId, obj);
+	}
+	
+	public boolean passwordIsEqualTo(String loginAttempt) {
+		return this.password.equals(loginAttempt);
 	}
 
 }
