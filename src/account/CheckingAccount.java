@@ -1,4 +1,9 @@
 package account;
 
-public class CheckingAccount {
+public class CheckingAccount extends Account{
+
+	public CheckingAccount(Long accountNumber) {
+		super(accountNumber);
+	}
+	
 }

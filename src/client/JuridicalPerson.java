@@ -1,26 +1,17 @@
 package client;
 
-public class JuridicalPerson {
+public class JuridicalPerson extends Client{
 
 
-    private String nome;
     private String cnpj;
 
-    public JuridicalPerson(String nome, String cnpj){
-        this.nome = nome;
+    public JuridicalPerson(String name, String cnpj){
+        super(name);
         this.cnpj = cnpj;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public String getCnpj() {
         return cnpj;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public void setCnpj(String cnpj) {

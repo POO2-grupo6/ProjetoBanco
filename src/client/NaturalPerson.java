@@ -1,26 +1,16 @@
 package client;
 
-public class NaturalPerson {
+public class NaturalPerson extends Client{
 
-
-    private String nome;
     private String cpf;
 
-    public NaturalPerson(String nome, String cpf){
-        this.nome = nome;
+    public NaturalPerson(String name, String cpf){
+        super(name);
         this.cpf = cpf;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public String getCpf() {
         return cpf;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public void setCpf(String cpf) {
