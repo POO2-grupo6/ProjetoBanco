@@ -4,22 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f29d9d8f-2906-403a-8dc7-6448d3c3920c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Projeto_Modulo_III_Banco.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Apl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/IOperations.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/account/Account.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/account/CheckingAccount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/account/InvestmentAccount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/account/SavingAccount.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/JuridicalPerson.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/client/NaturalPerson.java" afterDir="false" />
+    <list default="true" id="f29d9d8f-2906-403a-8dc7-6448d3c3920c" name="Changes" comment="projeto banco, começando em conjunto">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Apl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Aplicacao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/account/IOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/account/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/account/Account.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +27,13 @@
     <excluded-from-favorite>
       <branch-storage>
         <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
           <entry type="REMOTE">
             <value>
               <list>
@@ -48,19 +44,11 @@
         </map>
       </branch-storage>
     </excluded-from-favorite>
-    <favorite-branches>
-      <branch-storage>
-        <map>
-          <entry type="REMOTE">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="origin/main" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -89,6 +77,14 @@
       <option name="presentableId" value="Default" />
       <updated>1674131605067</updated>
     </task>
+    <task id="LOCAL-00001" summary="projeto banco, começando em conjunto">
+      <created>1674171873112</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1674171873112</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,5 +97,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="projeto banco, começando em conjunto" />
+    <option name="LAST_COMMIT_MESSAGE" value="projeto banco, começando em conjunto" />
   </component>
 </project>
