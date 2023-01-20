@@ -1,10 +1,9 @@
 package client;
 
-public class NaturalPerson extends Client{
-
+public class NaturalPerson extends Client {
     private String cpf;
 
-    public NaturalPerson(String name, String cpf){
+    public NaturalPerson(String name, String cpf) {
         super(name);
         this.cpf = cpf;
     }

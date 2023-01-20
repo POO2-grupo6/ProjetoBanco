@@ -5,5 +5,4 @@ public interface IOperations {
     void deposit();
     void transfer();
     void invest();
-
 }

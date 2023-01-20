@@ -1,8 +1,6 @@
 package client;
 
-public class JuridicalPerson extends Client{
-
-
+public class JuridicalPerson extends Client {
     private String cnpj;
 
     public JuridicalPerson(String name, String cnpj){

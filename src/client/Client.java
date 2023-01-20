@@ -1,14 +1,10 @@
 package client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import account.Account;
 
 public class Client {
-	
-	String name;
-	List<Account> accounts = new ArrayList<>();
+	private String name;
+	private Account[] accounts = new Account[2];
 
 	public Client(String name) {
 		this.name = name;
@@ -22,12 +18,11 @@ public class Client {
 		this.name = name;
 	}
 
-	public List<Account> getAccounts() {
+	public Account[] getAccounts() {
 		return accounts;
 	}
 
-	public void setAccounts(List<Account> accounts) {
+	public void setAccounts(Account[] accounts) {
 		this.accounts = accounts;
 	}
-
 }
