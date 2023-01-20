@@ -1,4 +1,4 @@
-package account;
+package sinqia.account;
 
 public class InvestmentAccount extends Account{
 

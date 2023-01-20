@@ -1,4 +1,4 @@
-package account;
+package sinqia.account;
 
 import java.math.BigDecimal;
 

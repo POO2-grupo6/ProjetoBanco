@@ -1,6 +1,6 @@
-package client;
+package sinqia.client;
 
-import account.Account;
+import sinqia.account.Account;
 
 public class Client {
 	private String name;

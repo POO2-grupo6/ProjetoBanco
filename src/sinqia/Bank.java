@@ -1,4 +1,4 @@
-import java.util.Set;
+package sinqia;
 
 public class Bank {
    

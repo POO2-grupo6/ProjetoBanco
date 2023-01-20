@@ -1,4 +1,4 @@
-package client;
+package sinqia.client;
 
 public class JuridicalPerson extends Client {
     private String cnpj;

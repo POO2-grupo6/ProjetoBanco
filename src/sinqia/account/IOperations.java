@@ -1,4 +1,4 @@
-package account;
+package sinqia.account;
 
 public interface IOperations {
     void withdraw();
