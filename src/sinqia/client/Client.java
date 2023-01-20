@@ -4,6 +4,7 @@ public class Client {
 	
 	private String name;
 	private String password;
+	private String registrationId;
 
 	public Client() {
 	}
@@ -28,6 +29,12 @@ public class Client {
 		this.password = password;
 	}
 	
-	
+	public String getRegistrationId() {
+		return registrationId;
+	}
+
+	public void setRegistrationId(String registrationId) {
+		this.registrationId = registrationId;
+	}
 
 }

@@ -100,15 +100,19 @@ public class Bank {
 	
 	public void registerNewClient(Client client) {
 		Long num = (long) clients.size() + 1;
+		System.out.printf("Insira o nome: ");
 		String name = sc.nextLine();
+		if(client.getClass()==NaturalPerson.class) {
+			System.out.printf("Insira o CPF: ");
+		}else if(client.getClass()==JuridicalPerson.class) {
+			System.out.printf("Insira o CNPJ: ");
+		}
+		String registrationId = sc.nextLine();
+		System.out.printf("Crie uma senha: ");
 		String password = sc.nextLine();
 		client.setName(name);
 		client.setPassword(password);
-		if(client.getClass() == NaturalPerson.class) {
-			String cpf = sc.nextLine();
-		} else if (client.getClass() == JuridicalPerson.class) {
-			String cnpj = sc.nextLine();
-		}
+		client.setRegistrationId(registrationId);
 		clients.add(client);
 	}
 	
