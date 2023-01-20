@@ -103,6 +103,7 @@ public class Bank {
 		String name = sc.nextLine();
 		String password = sc.nextLine();
 		client.setName(name);
+		client.setPassword(password);
 		if(client.getClass() == NaturalPerson.class) {
 			String cpf = sc.nextLine();
 		} else if (client.getClass() == JuridicalPerson.class) {
