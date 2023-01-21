@@ -1,11 +1,14 @@
 package sinqia.client;
 
+import java.math.BigDecimal;
+
 import sinqia.account.Account;
 
 public class JuridicalPerson extends Client {
 	
-    private String cnpj;
+    protected String cnpj;
 	private Account[] accounts = new Account[2];
+	static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.035);
     
 	public JuridicalPerson(){
         super();
@@ -31,5 +34,10 @@ public class JuridicalPerson extends Client {
 	public void setAccounts(Account[] accounts) {
 		this.accounts = accounts;
 	}
+
+	public static BigDecimal getInvestmentInterestRate() {
+		return INVESTMENT_INTEREST_RATE;
+	}
+	
     
 }

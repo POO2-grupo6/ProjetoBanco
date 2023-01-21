@@ -16,6 +16,7 @@ public class Bank {
 	Scanner sc = new Scanner(System.in);
 
 	public Set<Client> clients;
+	Client currentClient;
 
 	public Bank() {
 		clients = new HashSet<Client>();
