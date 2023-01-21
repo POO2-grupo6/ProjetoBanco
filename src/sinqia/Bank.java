@@ -9,6 +9,7 @@ import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
+import sinqia.exceptions.PasswordMismatchException;
 
 public class Bank {
 
@@ -66,10 +67,15 @@ public class Bank {
 			String registrationId = sc.nextLine();
 			try{
 				Client currentClient = findClient(registrationId);
-
+				System.out.printf("Insira a senha: ");
+				currentClient.passwordIsEqualTo(sc.nextLine());
+				this.loadClientMenu(currentClient);
 			} catch (ClientNotFoundException e) {
-				System.out.println("O cliente não está cadastrado.");
-				this.loadClientMenu();
+				System.out.println(e.getMessage());
+				this.loadMainMenu();
+			} catch (PasswordMismatchException e) {
+				System.out.println(e.getMessage());
+				this.loadMainMenu();
 			}
 		}
 
@@ -84,7 +90,7 @@ public class Bank {
 		throw new ClientNotFoundException();
 	}
 
-	public void loadClientMenu() {
+	public void loadClientMenu(Client client) {
 		System.out.println("\n====== MENU DO CLIENTE ======");
 		System.out.println("Escolha uma opção: ");
 		System.out.println("C - Consultar saldo\n"

@@ -2,6 +2,8 @@ package sinqia.client;
 
 import java.util.Objects;
 
+import sinqia.exceptions.PasswordMismatchException;
+
 public class Client{
 	
 	private String name;
@@ -53,8 +55,11 @@ public class Client{
 		return Objects.equals(this.registrationId, obj);
 	}
 	
-	public boolean passwordIsEqualTo(String loginAttempt) {
-		return this.password.equals(loginAttempt);
+	public boolean passwordIsEqualTo(String loginAttempt) throws PasswordMismatchException{
+		if (this.password.equals(loginAttempt))
+			return true;
+		else
+			throw new PasswordMismatchException();
 	}
 
 }
