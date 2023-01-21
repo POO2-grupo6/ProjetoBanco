@@ -1,6 +1,5 @@
 package sinqia;
 
-import java.awt.desktop.PrintFilesEvent;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -10,16 +9,17 @@ import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.PasswordMismatchException;
+import sinqia.view.BankView;
 
 public class Bank {
+	private BankView bankView;
+	private Scanner scanner = new Scanner(System.in);
+	private Set<Client> clients;
+	private Client currentClient;
 
-	Scanner sc = new Scanner(System.in);
-
-	public Set<Client> clients;
-	Client currentClient;
-
-	public Bank() {
-		clients = new HashSet<Client>();
+	public Bank(BankView bankView) {
+		this.bankView = bankView;
+		clients = new HashSet<>();
 	}
 
 	public Set<Client> getClients() {
@@ -35,7 +35,7 @@ public class Bank {
 				+ "L - Listar clientes\n"
 				+ "F - Fechar");
 
-		String menu = sc.nextLine().toUpperCase();
+		String menu = scanner.nextLine().toUpperCase();
 		switch(menu) {
 		case "F":
 			registerNewClient(new NaturalPerson());
@@ -64,12 +64,12 @@ public class Bank {
 			System.out.println("Ainda não há clientes cadastrados.");
 			this.loadMainMenu();
 		}else {
-			System.out.printf("Insira o CPF/CNPJ: ");
-			String registrationId = sc.nextLine();
+			System.out.print("Insira o CPF/CNPJ: ");
+			String registrationId = scanner.nextLine();
 			try{
 				Client currentClient = findClient(registrationId);
-				System.out.printf("Insira a senha: ");
-				currentClient.passwordIsEqualTo(sc.nextLine());
+				System.out.print("Insira a senha: ");
+				currentClient.passwordIsEqualTo(scanner.nextLine());
 				this.loadClientMenu(currentClient);
 			} catch (ClientNotFoundException e) {
 				System.out.println(e.getMessage());
@@ -84,10 +84,11 @@ public class Bank {
 
 	private Client findClient(String registrationId) throws ClientNotFoundException {
 		for(Client client : clients) {
-			if(client.equals(registrationId)) {
+			if(client.getRegistrationId().equals(registrationId)) {
 				return client;
 			}
 		}
+
 		throw new ClientNotFoundException();
 	}
 
@@ -136,16 +137,16 @@ public class Bank {
 
 	public void registerNewClient(Client client) {
 		Long num = (long) clients.size() + 1;
-		System.out.printf("Insira o nome: ");
-		String name = sc.nextLine();
-		if(client.getClass()==NaturalPerson.class) {
-			System.out.printf("Insira o CPF: ");
-		}else if(client.getClass()==JuridicalPerson.class) {
-			System.out.printf("Insira o CNPJ: ");
+		System.out.print("Insira o nome: ");
+		String name = scanner.nextLine();
+		if(client instanceof NaturalPerson) {
+			System.out.print("Insira o CPF: ");
+		}else if(client instanceof JuridicalPerson) {
+			System.out.print("Insira o CNPJ: ");
 		}
-		String registrationId = sc.nextLine();
-		System.out.printf("Crie uma senha: ");
-		String password = sc.nextLine();
+		String registrationId = scanner.nextLine();
+		System.out.print("Crie uma senha: ");
+		String password = scanner.nextLine();
 		client.setName(name);
 		client.setPassword(password);
 		client.setRegistrationId(registrationId);

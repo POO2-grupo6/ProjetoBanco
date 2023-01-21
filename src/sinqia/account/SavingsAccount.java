@@ -2,9 +2,19 @@ package sinqia.account;
 
 import java.math.BigDecimal;
 
-public class CheckingAccount extends Account implements IOperations {
-	public CheckingAccount(Long accountNumber) {
+public class SavingsAccount extends Account implements IOperations {
+	static final BigDecimal INTEREST_RATE = BigDecimal.valueOf(0.01);
+	
+	public SavingsAccount(Long accountNumber) {
 		super(accountNumber);
+	}
+	
+	public static BigDecimal getInterestRate() {
+		return INTEREST_RATE;
+	}
+
+	public BigDecimal calculateInterest(BigDecimal value) {
+		return value.multiply(INTEREST_RATE);
 	}
 
 	@Override

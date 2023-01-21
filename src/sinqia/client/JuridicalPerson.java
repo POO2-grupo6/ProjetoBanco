@@ -5,10 +5,9 @@ import java.math.BigDecimal;
 import sinqia.account.Account;
 
 public class JuridicalPerson extends Client {
-	
     protected String cnpj;
 	private Account[] accounts = new Account[2];
-	static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.035);
+	private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.035);
     
 	public JuridicalPerson(){
         super();

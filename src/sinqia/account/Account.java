@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Account {
 	
     private Long accountNumber;
-    private BigDecimal balance;
+    protected BigDecimal balance;
 
     public Account(Long accountNumber) {
         this.accountNumber = accountNumber;

@@ -3,13 +3,19 @@ package sinqia.account;
 import java.math.BigDecimal;
 
 public class InvestmentAccount extends Account implements IInterest {
-
-	public InvestmentAccount(Long accountNumber) {
+	private BigDecimal interestRate;
+	public InvestmentAccount(Long accountNumber, BigDecimal interestRate) {
 		super(accountNumber);
+		this.interestRate = interestRate;
 	}
 	
     public void redeem(Account destination, BigDecimal amount) {
     	
-    };
-	
+    }
+
+	public BigDecimal calculateInterest(BigDecimal value) {
+		return value.multiply(interestRate);
+	}
+
+
 }
