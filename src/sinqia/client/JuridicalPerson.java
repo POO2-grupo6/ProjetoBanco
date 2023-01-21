@@ -3,6 +3,8 @@ package sinqia.client;
 import java.math.BigDecimal;
 
 import sinqia.account.Account;
+import sinqia.account.CheckingAccount;
+import sinqia.account.InvestmentAccount;
 
 public class JuridicalPerson extends Client {
     protected String cnpj;
@@ -38,6 +40,21 @@ public class JuridicalPerson extends Client {
 	public BigDecimal getInvestmentInterestRate() {
 		return INVESTMENT_INTEREST_RATE;
 	}
-	
-    
+
+    @Override
+    public CheckingAccount getCheckingAccount() {
+        return (CheckingAccount) accounts[0];
+    }
+
+    @Override
+    public InvestmentAccount getInvestmentAccount() {
+        return (InvestmentAccount) accounts[1];
+    }
+
+    @Override
+    public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+        accounts[1] = investmentAccount;
+    }
+
+
 }

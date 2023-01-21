@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import sinqia.account.Account;
+import sinqia.account.CheckingAccount;
+import sinqia.account.InvestmentAccount;
 import sinqia.exceptions.PasswordMismatchException;
 
 public abstract class Client {
@@ -56,14 +58,19 @@ public abstract class Client {
 		return Objects.equals(this.registrationId, obj);  // Acho que tem algum problema aqui (Marcos)
 	}
 
-	public boolean passwordIsEqualTo(String loginAttempt) throws PasswordMismatchException{
-		if (this.password.equals(loginAttempt))
-			return true;
-		else
+	public void validatePassword(String loginAttempt) throws PasswordMismatchException{
+		if (!this.password.equals(loginAttempt)) {
 			throw new PasswordMismatchException();
+		}
 	}
 
     public abstract Account[] getAccounts();
 
 	public abstract BigDecimal getInvestmentInterestRate();
+
+	public abstract CheckingAccount getCheckingAccount();
+
+	public abstract InvestmentAccount getInvestmentAccount();
+
+	public abstract void setInvestmentAccount(InvestmentAccount investmentAccount);
 }

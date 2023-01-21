@@ -3,6 +3,9 @@ package sinqia.client;
 import java.math.BigDecimal;
 
 import sinqia.account.Account;
+import sinqia.account.CheckingAccount;
+import sinqia.account.InvestmentAccount;
+import sinqia.account.SavingsAccount;
 
 public class NaturalPerson extends Client {
 	private String cpf;
@@ -42,7 +45,28 @@ public class NaturalPerson extends Client {
 	public BigDecimal getInvestmentInterestRate() {
 		return INVESTMENT_INTEREST_RATE;
 	}
-	
-	
-	
+
+	@Override
+	public CheckingAccount getCheckingAccount() {
+		return (CheckingAccount) accounts[0];
+	}
+
+	@Override
+	public InvestmentAccount getInvestmentAccount() {
+		return (InvestmentAccount) accounts[1];
+	}
+
+	@Override
+	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+		accounts[1] = investmentAccount;
+	}
+
+	public SavingsAccount getSavingsAccount() {
+		return (SavingsAccount) accounts[2];
+	}
+
+
+	public void setSavingsAccount(SavingsAccount savingsAccount) {
+		accounts[2] = savingsAccount;
+	}
 }

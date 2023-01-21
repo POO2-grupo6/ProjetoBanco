@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import sinqia.account.InvestmentAccount;
+import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
@@ -70,7 +71,7 @@ public class Bank {
 			try{
 				Client currentClient = findClient(registrationId);
 				System.out.print("Insira a senha: ");
-				currentClient.passwordIsEqualTo(scanner.nextLine());
+				currentClient.validatePassword(scanner.nextLine());
 				this.loadClientMenu(currentClient);
 			} catch (ClientNotFoundException | PasswordMismatchException e) {
 				System.out.println(e.getMessage());
@@ -110,7 +111,7 @@ public class Bank {
 				activateInvestmentAccount(client);
 				break;
 			case "H":
-//				activateSavingsAccount(client);
+				activateSavingsAccount((NaturalPerson) client);
 				break;
 			case "S":
 //				withdraw();
@@ -133,9 +134,18 @@ public class Bank {
 		}
 	}
 
+	private void activateSavingsAccount(NaturalPerson client) {
+		if (client.getSavingsAccount() == null) {
+			client.setSavingsAccount(new SavingsAccount(numberOfAccountsOpened + 1));
+			numberOfAccountsOpened++;
+		} else {
+			bankView.showAccountAlreadyExistsMessage();
+		}
+	}
+
 	private void activateInvestmentAccount(Client client) {
-		if (client.getAccounts()[1] == null) {
-			client.getAccounts()[1] = new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate());
+		if (client.getInvestmentAccount() == null) {
+			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
 			numberOfAccountsOpened++;
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
