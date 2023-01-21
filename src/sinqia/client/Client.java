@@ -4,8 +4,7 @@ import java.util.Objects;
 
 import sinqia.exceptions.PasswordMismatchException;
 
-public class Client{
-	
+public class Client {
 	private String name;
 	private String password;
 	private String registrationId;
@@ -40,7 +39,7 @@ public class Client{
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(registrationId);
@@ -52,9 +51,9 @@ public class Client{
 			return true;
 		if (obj == null)
 			return false;
-		return Objects.equals(this.registrationId, obj);
+		return Objects.equals(this.registrationId, obj);  // Acho que tem algum problema aqui (Marcos)
 	}
-	
+
 	public boolean passwordIsEqualTo(String loginAttempt) throws PasswordMismatchException{
 		if (this.password.equals(loginAttempt))
 			return true;
