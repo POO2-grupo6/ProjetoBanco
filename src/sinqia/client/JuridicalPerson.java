@@ -34,7 +34,8 @@ public class JuridicalPerson extends Client {
 		this.accounts = accounts;
 	}
 
-	public static BigDecimal getInvestmentInterestRate() {
+    @Override
+	public BigDecimal getInvestmentInterestRate() {
 		return INVESTMENT_INTEREST_RATE;
 	}
 	

@@ -1,18 +1,20 @@
 package sinqia.client;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
+import sinqia.account.Account;
 import sinqia.exceptions.PasswordMismatchException;
 
-public class Client {
+public abstract class Client {
 	private String name;
 	private String password;
 	private String registrationId;
 
-	public Client() {
+	protected Client() {
 	}
 	
-	public Client(String name) {
+	protected Client(String name) {
 		this.name = name;
 	}
 
@@ -61,4 +63,7 @@ public class Client {
 			throw new PasswordMismatchException();
 	}
 
+    public abstract Account[] getAccounts();
+
+	public abstract BigDecimal getInvestmentInterestRate();
 }

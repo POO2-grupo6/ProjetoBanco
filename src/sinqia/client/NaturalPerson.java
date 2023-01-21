@@ -38,7 +38,8 @@ public class NaturalPerson extends Client {
 		return SAVINGS_INTEREST_RATE;
 	}
 
-	public static BigDecimal getInvestmentInterestRate() {
+	@Override
+	public BigDecimal getInvestmentInterestRate() {
 		return INVESTMENT_INTEREST_RATE;
 	}
 	
