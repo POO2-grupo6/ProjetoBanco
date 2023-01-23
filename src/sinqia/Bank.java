@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
@@ -32,19 +33,22 @@ public class Bank {
 	public void loadMainMenu() {
 		System.out.println("\n====== MENU PRINCIPAL =======");
 		System.out.println("Escolha uma opção: ");
-		System.out.println("PF - Registrar novo cliente - PF\n"
-						 + "PJ - Registrar novo cliente - PJ\n"
+		System.out.println("PF - Registrar novo cliente PF\n"
+						 + "PJ - Registrar novo cliente PJ\n"
 						 + "E - Entrar\n"
 						 + "L - Listar clientes\n"
 						 + "F - Fechar");
 
 		String menu = scanner.nextLine().toUpperCase();
 		switch (menu) {
-			case "PF":
+			case "PF": {
 				registerNewClient(new NaturalPerson());
+				this.loadMainMenu();
 				break;
+			}
 			case "PJ":
 				registerNewClient(new JuridicalPerson());
+				this.loadMainMenu();
 				break;
 			case "E":
 				login();
@@ -90,7 +94,7 @@ public class Bank {
 		throw new ClientNotFoundException();
 	}
 
-	public void loadClientMenu(Client client) {
+	private void loadClientMenu(Client client) {
 		System.out.println("\n====== MENU DO CLIENTE ======");
 		System.out.println("Escolha uma opção: ");
 		System.out.println("C - Consultar saldo\n"
@@ -152,7 +156,16 @@ public class Bank {
 		}
 	}
 
-	public void registerNewClient(Client client) {
+	private void activateCheckingAccount(Client client) {
+		if (client.getCheckingAccount() == null) {
+			client.setCheckingAccount(new CheckingAccount(numberOfAccountsOpened + 1));
+			numberOfAccountsOpened++;
+		} else {
+			bankView.showAccountAlreadyExistsMessage();
+		}
+	}
+
+	private void registerNewClient(Client client) {
 		Long num = (long) clients.size() + 1;
 
 		System.out.print("Insira o nome: ");
@@ -172,8 +185,14 @@ public class Bank {
 		client.setPassword(password);
 		client.setRegistrationId(registrationId);
 
-		clients.add(client);
-		this.loadMainMenu();
+		boolean clientRegisteredSuccessfully = clients.add(client);
+
+		if (clientRegisteredSuccessfully) {
+			activateCheckingAccount(client);
+			bankView.showClientSuccessfullyRegisteredMessage();
+		} else {
+			bankView.showClientAlreadyRegisteredMessage();
+		}
 	}
 
 

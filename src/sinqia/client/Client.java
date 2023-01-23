@@ -45,20 +45,19 @@ public abstract class Client {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Client client = (Client) o;
+		return Objects.equals(registrationId, client.registrationId);
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(registrationId);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		return Objects.equals(this.registrationId, obj);  // Acho que tem algum problema aqui (Marcos)
-	}
-
-	public void validatePassword(String loginAttempt) throws PasswordMismatchException{
+	public void validatePassword(String loginAttempt) throws PasswordMismatchException {
 		if (!this.password.equals(loginAttempt)) {
 			throw new PasswordMismatchException();
 		}
@@ -68,9 +67,19 @@ public abstract class Client {
 
 	public abstract BigDecimal getInvestmentInterestRate();
 
-	public abstract CheckingAccount getCheckingAccount();
+	public CheckingAccount getCheckingAccount() {
+		return (CheckingAccount) getAccounts()[0];
+	}
 
-	public abstract InvestmentAccount getInvestmentAccount();
+	public InvestmentAccount getInvestmentAccount() {
+		return (InvestmentAccount) getAccounts()[1];
+	}
 
-	public abstract void setInvestmentAccount(InvestmentAccount investmentAccount);
+	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+		getAccounts()[1] = investmentAccount;
+	}
+
+	public void setCheckingAccount(CheckingAccount checkingAccount) {
+		getAccounts()[0] = checkingAccount;
+	}
 }
