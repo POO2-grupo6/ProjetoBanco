@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
@@ -31,30 +30,28 @@ public class Bank {
 	}
 
 	public void loadMainMenu() {
-		System.out.println("\n====== MENU PRINCIPAL =======");
+									//MENU PRINCIPAL
+		System.out.println("\n====== Bem-vindo ao Banco Gr-6 =======");
 		System.out.println("Escolha uma opção: ");
-		System.out.println("PF - Registrar novo cliente PF\n"
-						 + "PJ - Registrar novo cliente PJ\n"
+		System.out.println("PF - Registrar novo cliente - PF\n"
+						 + "PJ - Registrar novo cliente - PJ\n"
 						 + "E - Entrar\n"
 						 + "L - Listar clientes\n"
 						 + "F - Fechar");
 
 		String menu = scanner.nextLine().toUpperCase();
 		switch (menu) {
-			case "PF": {
+			case "PF":
 				registerNewClient(new NaturalPerson());
-				this.loadMainMenu();
 				break;
-			}
 			case "PJ":
 				registerNewClient(new JuridicalPerson());
-				this.loadMainMenu();
 				break;
 			case "E":
 				login();
 				break;
 			case "L":
-				//			listClients();
+				listClients();
 				break;
 			case "F":
 				System.out.println("Até mais!");
@@ -68,6 +65,7 @@ public class Bank {
 	private void login() {
 		if(clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
+			System.out.println("Venha ser o nosso primeiro cliente! =)");
 			this.loadMainMenu();
 		}else {
 			System.out.print("Insira o CPF/CNPJ: ");
@@ -94,8 +92,9 @@ public class Bank {
 		throw new ClientNotFoundException();
 	}
 
-	private void loadClientMenu(Client client) {
-		System.out.println("\n====== MENU DO CLIENTE ======");
+	public void loadClientMenu(Client client) {
+									//MENU DO CLIENTE
+		System.out.println("\n====== Olá, " + client.getName() + " ======");
 		System.out.println("Escolha uma opção: ");
 		System.out.println("C - Consultar saldo\n"
 						 + "G - Abrir conta poupança\n"
@@ -113,11 +112,9 @@ public class Bank {
 				break;
 			case "G":
 				activateInvestmentAccount(client);
-				loadClientMenu(client);
 				break;
 			case "H":
 				activateSavingsAccount((NaturalPerson) client);
-				loadClientMenu(client);
 				break;
 			case "S":
 //				withdraw();
@@ -144,7 +141,6 @@ public class Bank {
 		if (client.getSavingsAccount() == null) {
 			client.setSavingsAccount(new SavingsAccount(numberOfAccountsOpened + 1));
 			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
 		}
@@ -154,23 +150,12 @@ public class Bank {
 		if (client.getInvestmentAccount() == null) {
 			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
 			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
 		}
 	}
 
-	private void activateCheckingAccount(Client client) {
-		if (client.getCheckingAccount() == null) {
-			client.setCheckingAccount(new CheckingAccount(numberOfAccountsOpened + 1));
-			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
-		} else {
-			bankView.showAccountAlreadyExistsMessage();
-		}
-	}
-
-	private void registerNewClient(Client client) {
+	public void registerNewClient(Client client) {
 		Long num = (long) clients.size() + 1;
 
 		System.out.print("Insira o nome: ");
@@ -190,22 +175,25 @@ public class Bank {
 		client.setPassword(password);
 		client.setRegistrationId(registrationId);
 
-		boolean clientRegisteredSuccessfully = clients.add(client);
-
-		if (clientRegisteredSuccessfully) {
-			activateCheckingAccount(client);
-			bankView.showClientSuccessfullyRegisteredMessage();
-		} else {
-			bankView.showClientAlreadyRegisteredMessage();
-		}
+		clients.add(client);
+		this.loadMainMenu();
 	}
 
 
-
-
-
-
-
+	public void listClients(){
+		if(clients.isEmpty()) {
+			System.out.println("Ainda não há clientes cadastrados.");
+			System.out.println("Venha ser o nosso primeiro cliente! =)");
+			this.loadMainMenu();
+		}else {
+			for (Client client : clients) {
+				System.out.println("Nome: " + client.getName());
+				System.out.println("Chave para transfêrencia: " + client.getRegistrationId()); // Aqui pode ser o número da conta
+				System.out.println(" ");
+			}
+			this.loadMainMenu();
+		}
+	}
 
 
 
