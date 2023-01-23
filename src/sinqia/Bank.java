@@ -30,7 +30,8 @@ public class Bank {
 	}
 
 	public void loadMainMenu() {
-		System.out.println("\n====== MENU PRINCIPAL =======");
+									//MENU PRINCIPAL
+		System.out.println("\n====== Bem-vindo ao Banco Gr-6 =======");
 		System.out.println("Escolha uma opção: ");
 		System.out.println("PF - Registrar novo cliente - PF\n"
 						 + "PJ - Registrar novo cliente - PJ\n"
@@ -50,7 +51,7 @@ public class Bank {
 				login();
 				break;
 			case "L":
-				//			listClients();
+				listClients();
 				break;
 			case "F":
 				System.out.println("Até mais!");
@@ -64,6 +65,7 @@ public class Bank {
 	private void login() {
 		if(clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
+			System.out.println("Venha ser o nosso primeiro cliente! =)");
 			this.loadMainMenu();
 		}else {
 			System.out.print("Insira o CPF/CNPJ: ");
@@ -91,7 +93,8 @@ public class Bank {
 	}
 
 	public void loadClientMenu(Client client) {
-		System.out.println("\n====== MENU DO CLIENTE ======");
+									//MENU DO CLIENTE
+		System.out.println("\n====== Olá, " + client.getName() + " ======");
 		System.out.println("Escolha uma opção: ");
 		System.out.println("C - Consultar saldo\n"
 						 + "G - Abrir conta poupança\n"
@@ -177,12 +180,20 @@ public class Bank {
 	}
 
 
-
-
-
-
-
-
+	public void listClients(){
+		if(clients.isEmpty()) {
+			System.out.println("Ainda não há clientes cadastrados.");
+			System.out.println("Venha ser o nosso primeiro cliente! =)");
+			this.loadMainMenu();
+		}else {
+			for (Client client : clients) {
+				System.out.println("Nome: " + client.getName());
+				System.out.println("Chave para transfêrencia: " + client.getRegistrationId()); // Aqui pode ser o número da conta
+				System.out.println(" ");
+			}
+			this.loadMainMenu();
+		}
+	}
 
 
 }
