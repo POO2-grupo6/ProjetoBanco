@@ -3,7 +3,6 @@ package sinqia.account;
 import java.math.BigDecimal;
 
 public class Account {
-	
     private Long accountNumber;
     protected BigDecimal balance;
 
@@ -35,5 +34,5 @@ public class Account {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
-    
+
 }
