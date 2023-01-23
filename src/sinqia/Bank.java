@@ -113,9 +113,11 @@ public class Bank {
 				break;
 			case "G":
 				activateInvestmentAccount(client);
+				loadClientMenu(client);
 				break;
 			case "H":
 				activateSavingsAccount((NaturalPerson) client);
+				loadClientMenu(client);
 				break;
 			case "S":
 //				withdraw();
@@ -142,6 +144,7 @@ public class Bank {
 		if (client.getSavingsAccount() == null) {
 			client.setSavingsAccount(new SavingsAccount(numberOfAccountsOpened + 1));
 			numberOfAccountsOpened++;
+			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
 		}
@@ -151,6 +154,7 @@ public class Bank {
 		if (client.getInvestmentAccount() == null) {
 			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
 			numberOfAccountsOpened++;
+			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
 		}
@@ -160,6 +164,7 @@ public class Bank {
 		if (client.getCheckingAccount() == null) {
 			client.setCheckingAccount(new CheckingAccount(numberOfAccountsOpened + 1));
 			numberOfAccountsOpened++;
+			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
 			bankView.showAccountAlreadyExistsMessage();
 		}
