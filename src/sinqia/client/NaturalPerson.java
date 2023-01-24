@@ -9,7 +9,7 @@ public class NaturalPerson extends Client {
 	private String cpf;
 	private Account[] accounts = new Account[3];
 	private static final BigDecimal SAVINGS_INTEREST_RATE = BigDecimal.valueOf(0.01);
-	 private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.015);
+	private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.015);
 
 	public NaturalPerson() {
 	}

@@ -100,7 +100,11 @@ public class Bank {
 
 	private void loadClientMenu(Client client) {
 							// MENU DO CLIENTE
-		System.out.println("====== Olá, " + client.getName() + "  ======");
+		System.out.print("=".repeat(18 - client.getName().length()/2));
+		System.out.print(" Olá, " + client.getName() + " ");
+		System.out.print("=".repeat(18 - client.getName().length()/2));
+		System.out.print(client.getName().length() % 2 == 0 ? "=" : "");
+		System.out.println();
 		System.out.println("|             Escolha uma opção:           |");
 		System.out.println("|          1 - Consultar saldo             |");
 		System.out.println("|          2 - Abrir conta poupança        |");
@@ -205,7 +209,7 @@ public class Bank {
 			bankView.showClientAlreadyRegisteredMessage();
 		}
 	}
-	public void listClients(){
+	private void listClients(){
 		if(clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			System.out.println("Venha ser o nosso primeiro cliente! =)");
