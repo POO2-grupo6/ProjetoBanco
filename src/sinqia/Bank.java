@@ -32,32 +32,35 @@ public class Bank {
 
 	public void loadMainMenu() {
 								// MENU PRINCIPAL
-		System.out.println("\n====== Bem-vindo ao Banco Gr-6 =======");
-		System.out.println("Escolha uma opção: ");
-		System.out.println("PF - Registrar novo cliente PF\n"
-				+ "PJ - Registrar novo cliente PJ\n"
-				+ "E - Entrar\n"
-				+ "L - Listar clientes\n"
-				+ "F - Fechar");
+		System.out.println("======================================");
+		System.out.println("====== Bem-vindo ao Banco Gr-6 =======");
+		System.out.println("======================================");
+		System.out.println("|         Escolha uma opção:         |");
+		System.out.println("|    1 - Registrar novo cliente PF   |");
+		System.out.println("|    2 - Registrar novo cliente PJ   |");
+		System.out.println("|    3 - Entrar                      |");
+		System.out.println("|    4 - Listar clientes             |");
+		System.out.println("|    5 - Fechar                      |");
+		System.out.println("======================================");
 
 		String menu = scanner.nextLine().toUpperCase();
 		switch (menu) {
-			case "PF": {
+			case "1": {
 				registerNewClient(new NaturalPerson());
 				this.loadMainMenu();
 				break;
 			}
-			case "PJ":
+			case "2":
 				registerNewClient(new JuridicalPerson());
 				this.loadMainMenu();
 				break;
-			case "E":
+			case "3":
 				login();
 				break;
-			case "L":
+			case "4":
 				listClients();
 				break;
-			case "F":
+			case "5":
 				System.out.println("Até mais!");
 				break;
 			default:
@@ -97,43 +100,44 @@ public class Bank {
 
 	private void loadClientMenu(Client client) {
 							// MENU DO CLIENTE
-		System.out.println("\n====== Olá, " + client.getName() + "  ======");
-		System.out.println("Escolha uma opção: ");
-		System.out.println("C - Consultar saldo\n"
-				+ "G - Abrir conta poupança\n"
-				+ "H - Abrir conta investimento\n"
-				+ "S - Sacar\n"
-				+ "D - Depositar\n"
-				+ "T - Transferir\n"
-				+ "I - Investir\n"
-				+ "X - Deslogar");
+		System.out.println("====== Olá, " + client.getName() + "  ======");
+		System.out.println("|             Escolha uma opção:           |");
+		System.out.println("|          1 - Consultar saldo             |");
+		System.out.println("|          2 - Abrir conta poupança        |");
+		System.out.println("|          3 - Abrir conta Investimento    |");
+		System.out.println("|          4 - Sacar                       |");
+		System.out.println("|          5 - Depositar                   |");
+		System.out.println("|          6 - Transferir                  |");
+		System.out.println("|          7 - Investir                    |");
+		System.out.println("|          8 - Deslogar                    |");
+		System.out.println("============================================");
 
 		String clientMenu = scanner.nextLine().toUpperCase();
 		switch(clientMenu) {
-			case "C":
+			case "1":
 //				checkBalance();
 				break;
-			case "G":
+			case "2":
 				activateInvestmentAccount(client);
 				loadClientMenu(client);
 				break;
-			case "H":
+			case "3":
 				activateSavingsAccount((NaturalPerson) client);
 				loadClientMenu(client);
 				break;
-			case "S":
+			case "4":
 //				withdraw();
 				break;
-			case "D":
+			case "5":
 //				deposit();
 				break;
-			case "T":
+			case "6":
 //				transfer();
 				break;
-			case "I":
+			case "7":
 //				invest();
 				break;
-			case "X":
+			case "8":
 				loadMainMenu();
 				break;
 			default:
