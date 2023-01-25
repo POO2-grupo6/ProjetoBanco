@@ -133,6 +133,12 @@ public class Bank {
 				break;
 			case "5":
 //				deposit();
+				BigDecimal amountDeposit = bankView.getAmountFromUser();
+				client.getCheckingAccount().deposit(amountDeposit);
+				BigDecimal newBalance = client.getCheckingAccount().getBalance();
+				bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(),newBalance);
+				loadClientMenu(client);
+
 				break;
 			case "6":
 //				transfer();
