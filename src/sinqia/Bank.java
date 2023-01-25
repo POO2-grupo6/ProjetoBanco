@@ -13,6 +13,7 @@ import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
+import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.PasswordMismatchException;
 import sinqia.view.BankView;
 
@@ -121,6 +122,14 @@ public class Bank {
 				break;
 			case "4":
 //				withdraw();
+				BigDecimal amount = bankView.getAmountFromUser();
+				try {
+					client.getCheckingAccount().withdraw(amount);
+					BigDecimal newBalance = client.getCheckingAccount().getBalance();
+					bankView.showSuccessfullWithdrawMessage(newBalance);
+				} catch (InsufficientFundsExceptions e) {
+					bankView.showInsufficientFundsMessage();
+				}
 				break;
 			case "5":
 //				deposit();

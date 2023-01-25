@@ -52,5 +52,21 @@ public class BankView {
 
     public void showAccountBalance(Long accountNumber, BigDecimal balance) {
 		System.out.format("O saldo da conta %d é de R$ %,.2f", accountNumber, balance);
+		System.out.println();
     }
+
+	public BigDecimal getAmountFromUser() {
+		System.out.print("informe o valor: R$ ");
+		return scanner.nextBigDecimal();
+	}
+
+	public void showSuccessfullWithdrawMessage(BigDecimal newBalance) {
+		System.out.println("Saque realizado com sucesso!");
+		System.out.format("O novo saldo da conta é de R$ %,.2f", newBalance);
+		System.out.println();
+	}
+
+	public void showInsufficientFundsMessage() {
+		System.out.println("Saldo insuficiente.");
+	}
 }

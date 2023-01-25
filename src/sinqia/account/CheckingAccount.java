@@ -1,5 +1,7 @@
 package sinqia.account;
 
+import sinqia.exceptions.InsufficientFundsExceptions;
+
 import java.math.BigDecimal;
 
 public class CheckingAccount extends Account implements IOperations {
@@ -10,6 +12,10 @@ public class CheckingAccount extends Account implements IOperations {
 	@Override
 	public void withdraw(BigDecimal amount) {
 		// TODO Auto-generated method stub
+		if (amount.compareTo(balance) > 0) {
+			throw new InsufficientFundsExceptions();
+		}
+
 		balance = balance.subtract(amount);
 	}
 
