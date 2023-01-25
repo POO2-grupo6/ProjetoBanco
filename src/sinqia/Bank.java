@@ -1,6 +1,7 @@
 package sinqia;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -31,25 +32,12 @@ public class Bank {
 	}
 
 	public void loadMainMenu() {
-								// MENU PRINCIPAL
-		System.out.println("======================================");
-		System.out.println("====== Bem-vindo ao Banco Gr-6 =======");
-		System.out.println("======================================");
-		System.out.println("|         Escolha uma opção:         |");
-		System.out.println("|    1 - Registrar novo cliente PF   |");
-		System.out.println("|    2 - Registrar novo cliente PJ   |");
-		System.out.println("|    3 - Entrar                      |");
-		System.out.println("|    4 - Listar clientes             |");
-		System.out.println("|    5 - Fechar                      |");
-		System.out.println("======================================");
-
-		String menu = scanner.nextLine().toUpperCase();
+		String menu = bankView.showMainMenu();
 		switch (menu) {
-			case "1": {
+			case "1": 
 				registerNewClient(new NaturalPerson());
 				this.loadMainMenu();
 				break;
-			}
 			case "2":
 				registerNewClient(new JuridicalPerson());
 				this.loadMainMenu();
@@ -74,12 +62,10 @@ public class Bank {
 			System.out.println("Ainda não há clientes cadastrados.");
 			this.loadMainMenu();
 		}else {
-			System.out.print("Insira o CPF/CNPJ: ");
-			String registrationId = scanner.nextLine();
 			try{
-				currentClient = findClient(registrationId);
-				System.out.print("Insira a senha: ");
-				currentClient.validatePassword(scanner.nextLine());
+				List<String> loginCredentials = bankView.loginScreen();
+				currentClient = findClient(loginCredentials.get(0));
+				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadClientMenu(currentClient);
 			} catch (ClientNotFoundException | PasswordMismatchException e) {
 				System.out.println(e.getMessage());
