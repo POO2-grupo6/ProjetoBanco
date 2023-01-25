@@ -1,5 +1,6 @@
 package sinqia;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -106,6 +107,9 @@ public class Bank {
 		switch(clientMenu) {
 			case "1":
 //				checkBalance();
+				long accountNumber = client.getCheckingAccount().getAccountNumber();
+				BigDecimal balance = client.getCheckingAccount().getBalance();
+				bankView.showAccountBalance(accountNumber, balance);
 				break;
 			case "2":
 				activateInvestmentAccount(client);

@@ -1,12 +1,13 @@
 package sinqia.view;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class BankView {
 	
-	Scanner scanner = new Scanner(System.in);
+	private Scanner scanner = new Scanner(System.in);
 	
 	public void showAccountAlreadyExistsMessage() {
 		System.out.println("A conta já existe.");
@@ -41,11 +42,15 @@ public class BankView {
 	}
 	
 	public List<String> loginScreen(){
-		List<String> loginCredentials = new ArrayList<String>();
+		List<String> loginCredentials = new ArrayList<>();
 		System.out.print("Insira o CPF/CNPJ: ");
 		loginCredentials.add(scanner.nextLine());
 		System.out.print("Insira a senha: ");
 		loginCredentials.add(scanner.nextLine());
 		return loginCredentials;
 	}
+
+    public void showAccountBalance(Long accountNumber, BigDecimal balance) {
+		System.out.format("O saldo da conta %d é de R$ %,.2f", accountNumber, balance);
+    }
 }
