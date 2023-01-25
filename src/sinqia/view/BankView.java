@@ -2,11 +2,11 @@ package sinqia.view;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class BankView {
-	
 	private Scanner scanner = new Scanner(System.in);
 	
 	public void showAccountAlreadyExistsMessage() {
@@ -27,6 +27,7 @@ public class BankView {
 
 	public String showMainMenu() {
 		// MENU PRINCIPAL
+		System.out.println();
 		System.out.println("======================================");
 		System.out.println("====== Bem-vindo ao Banco Gr-6 =======");
 		System.out.println("======================================");
@@ -51,22 +52,50 @@ public class BankView {
 	}
 
     public void showAccountBalance(Long accountNumber, BigDecimal balance) {
-		System.out.format("O saldo da conta %d é de R$ %,.2f", accountNumber, balance);
+		System.out.format("O saldo da conta %d é de R$ %,.2f.", accountNumber, balance);
 		System.out.println();
     }
 
 	public BigDecimal getAmountFromUser() {
-		System.out.print("informe o valor: R$ ");
-		return scanner.nextBigDecimal();
+		System.out.print("Informe o valor: R$ ");
+
+		BigDecimal amount;
+		try {
+			amount = scanner.nextBigDecimal();
+			scanner.nextLine();
+
+			if (amount.compareTo(BigDecimal.valueOf(0.01)) < 0) {
+				System.out.println("O valor mínimo é de R$ 0,01.");
+				amount = getAmountFromUser();
+			}
+		}
+		catch (InputMismatchException e) {
+			scanner.nextLine();
+			System.out.println("Por favor, informe apenas valores com o seguinte formato de exemplo: 6.543,21.");
+			amount = getAmountFromUser();
+		}
+
+		return amount;
 	}
 
-	public void showSuccessfullWithdrawMessage(BigDecimal newBalance) {
+	public void showSuccessfulWithdrawMessage(BigDecimal newBalance) {
 		System.out.println("Saque realizado com sucesso!");
-		System.out.format("O novo saldo da conta é de R$ %,.2f", newBalance);
+		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
 
 	public void showInsufficientFundsMessage() {
 		System.out.println("Saldo insuficiente.");
+	}
+
+	public long getDestinationAccountNumberFromUser() {
+		System.out.print("Informe a numeração da conta de destino: ");
+		return scanner.nextLong();  // talvez aqui precise de um scanner.nextLine()
+	}
+
+	public void showSuccessfulDepositMessage(BigDecimal newBalance) {
+		System.out.println("Depósito realizado com sucesso!");
+		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
+		System.out.println();
 	}
 }

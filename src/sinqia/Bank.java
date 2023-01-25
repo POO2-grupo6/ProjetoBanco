@@ -88,6 +88,7 @@ public class Bank {
 
 	private void loadClientMenu(Client client) {
 							// MENU DO CLIENTE
+		System.out.println();
 		System.out.print("=".repeat(18 - client.getName().length()/2));
 		System.out.print(" Olá, " + client.getName() + " ");
 		System.out.print("=".repeat(18 - client.getName().length()/2));
@@ -111,6 +112,7 @@ public class Bank {
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
 				BigDecimal balance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(accountNumber, balance);
+				loadClientMenu(client);
 				break;
 			case "2":
 				activateInvestmentAccount(client);
@@ -126,19 +128,19 @@ public class Bank {
 				try {
 					client.getCheckingAccount().withdraw(amount);
 					BigDecimal newBalance = client.getCheckingAccount().getBalance();
-					bankView.showSuccessfullWithdrawMessage(newBalance);
+					bankView.showSuccessfulWithdrawMessage(newBalance);
 				} catch (InsufficientFundsExceptions e) {
 					bankView.showInsufficientFundsMessage();
 				}
+				loadClientMenu(client);
 				break;
 			case "5":
 //				deposit();
 				BigDecimal amountDeposit = bankView.getAmountFromUser();
 				client.getCheckingAccount().deposit(amountDeposit);
 				BigDecimal newBalance = client.getCheckingAccount().getBalance();
-				bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(),newBalance);
+				bankView.showSuccessfulDepositMessage(newBalance);
 				loadClientMenu(client);
-
 				break;
 			case "6":
 //				transfer();
