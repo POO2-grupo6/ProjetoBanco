@@ -5,7 +5,7 @@ import sinqia.exceptions.InsufficientFundsExceptions;
 import java.math.BigDecimal;
 
 public class CheckingAccount extends Account implements IOperations {
-	public CheckingAccount(Long accountNumber) {
+	public CheckingAccount(long accountNumber) {
 		super(accountNumber);
 	}
 

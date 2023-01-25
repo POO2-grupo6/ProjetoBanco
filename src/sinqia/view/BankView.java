@@ -1,10 +1,9 @@
 package sinqia.view;
 
-import sinqia.client.Client;
+import sinqia.exceptions.InvalidAmountException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,28 +52,23 @@ public class BankView {
 		return loginCredentials;
 	}
 
-    public void showAccountBalance(Long accountNumber, BigDecimal balance) {
+    public void showAccountBalance(long accountNumber, BigDecimal balance) {
 		System.out.format("O saldo da conta %d é de R$ %,.2f.", accountNumber, balance);
 		System.out.println();
     }
 
 	public BigDecimal getAmountFromUser() {
 		System.out.print("Informe o valor: R$ ");
-
 		BigDecimal amount;
+
 		try {
 			amount = scanner.nextBigDecimal();
+		} finally {
 			scanner.nextLine();
-
-			if (amount.compareTo(BigDecimal.valueOf(0.01)) < 0) {
-				System.out.println("O valor mínimo é de R$ 0,01.");
-				amount = getAmountFromUser();
-			}
 		}
-		catch (InputMismatchException e) {
-			scanner.nextLine();
-			System.out.println("Por favor, informe apenas valores com o seguinte formato de exemplo: 6.543,21.");
-			amount = getAmountFromUser();
+
+		if (amount.compareTo(BigDecimal.valueOf(0.01)) < 0) {
+			throw new InvalidAmountException();
 		}
 
 		return amount;
@@ -104,14 +98,20 @@ public class BankView {
 	public BigDecimal transferScreenAmount(){
 		System.out.println("Insira o valor de transferencia : ");
 		return scanner.nextBigDecimal();
-
 	}
 
-	public int transferScreenAccount(){
+	public long transferScreenAccount(){
 		System.out.println("Insira a conta destino :");
-		return scanner.nextInt();
+		return scanner.nextLong();
 
 	}
 
 
+	public void showInvalidAmountInputMessage() {
+		System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+	}
+
+	public void showInvalidAmountMessage() {
+		System.out.println("O valor mínimo é de R$ 0,01.");
+	}
 }

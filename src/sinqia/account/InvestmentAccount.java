@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class InvestmentAccount extends Account implements IInterest {
 	private BigDecimal interestRate;
-	public InvestmentAccount(Long accountNumber, BigDecimal interestRate) {
+	public InvestmentAccount(long accountNumber, BigDecimal interestRate) {
 		super(accountNumber);
 		this.interestRate = interestRate;
 	}

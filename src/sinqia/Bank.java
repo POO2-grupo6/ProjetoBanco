@@ -2,6 +2,7 @@ package sinqia;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -14,6 +15,7 @@ import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.InsufficientFundsExceptions;
+import sinqia.exceptions.InvalidAmountException;
 import sinqia.exceptions.PasswordMismatchException;
 import sinqia.exceptions.TransferException;
 import sinqia.view.BankView;
@@ -34,7 +36,7 @@ public class Bank {
 		return clients;
 	}
 
-	public void loadMainMenu() {
+	public void loadMainMenu() throws InterruptedException {
 		String menu = bankView.showMainMenu();
 		switch (menu) {
 			case "1": 
@@ -60,7 +62,7 @@ public class Bank {
 		}
 	}
 
-	private void login() {
+	private void login() throws InterruptedException {
 		if(clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			this.loadMainMenu();
@@ -70,7 +72,7 @@ public class Bank {
 				currentClient = findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadClientMenu(currentClient);
-			} catch (ClientNotFoundException | PasswordMismatchException | InterruptedException e) {
+			} catch (ClientNotFoundException | PasswordMismatchException e) {
 				System.out.println(e.getMessage());
 				this.loadMainMenu();
 			}
@@ -126,24 +128,36 @@ public class Bank {
 				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
-			case "4":
-//				withdraw();
-				BigDecimal amount = bankView.getAmountFromUser();
+			case "4":  // withdraw();
 				try {
+					BigDecimal amount = bankView.getAmountFromUser();
 					client.getCheckingAccount().withdraw(amount);
 					BigDecimal newBalance = client.getCheckingAccount().getBalance();
 					bankView.showSuccessfulWithdrawMessage(newBalance);
 				} catch (InsufficientFundsExceptions e) {
 					bankView.showInsufficientFundsMessage();
+				} catch (InputMismatchException e) {
+					bankView.showInvalidAmountInputMessage();
+				} catch (InvalidAmountException e) {
+					bankView.showInvalidAmountMessage();
 				}
+
+				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
-			case "5":
-//				deposit();
-				BigDecimal amountDeposit = bankView.getAmountFromUser();
-				client.getCheckingAccount().deposit(amountDeposit);
-				BigDecimal newBalance = client.getCheckingAccount().getBalance();
-				bankView.showSuccessfulDepositMessage(newBalance);
+			case "5":  // deposit();
+				try {
+					BigDecimal amountDeposit = bankView.getAmountFromUser();
+					client.getCheckingAccount().deposit(amountDeposit);
+					BigDecimal newBalance = client.getCheckingAccount().getBalance();
+					bankView.showSuccessfulDepositMessage(newBalance);
+				} catch (InputMismatchException e) {
+//					amount = BigDecimal.ZERO;  // fazer amount ser zero e retornar zero, checar se for zero nao faz nada, sai do menu, mesmo para valor minimo talvez
+					System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+				} catch (InvalidAmountException e) {
+					System.out.println("O valor mínimo é de R$ 0,01.");
+				}
+
 				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
@@ -164,14 +178,14 @@ public class Bank {
 
 	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException,InsufficientFundsExceptions {
 
-		int destinyAccount = bankView.transferScreenAccount();
+		long destinyAccount = bankView.transferScreenAccount();
 		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
 		if(client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
 			throw new TransferException();
 		}
 
 		BigDecimal amountTransfer = bankView.transferScreenAmount();
-		if(client.getCheckingAccount().getBalance().compareTo(amountTransfer) == -1){
+		if(client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0){
 			throw  new InsufficientFundsExceptions();
 		}
 
@@ -214,7 +228,7 @@ public class Bank {
 	}
 
 	private void registerNewClient(Client client) {
-		Long num = (long) clients.size() + 1;
+		long num = (long) clients.size() + 1;
 
 		System.out.print("Insira o nome: ");
 		String name = scanner.nextLine();
@@ -242,7 +256,7 @@ public class Bank {
 			bankView.showClientAlreadyRegisteredMessage();
 		}
 	}
-	private void listClients(){
+	private void listClients() throws InterruptedException {
 		if(clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			System.out.println("Venha ser o nosso primeiro cliente! =)");

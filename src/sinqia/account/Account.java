@@ -3,10 +3,10 @@ package sinqia.account;
 import java.math.BigDecimal;
 
 public class Account {
-    private Long accountNumber;
+    private long accountNumber;
     protected BigDecimal balance;
 
-    public Account(Long accountNumber) {
+    public Account(long accountNumber) {
         this.accountNumber = accountNumber;
         balance = BigDecimal.ZERO;
     }
@@ -19,7 +19,7 @@ public class Account {
         balance = balance.subtract(value);
     }
 
-    public Long getAccountNumber() {
+    public long getAccountNumber() {
         return accountNumber;
     }
 
@@ -27,7 +27,7 @@ public class Account {
         return balance;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(long accountNumber) {
         this.accountNumber = accountNumber;
     }
 
