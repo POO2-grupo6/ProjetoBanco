@@ -1,12 +1,14 @@
 package sinqia;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
@@ -39,7 +41,7 @@ public class Bank {
 	public void loadMainMenu() throws InterruptedException {
 		String menu = bankView.showMainMenu();
 		switch (menu) {
-			case "1": 
+			case "1":
 				registerNewClient(new NaturalPerson());
 				this.loadMainMenu();
 				break;
@@ -63,11 +65,11 @@ public class Bank {
 	}
 
 	private void login() throws InterruptedException {
-		if(clients.isEmpty()) {
+		if (clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			this.loadMainMenu();
-		}else {
-			try{
+		} else {
+			try {
 				List<String> loginCredentials = bankView.loginScreen();
 				currentClient = findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
@@ -80,8 +82,8 @@ public class Bank {
 	}
 
 	private Client findClient(String registrationId) throws ClientNotFoundException {
-		for(Client client : clients) {
-			if(client.getRegistrationId().equals(registrationId)) {
+		for (Client client : clients) {
+			if (client.getRegistrationId().equals(registrationId)) {
 				return client;
 			}
 		}
@@ -90,11 +92,11 @@ public class Bank {
 	}
 
 	private void loadClientMenu(Client client) throws ClientNotFoundException, InterruptedException {
-							// MENU DO CLIENTE
+		// MENU DO CLIENTE
 		System.out.println();
-		System.out.print("=".repeat(18 - client.getName().length()/2));
+		System.out.print("=".repeat(18 - client.getName().length() / 2));
 		System.out.print(" Olá, " + client.getName() + " ");
-		System.out.print("=".repeat(18 - client.getName().length()/2));
+		System.out.print("=".repeat(18 - client.getName().length() / 2));
 		System.out.print(client.getName().length() % 2 == 0 ? "=" : "");
 		System.out.println();
 		System.out.println("|             Escolha uma opção:           |");
@@ -109,7 +111,7 @@ public class Bank {
 		System.out.println("============================================");
 
 		String clientMenu = scanner.nextLine().toUpperCase();
-		switch(clientMenu) {
+		switch (clientMenu) {
 			case "1":
 //				checkBalance();
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
@@ -176,22 +178,23 @@ public class Bank {
 		}
 	}
 
-	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException,InsufficientFundsExceptions {
+	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException, InsufficientFundsExceptions {
 
 		long destinyAccount = bankView.transferScreenAccount();
-		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
-		if(client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
-			throw new TransferException();
-		}
+		Account account = findAccountByAccountNumber(destinyAccount);
+//		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
+//		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
+//			throw new TransferException();
+//		}
 
 		BigDecimal amountTransfer = bankView.transferScreenAmount();
-		if(client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0){
-			throw  new InsufficientFundsExceptions();
+		if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
+			throw new InsufficientFundsExceptions();
 		}
 
 		client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
-		clientDestinyTransfer.getCheckingAccount().setBalance(clientDestinyTransfer.getCheckingAccount().getBalance().add(amountTransfer));
-		bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(), client.getCheckingAccount().getBalance());
+		account.setBalance(account.getBalance().add(amountTransfer));
+		bankView.showAccountBalance(destinyAccount, account.getBalance());
 
 		Thread.sleep(1000);
 		loadClientMenu(client);
@@ -233,9 +236,9 @@ public class Bank {
 		System.out.print("Insira o nome: ");
 		String name = scanner.nextLine();
 
-		if(client instanceof NaturalPerson) {
+		if (client instanceof NaturalPerson) {
 			System.out.print("Insira o CPF: ");
-		}else if(client instanceof JuridicalPerson) {
+		} else if (client instanceof JuridicalPerson) {
 			System.out.print("Insira o CNPJ: ");
 		}
 		String registrationId = scanner.nextLine();
@@ -256,12 +259,13 @@ public class Bank {
 			bankView.showClientAlreadyRegisteredMessage();
 		}
 	}
+
 	private void listClients() throws InterruptedException {
-		if(clients.isEmpty()) {
+		if (clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			System.out.println("Venha ser o nosso primeiro cliente! =)");
 			this.loadMainMenu();
-		}else {
+		} else {
 			for (Client client : clients) {
 				System.out.println("Nome: " + client.getName());
 				System.out.println("Chave para transfêrencia: " + client.getRegistrationId()); // Aqui pode ser o número da conta
@@ -271,6 +275,33 @@ public class Bank {
 		}
 	}
 
+	private Account findAccountByAccountNumber(long accountNumber) {  // lançar exception caso nao encontre
+//		final Account[] accounts = {null};
+//
+//		clients.forEach(client -> {
+//			if (accounts[0] == null) {
+//				accounts[0] = Arrays.stream(client.getAccounts()).
+//						filter(account -> account.getAccountNumber() == accountNumber).
+//						findAny().
+//						orElse(null);
+//			}
+//		});
+//
+//		return accounts[0];
 
+		for (Client client : clients) {
+			Account accountFound = Arrays.stream(client.getAccounts()).
+					filter(account -> account.getAccountNumber() == accountNumber).
+					findAny().
+					orElse(null);
 
+			if (accountFound != null) {
+				return accountFound;
+			}
+		}
+
+		return null;
+	}
 }
+
+
