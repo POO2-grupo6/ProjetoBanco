@@ -12,6 +12,7 @@ import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.PasswordMismatchException;
+import sinqia.exceptions.TransferException;
 import sinqia.view.BankView;
 
 public class Bank {
@@ -141,17 +142,8 @@ public class Bank {
 				loadClientMenu(client);
 
 				break;
-			case "6":
-//				transfer();
-				int destinyAccount = bankView.transferScreenAccount();
-				BigDecimal amountTransfer = bankView.transferScreenAmount();
-				Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
-				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
-				clientDestinyTransfer.getCheckingAccount().setBalance(clientDestinyTransfer.getCheckingAccount().getBalance().add(amountTransfer));
-				bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(),client.getCheckingAccount().getBalance());
-				
-				Thread.sleep(1000);
-				loadClientMenu(client);
+			case "6"://
+				transfer(client);
 
 				break;
 			case "7":
@@ -164,6 +156,27 @@ public class Bank {
 				System.out.println("Opção inválida.");
 				loadClientMenu(client);
 		}
+	}
+
+	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException,InsufficientFundsExceptions {
+
+		int destinyAccount = bankView.transferScreenAccount();
+		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
+		if(client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
+			throw new TransferException();
+		}
+
+		BigDecimal amountTransfer = bankView.transferScreenAmount();
+		if(client.getCheckingAccount().getBalance().compareTo(amountTransfer) == -1){
+			throw  new InsufficientFundsExceptions();
+		}
+		
+		client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
+		clientDestinyTransfer.getCheckingAccount().setBalance(clientDestinyTransfer.getCheckingAccount().getBalance().add(amountTransfer));
+		bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(), client.getCheckingAccount().getBalance());
+
+		Thread.sleep(1000);
+		loadClientMenu(client);
 	}
 
 	private void activateSavingsAccount(NaturalPerson client) {
