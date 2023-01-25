@@ -1,5 +1,7 @@
 package sinqia.view;
 
+import sinqia.client.Client;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -98,4 +100,18 @@ public class BankView {
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
+
+	public BigDecimal transferScreenAmount(){
+		System.out.println("Insira o valor de transferencia : ");
+		return scanner.nextBigDecimal();
+
+	}
+
+	public int transferScreenAccount(){
+		System.out.println("Insira a conta destino :");
+		return scanner.nextInt();
+
+	}
+
+
 }

@@ -15,6 +15,7 @@ import sinqia.client.NaturalPerson;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.PasswordMismatchException;
+import sinqia.exceptions.TransferException;
 import sinqia.view.BankView;
 
 public class Bank {
@@ -69,7 +70,7 @@ public class Bank {
 				currentClient = findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadClientMenu(currentClient);
-			} catch (ClientNotFoundException | PasswordMismatchException e) {
+			} catch (ClientNotFoundException | PasswordMismatchException | InterruptedException e) {
 				System.out.println(e.getMessage());
 				this.loadMainMenu();
 			}
@@ -86,7 +87,7 @@ public class Bank {
 		throw new ClientNotFoundException();
 	}
 
-	private void loadClientMenu(Client client) {
+	private void loadClientMenu(Client client) throws ClientNotFoundException, InterruptedException {
 							// MENU DO CLIENTE
 		System.out.println();
 		System.out.print("=".repeat(18 - client.getName().length()/2));
@@ -112,14 +113,17 @@ public class Bank {
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
 				BigDecimal balance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(accountNumber, balance);
+				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "2":
 				activateInvestmentAccount(client);
+				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "3":
 				activateSavingsAccount((NaturalPerson) client);
+				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "4":
@@ -140,10 +144,11 @@ public class Bank {
 				client.getCheckingAccount().deposit(amountDeposit);
 				BigDecimal newBalance = client.getCheckingAccount().getBalance();
 				bankView.showSuccessfulDepositMessage(newBalance);
+				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
-			case "6":
-//				transfer();
+			case "6"://
+				transfer(client);
 				break;
 			case "7":
 //				invest();
@@ -155,6 +160,27 @@ public class Bank {
 				System.out.println("Opção inválida.");
 				loadClientMenu(client);
 		}
+	}
+
+	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException,InsufficientFundsExceptions {
+
+		int destinyAccount = bankView.transferScreenAccount();
+		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
+		if(client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
+			throw new TransferException();
+		}
+
+		BigDecimal amountTransfer = bankView.transferScreenAmount();
+		if(client.getCheckingAccount().getBalance().compareTo(amountTransfer) == -1){
+			throw  new InsufficientFundsExceptions();
+		}
+
+		client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
+		clientDestinyTransfer.getCheckingAccount().setBalance(clientDestinyTransfer.getCheckingAccount().getBalance().add(amountTransfer));
+		bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(), client.getCheckingAccount().getBalance());
+
+		Thread.sleep(1000);
+		loadClientMenu(client);
 	}
 
 	private void activateSavingsAccount(NaturalPerson client) {
