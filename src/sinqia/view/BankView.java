@@ -1,5 +1,7 @@
 package sinqia.view;
 
+import sinqia.client.Client;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,4 +71,18 @@ public class BankView {
 	public void showInsufficientFundsMessage() {
 		System.out.println("Saldo insuficiente.");
 	}
+
+	public BigDecimal transferScreenAmount(){
+		System.out.println("Insira o valor de transferencia : ");
+		return scanner.nextBigDecimal();
+
+	}
+
+	public int transferScreenAccount(){
+		System.out.println("Insira a conta destino :");
+		return scanner.nextInt();
+
+	}
+
+
 }

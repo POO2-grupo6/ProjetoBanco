@@ -1,10 +1,7 @@
 package sinqia;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
@@ -69,7 +66,7 @@ public class Bank {
 				currentClient = findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadClientMenu(currentClient);
-			} catch (ClientNotFoundException | PasswordMismatchException e) {
+			} catch (ClientNotFoundException | PasswordMismatchException | InterruptedException e) {
 				System.out.println(e.getMessage());
 				this.loadMainMenu();
 			}
@@ -86,7 +83,7 @@ public class Bank {
 		throw new ClientNotFoundException();
 	}
 
-	private void loadClientMenu(Client client) {
+	private void loadClientMenu(Client client) throws ClientNotFoundException, InterruptedException {
 							// MENU DO CLIENTE
 		System.out.print("=".repeat(18 - client.getName().length()/2));
 		System.out.print(" Olá, " + client.getName() + " ");
@@ -111,14 +108,17 @@ public class Bank {
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
 				BigDecimal balance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(accountNumber, balance);
+				Thread.sleep(1000);
 				break;
 			case "2":
 				activateInvestmentAccount(client);
 				loadClientMenu(client);
+				Thread.sleep(1000);
 				break;
 			case "3":
 				activateSavingsAccount((NaturalPerson) client);
 				loadClientMenu(client);
+				Thread.sleep(1000);
 				break;
 			case "4":
 //				withdraw();
@@ -137,11 +137,22 @@ public class Bank {
 				client.getCheckingAccount().deposit(amountDeposit);
 				BigDecimal newBalance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(),newBalance);
+				Thread.sleep(1000);
 				loadClientMenu(client);
 
 				break;
 			case "6":
 //				transfer();
+				int destinyAccount = bankView.transferScreenAccount();
+				BigDecimal amountTransfer = bankView.transferScreenAmount();
+				Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
+				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
+				clientDestinyTransfer.getCheckingAccount().setBalance(clientDestinyTransfer.getCheckingAccount().getBalance().add(amountTransfer));
+				bankView.showAccountBalance(client.getCheckingAccount().getAccountNumber(),client.getCheckingAccount().getBalance());
+				
+				Thread.sleep(1000);
+				loadClientMenu(client);
+
 				break;
 			case "7":
 //				invest();
