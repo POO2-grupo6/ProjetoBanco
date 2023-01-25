@@ -13,6 +13,7 @@ public abstract class Client {
 	private String password;
 	private String registrationId;
 
+
 	protected Client() {
 	}
 

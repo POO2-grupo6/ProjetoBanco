@@ -148,23 +148,14 @@ public class Bank {
 				loadClientMenu(client);
 				break;
 			case "5":  // deposit();
-				try {
-					BigDecimal amountDeposit = bankView.getAmountFromUser();
-					client.getCheckingAccount().deposit(amountDeposit);
-					BigDecimal newBalance = client.getCheckingAccount().getBalance();
-					bankView.showSuccessfulDepositMessage(newBalance);
-				} catch (InputMismatchException e) {
-//					amount = BigDecimal.ZERO;  // fazer amount ser zero e retornar zero, checar se for zero nao faz nada, sai do menu, mesmo para valor minimo talvez
-					System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
-				} catch (InvalidAmountException e) {
-					System.out.println("O valor mínimo é de R$ 0,01.");
-				}
+				deposit(client);
 
 				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "6"://
 				transfer(client);
+				Thread.sleep(1000);
 				break;
 			case "7":
 //				invest();
@@ -175,6 +166,20 @@ public class Bank {
 			default:
 				System.out.println("Opção inválida.");
 				loadClientMenu(client);
+		}
+	}
+
+	private void deposit(Client client) {
+		try {
+			BigDecimal amountDeposit = bankView.getAmountFromUser();
+			client.getCheckingAccount().deposit(amountDeposit);
+			BigDecimal newBalance = client.getCheckingAccount().getBalance();
+			bankView.showSuccessfulDepositMessage(newBalance);
+		} catch (InputMismatchException e) {
+//					amount = BigDecimal.ZERO;  // fazer amount ser zero e retornar zero, checar se for zero nao faz nada, sai do menu, mesmo para valor minimo talvez
+			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+		} catch (InvalidAmountException e) {
+			System.out.println("O valor mínimo é de R$ 0,01.");
 		}
 	}
 
