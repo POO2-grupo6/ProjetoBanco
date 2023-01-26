@@ -174,12 +174,27 @@ public class Bank {
 	}
 
 	private void invest(Client client) {
-		System.out.print("Insira o valor a ser investido: R$ ");
-		BigDecimal amount = scanner.nextBigDecimal();
-		client.getCheckingAccount().removeFromBalance(amount);
-		client.getInvestmentAccount().addToBalance(amount);
-		client.getInvestmentAccount().addToBalance(client.getInvestmentAccount().calculateInterest(amount));
-		bankView.showSuccessfulInvestmentMessage(client.getInvestmentAccount().getBalance());
+		try {
+			if (client.getInvestmentAccount() == null) {
+				throw new AccountNotFoundException();
+			}
+
+			BigDecimal amount = bankView.getAmountFromUser();
+
+			client.getCheckingAccount().withdraw(amount);
+			client.getInvestmentAccount().addToBalance(amount);
+			client.getInvestmentAccount().addToBalance(client.getInvestmentAccount().calculateInterest(amount));
+
+			bankView.showSuccessfulInvestmentMessage(client.getInvestmentAccount().getBalance());
+		} catch (InputMismatchException e) {
+			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+		} catch (InvalidAmountException e) {
+			System.out.println("O valor mínimo é de R$ 0,01.");
+		} catch (AccountNotFoundException e) {
+			bankView.showInvestmentAccountDoesNotExistMessage();
+		} catch (InsufficientFundsExceptions e) {
+			bankView.showInsufficientFundsMessage();
+		}
 	}
 
 	private void deposit(Client client) {

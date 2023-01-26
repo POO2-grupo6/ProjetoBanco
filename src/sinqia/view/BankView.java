@@ -127,4 +127,8 @@ public class BankView {
 	public void showInvalidInputForAccountMessage() {
 		System.out.println("Por favor, informe apenas números.");
 	}
+
+	public void showInvestmentAccountDoesNotExistMessage() {
+		System.out.println("Você ainda não possui uma conta investimento!");
+	}
 }
