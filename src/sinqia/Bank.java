@@ -151,16 +151,18 @@ public class Bank {
 				break;
 			case "5":  // deposit();
 				deposit(client);
-
 				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "6"://
 				transfer(client);
 				Thread.sleep(1000);
+				loadClientMenu(client);
 				break;
 			case "7":
 				invest(client);
+				Thread.sleep(1000);
+				loadClientMenu(client);
 				break;
 			case "8":
 				loadMainMenu();
@@ -172,7 +174,7 @@ public class Bank {
 	}
 
 	private void invest(Client client) {
-		System.out.println("Insira o valor a ser investido: ");
+		System.out.print("Insira o valor a ser investido: R$ ");
 		BigDecimal amount = scanner.nextBigDecimal();
 		client.getCheckingAccount().removeFromBalance(amount);
 		client.getInvestmentAccount().addToBalance(amount);
@@ -187,27 +189,24 @@ public class Bank {
 			BigDecimal newBalance = client.getCheckingAccount().getBalance();
 			bankView.showSuccessfulDepositMessage(newBalance);
 		} catch (InputMismatchException e) {
-//					amount = BigDecimal.ZERO;  // fazer amount ser zero e retornar zero, checar se for zero nao faz nada, sai do menu, mesmo para valor minimo talvez
 			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
 		} catch (InvalidAmountException e) {
 			System.out.println("O valor mínimo é de R$ 0,01.");
 		}
 	}
 
-	private void transfer(Client client) throws ClientNotFoundException,
-			                                    InterruptedException,
-			                                    TransferException,
-			                                    InsufficientFundsExceptions {
+	private void transfer(Client client) throws TransferException, InsufficientFundsExceptions {
 		long destinyAccount = bankView.transferScreenAccount();
 
-		try {
 //		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
 //		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
 //			throw new TransferException();
 //		}
 
+		try {
 			Account account = findAccountByAccountNumber(destinyAccount);
 			BigDecimal amountTransfer = bankView.transferScreenAmount();
+
 			if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
 				throw new InsufficientFundsExceptions();
 			}
@@ -220,9 +219,6 @@ public class Bank {
 		} catch (InputMismatchException e) {
 			bankView.showInvalidInputForAccountMessage();
 		}
-
-		Thread.sleep(1000);
-		loadClientMenu(client);
 	}
 
 	private void activateSavingsAccount(NaturalPerson client) {
@@ -293,7 +289,7 @@ public class Bank {
 		} else {
 			for (Client client : clients) {
 				System.out.println("Nome: " + client.getName());
-				System.out.println("Chave para transfêrencia: " + client.getRegistrationId()); // Aqui pode ser o número da conta
+				System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
 				System.out.println(" ");
 			}
 			this.loadMainMenu();
@@ -303,10 +299,10 @@ public class Bank {
 	private Account findAccountByAccountNumber(long accountNumber) {
 		for (Client client : clients) {
 			Account accountFound = Arrays.stream(client.getAccounts()).
-					filter(Objects::nonNull).
-					filter(account -> account.getAccountNumber() == accountNumber).
-					findAny().
-					orElse(null);
+					                      filter(Objects::nonNull).
+					                      filter(account -> account.getAccountNumber() == accountNumber).
+					                      findAny().
+					                      orElse(null);
 
 			if (accountFound != null) {
 				return accountFound;
@@ -316,5 +312,3 @@ public class Bank {
 		throw new AccountNotFoundException();
 	}
 }
-
-
