@@ -1,5 +1,7 @@
 package sinqia.view;
 
+import sinqia.client.Client;
+import sinqia.client.NaturalPerson;
 import sinqia.exceptions.BlankFieldException;
 import sinqia.exceptions.InvalidAmountException;
 
@@ -127,8 +129,10 @@ public class BankView {
 		System.out.println("Por favor, informe apenas números.");
 	}
 
-	public void showInvestmentAccountDoesNotExistMessage() {
-		System.out.println("Você ainda não possui uma conta investimento!");
+	public int showInvestmentAccountDoesNotExistMessage() {
+		System.out.println("Você ainda não possui uma conta investimento! Deseja abrir uma?");
+		System.out.println("1 - Sim.\n 2 - Não.");
+		return scanner.nextInt();
 	}
 
 	public String getNotBlankInputFromUser() {
@@ -143,5 +147,15 @@ public class BankView {
 
 	public void showFieldCanNotBeBlankMessage() {
 		System.out.println("O campo não pode ficar em branco.");
+	}
+
+	public int showInvestmentAccountMenu(Client client) {
+		System.out.println("1 - Ver saldo\n"
+				+ "2 - Resgatar\n"
+				+ "3 - Acessar conta corrente");
+		if(client instanceof NaturalPerson) {
+			System.out.println("4 - Acessar conta poupança.");
+		}
+		return scanner.nextInt();
 	}
 }

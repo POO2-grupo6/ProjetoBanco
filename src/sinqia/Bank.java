@@ -105,8 +105,8 @@ public class Bank {
 		System.out.println();
 		System.out.println("|             Escolha uma opção:           |");
 		System.out.println("|          1 - Consultar saldo             |");
-		System.out.println("|          2 - Abrir conta investimento    |");
-		System.out.println("|          3 - Abrir conta poupança        |");
+		System.out.println("|          2 - Acessar conta investimento  |");
+		System.out.println("|          3 - Acessar conta poupança      |");
 		System.out.println("|          4 - Sacar                       |");
 		System.out.println("|          5 - Depositar                   |");
 		System.out.println("|          6 - Transferir                  |");
@@ -248,14 +248,53 @@ public class Bank {
 		}
 	}
 
-	private void activateInvestmentAccount(Client client) {
+	private void activateInvestmentAccount(Client client) throws ClientNotFoundException, InterruptedException {
 		if (client.getInvestmentAccount() == null) {
-			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
-			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+			int option = bankView.showInvestmentAccountDoesNotExistMessage();
+			if(option == 1) {
+				client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
+				numberOfAccountsOpened++;
+				bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+			} else if (option == 2) {
+				return;
+			} else {
+				System.out.println("Comando incorreto.");
+				activateInvestmentAccount(client);
+			}
 		} else {
-			bankView.showAccountAlreadyExistsMessage();
+			loadInvestmentAccountMenu(client);
 		}
+	}
+	
+	private void loadInvestmentAccountMenu(Client client) throws ClientNotFoundException, InterruptedException{
+		int option = bankView.showInvestmentAccountMenu(client);
+		long accountNumber = client.getInvestmentAccount().getAccountNumber();
+		BigDecimal balance = client.getInvestmentAccount().getBalance();
+		switch(option) {
+			case 1:
+				bankView.showAccountBalance(accountNumber, balance);
+				break;
+			case 2:
+//				redeem(client);
+				break;
+			case 3:
+				loadClientMenu(client);
+				break;
+			case 4:
+				if(client instanceof NaturalPerson) {
+					loadCheckingAccountMenu(client);
+				}else {
+					System.out.println("Comando inválido.");
+				}
+				break;
+			default:
+				System.out.println("Comando inválido");
+		}
+	}
+
+	private void loadCheckingAccountMenu(Client client) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void activateCheckingAccount(Client client) {
