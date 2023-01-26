@@ -17,6 +17,7 @@ import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.AccountNotFoundException;
+import sinqia.exceptions.BlankFieldException;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.InvalidAmountException;
@@ -56,6 +57,7 @@ public class Bank {
 				break;
 			case "4":
 				listClients();
+				this.loadMainMenu();
 				break;
 			case "5":
 				System.out.println("Até mais!");
@@ -269,45 +271,47 @@ public class Bank {
 	private void registerNewClient(Client client) {
 		long num = (long) clients.size() + 1;
 
-		System.out.print("Insira o nome: ");
-		String name = scanner.nextLine();
+		try {
+			System.out.print("Insira o nome: ");
+			String name = bankView.getNotBlankInputFromUser();
 
-		if (client instanceof NaturalPerson) {
-			System.out.print("Insira o CPF: ");
-		} else if (client instanceof JuridicalPerson) {
-			System.out.print("Insira o CNPJ: ");
-		}
-		String registrationId = scanner.nextLine();
+			if (client instanceof NaturalPerson) {
+				System.out.print("Insira o CPF: ");
+			} else if (client instanceof JuridicalPerson) {
+				System.out.print("Insira o CNPJ: ");
+			}
+			String registrationId = bankView.getNotBlankInputFromUser();
 
-		System.out.print("Crie uma senha: ");
-		String password = scanner.nextLine();
+			System.out.print("Crie uma senha: ");
+			String password = bankView.getNotBlankInputFromUser();
 
-		client.setName(name);
-		client.setPassword(password);
-		client.setRegistrationId(registrationId);
+			client.setName(name);
+			client.setPassword(password);
+			client.setRegistrationId(registrationId);
 
-		boolean clientRegisteredSuccessfully = clients.add(client);
+			boolean clientRegisteredSuccessfully = clients.add(client);
 
-		if (clientRegisteredSuccessfully) {
-			activateCheckingAccount(client);
-			bankView.showClientSuccessfullyRegisteredMessage();
-		} else {
-			bankView.showClientAlreadyRegisteredMessage();
+			if (clientRegisteredSuccessfully) {
+				activateCheckingAccount(client);
+				bankView.showClientSuccessfullyRegisteredMessage();
+			} else {
+				bankView.showClientAlreadyRegisteredMessage();
+			}
+		} catch (BlankFieldException e) {
+			bankView.showFieldCanNotBeBlankMessage();
 		}
 	}
 
-	private void listClients() throws InterruptedException {
+	private void listClients() {
 		if (clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			System.out.println("Venha ser o nosso primeiro cliente! =)");
-			this.loadMainMenu();
 		} else {
 			for (Client client : clients) {
 				System.out.println("Nome: " + client.getName());
 				System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
 				System.out.println(" ");
 			}
-			this.loadMainMenu();
 		}
 	}
 

@@ -1,5 +1,6 @@
 package sinqia.view;
 
+import sinqia.exceptions.BlankFieldException;
 import sinqia.exceptions.InvalidAmountException;
 
 import java.math.BigDecimal;
@@ -27,7 +28,6 @@ public class BankView {
 	}
 
 	public String showMainMenu() {
-		// MENU PRINCIPAL
 		System.out.println();
 		System.out.println("======================================");
 		System.out.println("====== Bem-vindo ao Banco Gr-6 =======");
@@ -102,7 +102,7 @@ public class BankView {
 	}
 	
 	public BigDecimal transferScreenAmount(){
-		System.out.println("Insira o valor de transferencia : ");
+		System.out.print("Insira o valor de transferência: R$");
 		return scanner.nextBigDecimal();
 	}
 
@@ -110,7 +110,6 @@ public class BankView {
 		System.out.print("Insira a conta destino: ");
 		return scanner.nextLong();
 	}
-
 
 	public void showInvalidAmountInputMessage() {
 		System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
@@ -130,5 +129,19 @@ public class BankView {
 
 	public void showInvestmentAccountDoesNotExistMessage() {
 		System.out.println("Você ainda não possui uma conta investimento!");
+	}
+
+	public String getNotBlankInputFromUser() {
+		String string = scanner.nextLine();
+
+		if (string.isBlank()) {
+			throw new BlankFieldException();
+		}
+
+		return string;
+	}
+
+	public void showFieldCanNotBeBlankMessage() {
+		System.out.println("O campo não pode ficar em branco.");
 	}
 }

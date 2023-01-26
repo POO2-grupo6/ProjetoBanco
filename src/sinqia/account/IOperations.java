@@ -10,7 +10,4 @@ public interface IOperations {
     void transfer(Account destination, BigDecimal amount);
     
     void invest(InvestmentAccount account, BigDecimal amount);
-
-
-    
 }
