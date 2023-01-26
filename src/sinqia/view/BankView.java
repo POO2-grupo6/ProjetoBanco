@@ -104,6 +104,12 @@ public class BankView {
 		System.out.println();
 	}
 	
+	public void showSuccessfulRedeemMessage(BigDecimal newBalance) {
+		System.out.println("Resgate realizado com sucesso!");
+		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
+		System.out.println();
+	}
+	
 	public void showSuccessfulTransferMessage(BigDecimal newBalance) {
 		System.out.println("Transferência realizada com sucesso!");
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
@@ -140,7 +146,7 @@ public class BankView {
 
 	public int showInvestmentAccountDoesNotExistMessage() {
 		System.out.println("Você ainda não possui uma conta investimento!\nDeseja abrir uma?");
-		System.out.println("1 - Sim.\n2 - Não.");
+		System.out.println("1 - Sim\n2 - Não");
 		return scanner.nextInt();
 	}
 
@@ -161,9 +167,10 @@ public class BankView {
 	public int showInvestmentAccountMenu(Client client) {
 		System.out.println("1 - Ver saldo\n"
 				+ "2 - Resgatar\n"
-				+ "3 - Acessar conta corrente");
+				+ "3 - Investir\n"
+				+ "4 - Acessar conta corrente");
 		if(client instanceof NaturalPerson) {
-			System.out.println("4 - Acessar conta poupança.");
+			System.out.println("5 - Acessar conta poupança.");
 		}
 		return scanner.nextInt();
 	}
