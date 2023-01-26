@@ -178,7 +178,7 @@ public class Bank {
 	private void invest(Client client) {
 		try {
 			if (client.getInvestmentAccount() == null) {
-				throw new AccountNotFoundException();
+				bankView.showInvestmentAccountDoesNotExistMessage();
 			}
 
 			BigDecimal amount = bankView.getAmountFromUser();
@@ -213,14 +213,15 @@ public class Bank {
 	}
 
 	private void transfer(Client client) throws TransferException, InsufficientFundsExceptions {
-		long destinyAccount = bankView.transferScreenAccount();
-
+	
 //		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
 //		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
 //			throw new TransferException();
 //		}
 
 		try {
+			long destinyAccount = bankView.transferScreenAccount();
+			
 			Account account = findAccountByAccountNumber(destinyAccount);
 			BigDecimal amountTransfer = bankView.transferScreenAmount();
 
@@ -230,7 +231,10 @@ public class Bank {
 
 			client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
 			account.setBalance(account.getBalance().add(amountTransfer));
-			bankView.showAccountBalance(destinyAccount, account.getBalance());
+			bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			// bankView.showAccountBalance(currentClient.getCheckingAccount().getAccountNumber() , account.getBalance());
+		} catch (InsufficientFundsExceptions e) {
+			bankView.showInsufficientFundsMessage();
 		} catch (AccountNotFoundException e) {
 			bankView.showAccountNotFoundMessage();
 		} catch (InputMismatchException e) {

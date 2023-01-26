@@ -7,6 +7,7 @@ import sinqia.exceptions.InvalidAmountException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -88,7 +89,7 @@ public class BankView {
 
 	public long getDestinationAccountNumberFromUser() {
 		System.out.print("Informe a numeração da conta de destino: ");
-		return scanner.nextLong();  // talvez aqui precise de um scanner.nextLine()
+		return Long.parseLong(scanner.nextLine());  
 	}
 
 	public void showSuccessfulDepositMessage(BigDecimal newBalance) {
@@ -103,14 +104,22 @@ public class BankView {
 		System.out.println();
 	}
 	
+	public void showSuccessfulTransferMessage(BigDecimal newBalance) {
+		System.out.println("Transferência realizada com sucesso!");
+		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
+		System.out.println();
+	}
+	
 	public BigDecimal transferScreenAmount(){
-		System.out.print("Insira o valor de transferência: R$");
-		return scanner.nextBigDecimal();
+		System.out.print("Insira o valor de transferência: R$ ");
+		BigDecimal amount = scanner.nextBigDecimal();
+		scanner.nextLine();
+		return amount;
 	}
 
-	public long transferScreenAccount(){
+	public long transferScreenAccount() {
 		System.out.print("Insira a conta destino: ");
-		return scanner.nextLong();
+		return Long.parseLong(scanner.nextLine());
 	}
 
 	public void showInvalidAmountInputMessage() {
@@ -130,8 +139,8 @@ public class BankView {
 	}
 
 	public int showInvestmentAccountDoesNotExistMessage() {
-		System.out.println("Você ainda não possui uma conta investimento! Deseja abrir uma?");
-		System.out.println("1 - Sim.\n 2 - Não.");
+		System.out.println("Você ainda não possui uma conta investimento!\nDeseja abrir uma?");
+		System.out.println("1 - Sim.\n2 - Não.");
 		return scanner.nextInt();
 	}
 
