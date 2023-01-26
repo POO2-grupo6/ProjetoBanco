@@ -94,7 +94,13 @@ public class BankView {
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
-
+	
+	public void showSuccessfulInvestmentMessage(BigDecimal newBalance) {
+		System.out.println("Investimento realizado com sucesso!");
+		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
+		System.out.println();
+	}
+	
 	public BigDecimal transferScreenAmount(){
 		System.out.println("Insira o valor de transferencia : ");
 		return scanner.nextBigDecimal();
