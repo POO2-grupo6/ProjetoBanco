@@ -101,9 +101,8 @@ public class BankView {
 	}
 
 	public long transferScreenAccount(){
-		System.out.println("Insira a conta destino :");
+		System.out.print("Insira a conta destino: ");
 		return scanner.nextLong();
-
 	}
 
 
@@ -113,5 +112,13 @@ public class BankView {
 
 	public void showInvalidAmountMessage() {
 		System.out.println("O valor mínimo é de R$ 0,01.");
+	}
+
+    public void showAccountNotFoundMessage() {
+		System.out.println("Conta não localizada.");
+    }
+
+	public void showInvalidInputForAccountMessage() {
+		System.out.println("Por favor, informe apenas números.");
 	}
 }

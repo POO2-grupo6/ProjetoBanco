@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
+import sinqia.exceptions.AccountNotFoundException;
 import sinqia.exceptions.ClientNotFoundException;
 import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.InvalidAmountException;
@@ -183,23 +185,32 @@ public class Bank {
 		}
 	}
 
-	private void transfer(Client client) throws ClientNotFoundException, InterruptedException, TransferException, InsufficientFundsExceptions {
-
+	private void transfer(Client client) throws ClientNotFoundException,
+			                                    InterruptedException,
+			                                    TransferException,
+			                                    InsufficientFundsExceptions {
 		long destinyAccount = bankView.transferScreenAccount();
-		Account account = findAccountByAccountNumber(destinyAccount);
+
+		try {
 //		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
 //		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
 //			throw new TransferException();
 //		}
 
-		BigDecimal amountTransfer = bankView.transferScreenAmount();
-		if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
-			throw new InsufficientFundsExceptions();
-		}
+			Account account = findAccountByAccountNumber(destinyAccount);
+			BigDecimal amountTransfer = bankView.transferScreenAmount();
+			if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
+				throw new InsufficientFundsExceptions();
+			}
 
-		client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
-		account.setBalance(account.getBalance().add(amountTransfer));
-		bankView.showAccountBalance(destinyAccount, account.getBalance());
+			client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
+			account.setBalance(account.getBalance().add(amountTransfer));
+			bankView.showAccountBalance(destinyAccount, account.getBalance());
+		} catch (AccountNotFoundException e) {
+			bankView.showAccountNotFoundMessage();
+		} catch (InputMismatchException e) {
+			bankView.showInvalidInputForAccountMessage();
+		}
 
 		Thread.sleep(1000);
 		loadClientMenu(client);
@@ -280,22 +291,10 @@ public class Bank {
 		}
 	}
 
-	private Account findAccountByAccountNumber(long accountNumber) {  // lançar exception caso nao encontre
-//		final Account[] accounts = {null};
-//
-//		clients.forEach(client -> {
-//			if (accounts[0] == null) {
-//				accounts[0] = Arrays.stream(client.getAccounts()).
-//						filter(account -> account.getAccountNumber() == accountNumber).
-//						findAny().
-//						orElse(null);
-//			}
-//		});
-//
-//		return accounts[0];
-
+	private Account findAccountByAccountNumber(long accountNumber) {
 		for (Client client : clients) {
 			Account accountFound = Arrays.stream(client.getAccounts()).
+					filter(Objects::nonNull).
 					filter(account -> account.getAccountNumber() == accountNumber).
 					findAny().
 					orElse(null);
@@ -305,7 +304,7 @@ public class Bank {
 			}
 		}
 
-		return null;
+		throw new AccountNotFoundException();
 	}
 }
 
