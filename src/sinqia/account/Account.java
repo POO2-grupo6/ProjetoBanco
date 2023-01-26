@@ -11,12 +11,12 @@ public class Account {
         balance = BigDecimal.ZERO;
     }
 
-    public void addToBalance (BigDecimal value){
-        balance = balance.add(value);
+    public void addToBalance (BigDecimal amount){
+        balance = balance.add(amount);
     }
 
-    public void removeFromBalance (BigDecimal value){
-        balance = balance.subtract(value);
+    public void removeFromBalance (BigDecimal amount){
+        balance = balance.subtract(amount);
     }
 
     public long getAccountNumber() {

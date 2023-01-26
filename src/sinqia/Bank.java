@@ -101,8 +101,8 @@ public class Bank {
 		System.out.println();
 		System.out.println("|             Escolha uma opção:           |");
 		System.out.println("|          1 - Consultar saldo             |");
-		System.out.println("|          2 - Abrir conta poupança        |");
-		System.out.println("|          3 - Abrir conta Investimento    |");
+		System.out.println("|          2 - Abrir conta investimento    |");
+		System.out.println("|          3 - Abrir conta poupança        |");
 		System.out.println("|          4 - Sacar                       |");
 		System.out.println("|          5 - Depositar                   |");
 		System.out.println("|          6 - Transferir                  |");
@@ -158,7 +158,7 @@ public class Bank {
 				Thread.sleep(1000);
 				break;
 			case "7":
-//				invest();
+				invest(client);
 				break;
 			case "8":
 				loadMainMenu();
@@ -167,6 +167,15 @@ public class Bank {
 				System.out.println("Opção inválida.");
 				loadClientMenu(client);
 		}
+	}
+
+	private void invest(Client client) {
+		System.out.println("Insira o valor a ser investido: ");
+		BigDecimal amount = scanner.nextBigDecimal();
+		client.getCheckingAccount().removeFromBalance(amount);
+		client.getInvestmentAccount().addToBalance(amount);
+		client.getInvestmentAccount().addToBalance(client.getInvestmentAccount().calculateInterest(amount));
+		bankView.showSuccessfulInvestmentMessage(client.getInvestmentAccount().getBalance());
 	}
 
 	private void deposit(Client client) {
