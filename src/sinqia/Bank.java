@@ -96,7 +96,7 @@ public class Bank {
 	}
 
 	private void loadClientMenu(Client client) throws ClientNotFoundException, InterruptedException {
-		// MENU DO CLIENTE
+		Thread.sleep(1000);
 		System.out.println();
 		System.out.print("=".repeat(18 - client.getName().length() / 2));
 		System.out.print(" Olá, " + client.getName() + " ");
@@ -115,22 +115,18 @@ public class Bank {
 
 		String clientMenu = scanner.nextLine().toUpperCase();
 		switch (clientMenu) {
-			case "1":
-//				checkBalance();
+			case "1":  // checkBalance();
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
 				BigDecimal balance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(accountNumber, balance);
-				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "2":
 				activateInvestmentAccount(client);
-				Thread.sleep(1000);
 				// loadClientMenu(client);
 				break;
 			case "3":
 				activateSavingsAccount((NaturalPerson) client);
-				Thread.sleep(1000);
 				// loadClientMenu(client);
 				break;
 			case "4":  // withdraw();
@@ -147,24 +143,21 @@ public class Bank {
 					bankView.showInvalidAmountMessage();
 				}
 
-				Thread.sleep(1000);
 				loadClientMenu(client);
 				break;
 			case "5":  // deposit();
-				deposit(client);
-				Thread.sleep(1000);
+				manageDeposit(client);
 				loadClientMenu(client);
 				break;
-			case "6"://
-				transfer(client);
-				Thread.sleep(1000);
+			case "6":
+				manageTransfer(client);
 				loadClientMenu(client);
 				break;
 			case "7":
 				loadMainMenu();
 				break;
 			default:
-				System.out.println("Opção inválida.");
+				bankView.showInvalidOptionMessage();
 				loadClientMenu(client);
 		}
 	}
@@ -203,22 +196,21 @@ public class Bank {
 			bankView.showInsufficientFundsMessage();
 		}
 	}
-	
 
-	private void deposit(Client client) {
+	private void manageDeposit(Client client) {
 		try {
 			BigDecimal amountDeposit = bankView.getAmountFromUser();
 			client.getCheckingAccount().deposit(amountDeposit);
 			BigDecimal newBalance = client.getCheckingAccount().getBalance();
 			bankView.showSuccessfulDepositMessage(newBalance);
 		} catch (InputMismatchException e) {
-			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+			bankView.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			System.out.println("O valor mínimo é de R$ 0,01.");
+			bankView.showInvalidAmountMessage();
 		}
 	}
 
-	private void transfer(Client client) throws TransferException, InsufficientFundsExceptions {
+	private void manageTransfer(Client client) throws TransferException, InsufficientFundsExceptions {
 	
 //		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
 //		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
@@ -281,9 +273,10 @@ public class Bank {
 	}
 	
 	private void loadInvestmentAccountMenu(Client client) throws ClientNotFoundException, InterruptedException{
-		int option = bankView.showInvestmentAccountMenu(client);
 		long accountNumber = client.getInvestmentAccount().getAccountNumber();
 		BigDecimal balance = client.getInvestmentAccount().getBalance();
+
+		int option = bankView.showInvestmentAccountMenu(client);
 		switch(option) {
 			case 1:
 				bankView.showAccountBalance(accountNumber, balance);
@@ -365,12 +358,13 @@ public class Bank {
 		if (clients.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			System.out.println("Venha ser o nosso primeiro cliente! =)");
-		} else {
-			for (Client client : clients) {
-				System.out.println("Nome: " + client.getName());
-				System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
-				System.out.println(" ");
-			}
+			return;
+		}
+
+		for (Client client : clients) {
+			System.out.println("Nome: " + client.getName());
+			System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
+			System.out.println("----------");
 		}
 	}
 

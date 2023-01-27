@@ -7,7 +7,6 @@ import sinqia.exceptions.InvalidAmountException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +29,8 @@ public class BankView {
 		System.out.println("Conta de número " + accountNumber + " criada com sucesso!");
 	}
 
-	public String showMainMenu() {
+	public String showMainMenu() throws InterruptedException {
+		Thread.sleep(1000);
 		System.out.println();
 		System.out.println("======================================");
 		System.out.println("====== Bem-vindo ao Banco Gr-6 =======");
@@ -173,5 +173,18 @@ public class BankView {
 			System.out.println("5 - Acessar conta poupança.");
 		}
 		return scanner.nextInt();
+	}
+
+	public void promptUserToOpenAccount() {
+		System.out.println("A conta ainda não existe!\nDeseja abrir uma?");
+		System.out.println("1 - Sim.\n2 - Não.");
+	}
+
+	public void showInvalidOptionMessage() {
+		System.out.println("Opção inválida.");
+	}
+
+	public int getOptionFromUser() {
+		return Integer.parseInt(scanner.nextLine());
 	}
 }
