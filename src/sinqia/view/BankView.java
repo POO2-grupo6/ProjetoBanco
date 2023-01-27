@@ -164,7 +164,8 @@ public class BankView {
 		System.out.println("O campo não pode ficar em branco.");
 	}
 
-	public int showInvestmentAccountMenu(Client client) {
+	public int showInvestmentAccountMenu(Client client) throws InterruptedException {
+		Thread.sleep(1000);
 		System.out.println("1 - Ver saldo\n"
 				+ "2 - Resgatar\n"
 				+ "3 - Investir\n"

@@ -122,11 +122,11 @@ public class Bank {
 				loadClientMenu(client);
 				break;
 			case "2":
-				activateInvestmentAccount(client);
+				accessInvestmentAccount(client);
 				// loadClientMenu(client);
 				break;
 			case "3":
-				activateSavingsAccount((NaturalPerson) client);
+				// accessSavingsAccount((NaturalPerson) client);  //tem que fazer
 				// loadClientMenu(client);
 				break;
 			case "4":  // withdraw();
@@ -162,9 +162,8 @@ public class Bank {
 		}
 	}
 
-	private void invest(Client client) {
+	private void manageInvestment(Client client) {
 		try {
-
 			BigDecimal amount = bankView.getAmountFromUser();
 
 			client.getCheckingAccount().withdraw(amount);
@@ -173,9 +172,9 @@ public class Bank {
 
 			bankView.showSuccessfulInvestmentMessage(client.getInvestmentAccount().getBalance());
 		} catch (InputMismatchException e) {
-			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+			bankView.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			System.out.println("O valor mínimo é de R$ 0,01.");
+			bankView.showInvalidAmountMessage();
 		} catch (InsufficientFundsExceptions e) {
 			bankView.showInsufficientFundsMessage();
 		}
@@ -249,30 +248,46 @@ public class Bank {
 		}
 	}
 
-	private void activateInvestmentAccount(Client client) throws ClientNotFoundException, InterruptedException {
-		if (!checkIfInvestmentAccountIsActive(client)) {
-			int option = bankView.showInvestmentAccountDoesNotExistMessage();
-			if(option == 1) {
-				client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
-				numberOfAccountsOpened++;
-				bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
-				loadInvestmentAccountMenu(client);
-			} else if (option == 2) {
-				loadClientMenu(client);
-			} else {
-				System.out.println("Comando incorreto.");
-				activateInvestmentAccount(client);
+	private void accessInvestmentAccount(Client client) throws ClientNotFoundException, InterruptedException {
+		promptClientToOpenInvestmentAccountIfItDoesNotExist(client);
+		if (client.getInvestmentAccount() == null) {
+			return;
+		}
+		loadInvestmentAccountMenu(client);
+	}
+
+	private void promptClientToOpenInvestmentAccountIfItDoesNotExist(Client client) {
+		if (client.getInvestmentAccount() == null) {
+			bankView.promptUserToOpenAccount();
+
+			try {
+				int option = bankView.getOptionFromUser();
+				if (option == 1) {
+					activateInvestmentAccount(client);
+				} else if (option != 2) {
+					bankView.showInvalidOptionMessage();
+				}
+			} catch (NumberFormatException e) {
+				bankView.showInvalidOptionMessage();
 			}
-		} else {
-			loadInvestmentAccountMenu(client);
 		}
 	}
-	
+
+	private void activateInvestmentAccount(Client client) {
+		if (client.getInvestmentAccount() == null) {
+			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
+			numberOfAccountsOpened++;
+			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+		} else {
+			bankView.showAccountAlreadyExistsMessage();
+		}
+	}
+
 	private boolean checkIfInvestmentAccountIsActive(Client client) {
 		return client.getInvestmentAccount() != null;
 	}
 	
-	private void loadInvestmentAccountMenu(Client client) throws ClientNotFoundException, InterruptedException{
+	private void loadInvestmentAccountMenu(Client client) throws ClientNotFoundException, InterruptedException {
 		long accountNumber = client.getInvestmentAccount().getAccountNumber();
 		BigDecimal balance = client.getInvestmentAccount().getBalance();
 
@@ -280,17 +295,14 @@ public class Bank {
 		switch(option) {
 			case 1:
 				bankView.showAccountBalance(accountNumber, balance);
-				Thread.sleep(1000);
 				loadInvestmentAccountMenu(client);
 				break;
 			case 2:
 				redeem(client);
-				Thread.sleep(1000);
 				loadInvestmentAccountMenu(client);
 				break;
 			case 3:
-				invest(client);
-				Thread.sleep(1000);
+				manageInvestment(client);
 				loadInvestmentAccountMenu(client);
 				break;
 			case 4:
@@ -305,7 +317,6 @@ public class Bank {
 				break;
 			default:
 				System.out.println("Comando inválido");
-				Thread.sleep(1000);
 				loadInvestmentAccountMenu(client);
 		}
 	}
