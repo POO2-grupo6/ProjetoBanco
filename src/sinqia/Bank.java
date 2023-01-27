@@ -126,7 +126,8 @@ public class Bank {
 				// loadClientMenu(client);
 				break;
 			case "3":
-				// accessSavingsAccount((NaturalPerson) client);  //tem que fazer
+				System.out.println("Ok, indo para Conta Poupança..");
+				accessSavingsAccount((NaturalPerson) client);
 				// loadClientMenu(client);
 				break;
 			case "4":  // withdraw();
@@ -161,6 +162,7 @@ public class Bank {
 				loadClientMenu(client);
 		}
 	}
+
 
 	private void manageInvestment(Client client) {
 		try {
@@ -248,6 +250,93 @@ public class Bank {
 		}
 	}
 
+	private void accessSavingsAccount(NaturalPerson client) throws ClientNotFoundException, InterruptedException {
+		promptClientToOpenSavingsAccountIfItDoesNotExist(client);
+		if (client.getSavingsAccount() == null) {
+			return;
+		}
+		loadSavingsAccountMenu(client);
+	}
+
+
+	private void promptClientToOpenSavingsAccountIfItDoesNotExist(NaturalPerson client) {
+		if (client.getSavingsAccount() == null) {
+			bankView.promptUserToOpenAccount();
+
+			try {
+				int option = bankView.getOptionFromUser();
+				if (option == 1) {
+					activateSavingsAccount(client);
+				} else if (option != 2) {
+					bankView.showInvalidOptionMessage();
+				}
+			} catch (NumberFormatException e) {
+				bankView.showInvalidOptionMessage();
+			}
+		}
+	}
+
+	private void loadSavingsAccountMenu(NaturalPerson client) throws ClientNotFoundException, InterruptedException {
+		long accountNumber = client.getSavingsAccount().getAccountNumber();
+		BigDecimal balance = client.getSavingsAccount().getBalance();
+
+		int option = bankView.showSavingsAccountMenu(client);
+		switch (option) {
+			case 1:   // checkBalance();
+				bankView.showAccountBalance(accountNumber, balance);
+				loadSavingsAccountMenu(client);
+				break;
+			case 2:
+				accessInvestmentAccount(client);
+				break;
+			case 3:
+				System.out.println("Ok, Indo para Conta Corrente..");
+				loadClientMenu(client);
+				break;
+			case 4:  // withdraw();
+				try {
+					BigDecimal amount = bankView.getAmountFromUser();
+					client.getSavingsAccount().withdraw(amount);
+					BigDecimal newBalance = client.getSavingsAccount().getBalance();
+					bankView.showSuccessfulWithdrawMessage(newBalance);
+				} catch (InsufficientFundsExceptions e) {
+					bankView.showInsufficientFundsMessage();
+				} catch (InputMismatchException e) {
+					bankView.showInvalidAmountInputMessage();
+				} catch (InvalidAmountException e) {
+					bankView.showInvalidAmountMessage();
+				}
+
+				loadSavingsAccountMenu(client);
+				break;
+			case 5:  // deposit();
+				manageDeposit(client);
+				loadSavingsAccountMenu(client);
+				break;
+			case 6:
+				manageTransfer(client);
+				loadSavingsAccountMenu(client);
+				break;
+			case 7:
+				loadMainMenu();
+				break;
+			default:
+				bankView.showInvalidOptionMessage();
+				loadSavingsAccountMenu(client);
+		}
+
+	}
+
+	private void activateInvestmentAccount(Client client) {
+		if (client.getInvestmentAccount() == null) {
+			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
+			numberOfAccountsOpened++;
+			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+		} else {
+			bankView.showAccountAlreadyExistsMessage();
+		}
+	}
+
 	private void accessInvestmentAccount(Client client) throws ClientNotFoundException, InterruptedException {
 		promptClientToOpenInvestmentAccountIfItDoesNotExist(client);
 		if (client.getInvestmentAccount() == null) {
@@ -273,20 +362,10 @@ public class Bank {
 		}
 	}
 
-	private void activateInvestmentAccount(Client client) {
-		if (client.getInvestmentAccount() == null) {
-			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
-			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
-		} else {
-			bankView.showAccountAlreadyExistsMessage();
-		}
-	}
-
 	private boolean checkIfInvestmentAccountIsActive(Client client) {
 		return client.getInvestmentAccount() != null;
 	}
-	
+
 	private void loadInvestmentAccountMenu(Client client) throws ClientNotFoundException, InterruptedException {
 		long accountNumber = client.getInvestmentAccount().getAccountNumber();
 		BigDecimal balance = client.getInvestmentAccount().getBalance();

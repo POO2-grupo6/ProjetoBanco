@@ -6,6 +6,7 @@ import java.util.Objects;
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
+import sinqia.account.SavingsAccount;
 import sinqia.exceptions.PasswordMismatchException;
 
 public abstract class Client {
@@ -75,11 +76,19 @@ public abstract class Client {
 		return (InvestmentAccount) getAccounts()[1];
 	}
 
-	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
-		getAccounts()[1] = investmentAccount;
+	public SavingsAccount getSavingsAccount (){
+		return (SavingsAccount) getAccounts()[2];
 	}
 
 	public void setCheckingAccount(CheckingAccount checkingAccount) {
 		getAccounts()[0] = checkingAccount;
+	}
+
+	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+		getAccounts()[1] = investmentAccount;
+	}
+
+	public void setSavingsAccount (SavingsAccount savingsAccount){
+		getAccounts()[2] = savingsAccount;
 	}
 }
