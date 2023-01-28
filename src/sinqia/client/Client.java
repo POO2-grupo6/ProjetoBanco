@@ -75,6 +75,11 @@ public abstract class Client {
 		account.removeFromBalance(amountWithdraw);
 	}
 
+	public void transfer(Account originAccount, Account destinationAccount, BigDecimal amount) {
+		originAccount.removeFromBalance(amount);
+		destinationAccount.addToBalance(amount);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -86,10 +91,5 @@ public abstract class Client {
 	@Override
 	public int hashCode() {
 		return Objects.hash(registrationId);
-	}
-
-	public void transfer(Account originAccount, Account destinationAccount, BigDecimal amount) {
-		originAccount.removeFromBalance(amount);
-		destinationAccount.addToBalance(amount);
 	}
 }

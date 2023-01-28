@@ -72,7 +72,7 @@ public class Bank {
 			this.loadMainMenu();
 		} else {
 			try {
-				List<String> loginCredentials = bankView.loginScreen();
+				List<String> loginCredentials = bankView.getClientCredentials();
 				currentClient = findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadCheckingAccountMenu(currentClient);
@@ -119,22 +119,7 @@ public class Bank {
 			BigDecimal amount = bankView.getAmountFromUser();
 
 			client.transfer(originAccount, destinationAccount, amount);
-
-//			if (client.getCheckingAccount().getBalance().compareTo(amount) < 0) {
-//				throw new InsufficientFundsExceptions();
-//			}
-//
-//			if(client.getClass().equals(JuridicalPerson.class)) {
-//				BigDecimal tax = EOperationTaxes.TRANSFER_TAX_RATE_PJ.getTax();
-//				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amount)
-//						.subtract(amount.multiply(tax)));
-//				destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
-//				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
-//			} else {
-//				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amount));
-//				destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
-//				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
-//			}
+			bankView.showSuccessfulTransferMessage(originAccount.getBalance());
 		} catch (InsufficientFundsExceptions e) {
 			bankView.showInsufficientFundsMessage();
 		} catch (AccountNotFoundException e) {
@@ -194,7 +179,7 @@ public class Bank {
 		try {
 			BigDecimal amount = bankView.getAmountFromUser();
 			client.getInvestmentAccount().redeem(client.getCheckingAccount(), amount);
-			bankView.showSuccessfulRedeemMessage(client.getInvestmentAccount().getBalance());
+			bankView.showSuccessfulRedemptionMessage(client.getInvestmentAccount().getBalance());
 		} catch (InputMismatchException e) {
 			bankView.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {

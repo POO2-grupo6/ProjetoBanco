@@ -46,7 +46,7 @@ public class BankView {
 		return scanner.nextLine().toUpperCase();
 	}
 	
-	public List<String> loginScreen(){
+	public List<String> getClientCredentials(){
 		List<String> loginCredentials = new ArrayList<>();
 		System.out.print("Insira o CPF/CNPJ: ");
 		loginCredentials.add(scanner.nextLine());
@@ -104,7 +104,7 @@ public class BankView {
 		System.out.println();
 	}
 	
-	public void showSuccessfulRedeemMessage(BigDecimal newBalance) {
+	public void showSuccessfulRedemptionMessage(BigDecimal newBalance) {
 		System.out.println("Resgate realizado com sucesso!");
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
