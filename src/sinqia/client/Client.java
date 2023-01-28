@@ -29,20 +29,54 @@ public abstract class Client {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getRegistrationId() {
 		return registrationId;
 	}
 
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
+	}
+
+	public abstract Account[] getAccounts();
+
+	public abstract BigDecimal getInvestmentInterestRate();
+
+	public CheckingAccount getCheckingAccount() {
+		return (CheckingAccount) getAccounts()[0];
+	}
+
+	public void setCheckingAccount(CheckingAccount checkingAccount) {
+		getAccounts()[0] = checkingAccount;
+	}
+
+	public InvestmentAccount getInvestmentAccount() {
+		return (InvestmentAccount) getAccounts()[1];
+	}
+
+	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
+		getAccounts()[1] = investmentAccount;
+	}
+
+	public SavingsAccount getSavingsAccount (){
+		return (SavingsAccount) getAccounts()[2];
+	}
+
+	public void setSavingsAccount (SavingsAccount savingsAccount){
+		getAccounts()[2] = savingsAccount;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void validatePassword(String loginAttempt) throws PasswordMismatchException {
+		if (!this.password.equals(loginAttempt)) {
+			throw new PasswordMismatchException();
+		}
+	}
+
+	public void withdraw(Account account, BigDecimal amountWithdraw) {
+		account.removeFromBalance(amountWithdraw);
 	}
 
 	@Override
@@ -56,39 +90,5 @@ public abstract class Client {
 	@Override
 	public int hashCode() {
 		return Objects.hash(registrationId);
-	}
-
-	public void validatePassword(String loginAttempt) throws PasswordMismatchException {
-		if (!this.password.equals(loginAttempt)) {
-			throw new PasswordMismatchException();
-		}
-	}
-
-	public abstract Account[] getAccounts();
-
-	public abstract BigDecimal getInvestmentInterestRate();
-
-	public CheckingAccount getCheckingAccount() {
-		return (CheckingAccount) getAccounts()[0];
-	}
-
-	public InvestmentAccount getInvestmentAccount() {
-		return (InvestmentAccount) getAccounts()[1];
-	}
-
-	public SavingsAccount getSavingsAccount (){
-		return (SavingsAccount) getAccounts()[2];
-	}
-
-	public void setCheckingAccount(CheckingAccount checkingAccount) {
-		getAccounts()[0] = checkingAccount;
-	}
-
-	public void setInvestmentAccount(InvestmentAccount investmentAccount) {
-		getAccounts()[1] = investmentAccount;
-	}
-
-	public void setSavingsAccount (SavingsAccount savingsAccount){
-		getAccounts()[2] = savingsAccount;
 	}
 }

@@ -124,7 +124,9 @@ public class Bank {
 				break;
 			case "2":
 				accessInvestmentAccount(client);
-				// loadClientMenu(client);
+				if (client.getInvestmentAccount() == null) {
+					loadClientMenu(client);
+				}
 				break;
 			case "3":
 				System.out.println("Ok, indo para Conta Poupança..");
@@ -132,11 +134,11 @@ public class Bank {
 				// loadClientMenu(client);
 				break;
 			case "4":  // withdraw();
-				manageWithdraw(client);
+				manageWithdraw(client, client.getCheckingAccount());
 				loadClientMenu(client);
 				break;
 			case "5":  // deposit();
-				manageDeposit(client);
+				manageDeposit(client, client.getCheckingAccount());
 				loadClientMenu(client);
 				break;
 			case "6":
@@ -185,11 +187,11 @@ public class Bank {
 		}
 	}
 
-	private void manageDeposit(Client client) {
+	private void manageDeposit(Client client, Account account) {
 		try {
-			BigDecimal amountDeposit = bankView.getAmountFromUser();
-			client.getCheckingAccount().deposit(amountDeposit);
-			BigDecimal newBalance = client.getCheckingAccount().getBalance();
+			BigDecimal amount = bankView.getAmountFromUser();
+			account.addToBalance(amount);
+			BigDecimal newBalance = account.getBalance();
 			bankView.showSuccessfulDepositMessage(newBalance);
 		} catch (InputMismatchException e) {
 			bankView.showInvalidAmountInputMessage();
@@ -235,7 +237,7 @@ public class Bank {
 		}
 	}
 	
-	private void manageWithdraw(Client client) throws InsufficientFundsExceptions, InputMismatchException, InvalidAmountException {
+	private void manageWithdraw(Client client, Account account) throws InsufficientFundsExceptions, InputMismatchException, InvalidAmountException {
 //		try {
 //			BigDecimal amount = bankView.getAmountFromUser();
 //			client.getCheckingAccount().withdraw(amount);
@@ -251,23 +253,10 @@ public class Bank {
 		
 		
 		try {
-			BigDecimal amountWithdraw = bankView.withdrawScreenAmount();
-			
-			if (client.getCheckingAccount().getBalance().compareTo(amountWithdraw) < 0) {
-				throw new InsufficientFundsExceptions();
-			}
-			
-			if(client.getClass().equals(JuridicalPerson.class)) {
-				BigDecimal tax = EOperationTaxes.WITHDRAW_TAX_RATE_PJ.getTax();
-				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance()
-						.subtract(amountWithdraw)
-						.subtract(amountWithdraw.multiply(tax)));
-				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
-			} else {
-				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance()
-						.subtract(amountWithdraw));
-				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
-			}
+//			BigDecimal amountWithdraw = bankView.withdrawScreenAmount();
+			BigDecimal amount = bankView.getAmountFromUser();
+			client.withdraw(account, amount);
+			bankView.showSuccessfulWithdrawMessage(account.getBalance());
 		} catch (InsufficientFundsExceptions e) {
 			bankView.showInsufficientFundsMessage();
 		} catch (InputMismatchException e) {
@@ -294,7 +283,6 @@ public class Bank {
 		}
 		loadSavingsAccountMenu(client);
 	}
-
 
 	private void promptClientToOpenSavingsAccountIfItDoesNotExist(NaturalPerson client) {
 		if (client.getSavingsAccount() == null) {
@@ -325,29 +313,20 @@ public class Bank {
 				break;
 			case 2:
 				accessInvestmentAccount(client);
+				if (client.getInvestmentAccount() == null) {
+					loadSavingsAccountMenu(client);
+				}
 				break;
 			case 3:
 				System.out.println("Ok, Indo para Conta Corrente..");
 				loadClientMenu(client);
 				break;
 			case 4:  // withdraw();
-				try {
-					BigDecimal amount = bankView.getAmountFromUser();
-					client.getSavingsAccount().withdraw(amount);
-					BigDecimal newBalance = client.getSavingsAccount().getBalance();
-					bankView.showSuccessfulWithdrawMessage(newBalance);
-				} catch (InsufficientFundsExceptions e) {
-					bankView.showInsufficientFundsMessage();
-				} catch (InputMismatchException e) {
-					bankView.showInvalidAmountInputMessage();
-				} catch (InvalidAmountException e) {
-					bankView.showInvalidAmountMessage();
-				}
-
+				manageWithdraw(client, client.getSavingsAccount());
 				loadSavingsAccountMenu(client);
 				break;
 			case 5:  // deposit();
-				manageDeposit(client);
+				manageDeposit(client, client.getSavingsAccount());
 				loadSavingsAccountMenu(client);
 				break;
 			case 6:
@@ -361,7 +340,6 @@ public class Bank {
 				bankView.showInvalidOptionMessage();
 				loadSavingsAccountMenu(client);
 		}
-
 	}
 
 	private void activateInvestmentAccount(Client client) {

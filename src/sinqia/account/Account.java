@@ -1,5 +1,7 @@
 package sinqia.account;
 
+import sinqia.exceptions.InsufficientFundsExceptions;
+
 import java.math.BigDecimal;
 
 public class Account {
@@ -16,6 +18,10 @@ public class Account {
     }
 
     public void removeFromBalance (BigDecimal amount){
+        if (amount.compareTo(balance) > 0) {
+            throw new InsufficientFundsExceptions();
+        }
+
         balance = balance.subtract(amount);
     }
 

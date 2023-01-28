@@ -49,8 +49,9 @@ public class JuridicalPerson extends Client {
         return EOperationTaxes.TRANSFER_TAX_RATE_PJ.getTax();
     }
 
-
-
-
-
+    @Override
+    public void withdraw(Account account, BigDecimal amount) {
+        BigDecimal valueToDebit = amount.multiply(BigDecimal.ONE.add(EOperationTaxes.WITHDRAW_TAX_RATE_PJ.getTax()));
+        account.removeFromBalance(valueToDebit);
+    }
 }
