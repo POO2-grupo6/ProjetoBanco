@@ -171,13 +171,13 @@ public class BankView {
 		System.out.println("============================================");
 	}
 
-	public void showSavingsAccountMenu(Client client) throws InterruptedException {
+	public void showSavingsAccountMenu(String name) throws InterruptedException {
 		Thread.sleep(1000);
 		System.out.println();
-		System.out.print("=".repeat(18 - client.getName().length() / 2));
-		System.out.print(" Olá, " + client.getName() + " ");
-		System.out.print("=".repeat(18 - client.getName().length() / 2));
-		System.out.print(client.getName().length() % 2 == 0 ? "=" : "");
+		System.out.print("=".repeat(18 - name.length() / 2));
+		System.out.print(" Olá, " + name + " ");
+		System.out.print("=".repeat(18 - name.length() / 2));
+		System.out.print(name.length() % 2 == 0 ? "=" : "");
 		System.out.println();
 		System.out.println("|             Escolha uma opção:           |");
 		System.out.println("|          1 - Consultar saldo             |");
@@ -201,5 +201,24 @@ public class BankView {
 
 	public int getOptionFromUser() {
 		return Integer.parseInt(scanner.nextLine());
+	}
+
+	public void showCheckingAccountMenu(String name) throws InterruptedException {
+		Thread.sleep(1000);
+		System.out.println();
+		System.out.print("=".repeat(18 - name.length() / 2));
+		System.out.print(" Olá, " + name + " ");
+		System.out.print("=".repeat(18 - name.length() / 2));
+		System.out.print(name.length() % 2 == 0 ? "=" : "");
+		System.out.println();
+		System.out.println("|             Escolha uma opção:           |");
+		System.out.println("|          1 - Consultar saldo             |");
+		System.out.println("|          2 - Acessar conta investimento  |");
+		System.out.println("|          3 - Acessar conta poupança      |");
+		System.out.println("|          4 - Sacar                       |");
+		System.out.println("|          5 - Depositar                   |");
+		System.out.println("|          6 - Transferir                  |");
+		System.out.println("|          7 - Deslogar                    |");
+		System.out.println("============================================");
 	}
 }

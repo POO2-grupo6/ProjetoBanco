@@ -87,4 +87,9 @@ public abstract class Client {
 	public int hashCode() {
 		return Objects.hash(registrationId);
 	}
+
+	public void transfer(Account originAccount, Account destinationAccount, BigDecimal amount) {
+		originAccount.removeFromBalance(amount);
+		destinationAccount.addToBalance(amount);
+	}
 }
