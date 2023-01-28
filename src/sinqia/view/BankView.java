@@ -132,7 +132,7 @@ public class BankView {
 		
 	public long transferScreenAccount() {
 		System.out.print("Insira a conta destino: ");
-		Long account = scanner.nextLong();
+		long account = scanner.nextLong();
 		scanner.nextLine();
 		return account;
 		// return Long.parseLong(scanner.nextLine());
@@ -174,8 +174,10 @@ public class BankView {
 		System.out.println("O campo não pode ficar em branco.");
 	}
 
-	public int showInvestmentAccountMenu(Client client) throws InterruptedException {
+	public void showInvestmentAccountMenu(Client client) throws InterruptedException {
 		Thread.sleep(1000);
+		System.out.println();
+		System.out.println("Escolha uma opção:");
 		System.out.println("1 - Ver saldo\n"
 				+ "2 - Resgatar\n"
 				+ "3 - Investir\n"
@@ -194,7 +196,6 @@ public class BankView {
 		if(client instanceof NaturalPerson) {
 			System.out.println("|          5 - Acessar conta poupança      |");
 		}
-		return scanner.nextInt();
 	}
 
 	public int showSavingsAccountMenu(Client client) throws InterruptedException {
@@ -220,7 +221,7 @@ public class BankView {
 
 	public void promptUserToOpenAccount() {
 		System.out.println("A conta ainda não existe!\nDeseja abrir uma?");
-		System.out.println("1 - Sim.\n2 - Não.");
+		System.out.println("1 - Sim\n2 - Não");
 	}
 
 	public void showInvalidOptionMessage() {

@@ -174,14 +174,12 @@ public class Bank {
 	private void redeem(Client client) {
 		try {
 			BigDecimal amount = bankView.getAmountFromUser();
-
 			client.getInvestmentAccount().redeem(client.getCheckingAccount(), amount);
-
 			bankView.showSuccessfulRedeemMessage(client.getInvestmentAccount().getBalance());
 		} catch (InputMismatchException e) {
-			System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
+			bankView.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			System.out.println("O valor mínimo é de R$ 0,01.");
+			bankView.showInvalidAmountMessage();
 		} catch (InsufficientFundsExceptions e) {
 			bankView.showInsufficientFundsMessage();
 		}
@@ -409,8 +407,10 @@ public class Bank {
 		long accountNumber = client.getInvestmentAccount().getAccountNumber();
 		BigDecimal balance = client.getInvestmentAccount().getBalance();
 
-		int option = bankView.showInvestmentAccountMenu(client);
-		switch(option) {
+		bankView.showInvestmentAccountMenu(client);
+		int option = bankView.getOptionFromUser();
+
+		switch (option) {
 			case 1:
 				bankView.showAccountBalance(accountNumber, balance);
 				loadInvestmentAccountMenu(client);
