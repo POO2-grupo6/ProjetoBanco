@@ -3,11 +3,13 @@ package sinqia.client;
 import java.math.BigDecimal;
 
 import sinqia.account.Account;
+import sinqia.enums.EInterestRates;
+import sinqia.enums.EOperationTaxes;
 
 public class JuridicalPerson extends Client {
     private String cnpj;
     private Account[] accounts = new Account[2];
-    private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.035);
+//    private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.035);
 
     public JuridicalPerson(){
         super();
@@ -36,7 +38,15 @@ public class JuridicalPerson extends Client {
 
     @Override
     public BigDecimal getInvestmentInterestRate() {
-        return INVESTMENT_INTEREST_RATE;
+        return EInterestRates.INVESTMENT_INTEREST_RATE_PJ.getRate();
+    }
+    
+    public BigDecimal getJuridicalPersonWithdrawTax() {
+        return EOperationTaxes.WITHDRAW_TAX_RATE_PJ.getTax();
+    }
+    
+    public BigDecimal getJuridicalPersonTransferTax() {
+        return EOperationTaxes.TRANSFER_TAX_RATE_PJ.getTax();
     }
 
 

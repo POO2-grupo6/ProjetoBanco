@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 
 import sinqia.account.Account;
 import sinqia.account.SavingsAccount;
+import sinqia.enums.EInterestRates;
 
 public class NaturalPerson extends Client {
 	private String cpf;
 	private Account[] accounts = new Account[3];
-	private static final BigDecimal SAVINGS_INTEREST_RATE = BigDecimal.valueOf(0.01);
-	private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.015);
+//	private static final BigDecimal SAVINGS_INTEREST_RATE = BigDecimal.valueOf(0.01);
+//	private static final BigDecimal INVESTMENT_INTEREST_RATE = BigDecimal.valueOf(0.015);
 
 	public NaturalPerson() {
 	}
@@ -36,12 +37,12 @@ public class NaturalPerson extends Client {
 	}
 
 	public static BigDecimal getSavingsInterestRate() {
-		return SAVINGS_INTEREST_RATE;
+		return EInterestRates.SAVINGS_INTEREST_RATE_PF.getRate();
 	}
 
 	@Override
 	public BigDecimal getInvestmentInterestRate() {
-		return INVESTMENT_INTEREST_RATE;
+		return EInterestRates.INVESTMENT_INTEREST_RATE_PF.getRate();
 	}
 
 	public SavingsAccount getSavingsAccount() {

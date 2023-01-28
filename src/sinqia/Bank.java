@@ -16,6 +16,7 @@ import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
+import sinqia.enums.EOperationTaxes;
 import sinqia.exceptions.AccountNotFoundException;
 import sinqia.exceptions.BlankFieldException;
 import sinqia.exceptions.ClientNotFoundException;
@@ -131,19 +132,7 @@ public class Bank {
 				// loadClientMenu(client);
 				break;
 			case "4":  // withdraw();
-				try {
-					BigDecimal amount = bankView.getAmountFromUser();
-					client.getCheckingAccount().withdraw(amount);
-					BigDecimal newBalance = client.getCheckingAccount().getBalance();
-					bankView.showSuccessfulWithdrawMessage(newBalance);
-				} catch (InsufficientFundsExceptions e) {
-					bankView.showInsufficientFundsMessage();
-				} catch (InputMismatchException e) {
-					bankView.showInvalidAmountInputMessage();
-				} catch (InvalidAmountException e) {
-					bankView.showInvalidAmountMessage();
-				}
-
+				manageWithdraw(client);
 				loadClientMenu(client);
 				break;
 			case "5":  // deposit();
@@ -219,24 +208,74 @@ public class Bank {
 //		}
 
 		try {
-			long destinyAccount = bankView.transferScreenAccount();
+			long destinationAccount = bankView.transferScreenAccount();
 			
-			Account account = findAccountByAccountNumber(destinyAccount);
+			Account account = findAccountByAccountNumber(destinationAccount);
 			BigDecimal amountTransfer = bankView.transferScreenAmount();
 
 			if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
 				throw new InsufficientFundsExceptions();
 			}
-
-			client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
-			account.setBalance(account.getBalance().add(amountTransfer));
-			bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			
+			if(client.getClass().equals(JuridicalPerson.class)) {
+				BigDecimal tax = EOperationTaxes.TRANSFER_TAX_RATE_PJ.getTax();
+				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer)
+						.subtract(amountTransfer.multiply(tax)));
+				account.setBalance(account.getBalance().add(amountTransfer));
+				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			} else {
+				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance().subtract(amountTransfer));
+				account.setBalance(account.getBalance().add(amountTransfer));
+				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			}
 		} catch (InsufficientFundsExceptions e) {
 			bankView.showInsufficientFundsMessage();
 		} catch (AccountNotFoundException e) {
 			bankView.showAccountNotFoundMessage();
 		} catch (InputMismatchException e) {
 			bankView.showInvalidInputForAccountMessage();
+		}
+	}
+	
+	private void manageWithdraw(Client client) throws InsufficientFundsExceptions, InputMismatchException, InvalidAmountException {
+//		try {
+//			BigDecimal amount = bankView.getAmountFromUser();
+//			client.getCheckingAccount().withdraw(amount);
+//			BigDecimal newBalance = client.getCheckingAccount().getBalance();
+//			bankView.showSuccessfulWithdrawMessage(newBalance);
+//		} catch (InsufficientFundsExceptions e) {
+//			bankView.showInsufficientFundsMessage();
+//		} catch (InputMismatchException e) {
+//			bankView.showInvalidAmountInputMessage();
+//		} catch (InvalidAmountException e) {
+//			bankView.showInvalidAmountMessage();
+//		}
+		
+		
+		try {
+			BigDecimal amountWithdraw = bankView.withdrawScreenAmount();
+			
+			if (client.getCheckingAccount().getBalance().compareTo(amountWithdraw) < 0) {
+				throw new InsufficientFundsExceptions();
+			}
+			
+			if(client.getClass().equals(JuridicalPerson.class)) {
+				BigDecimal tax = EOperationTaxes.WITHDRAW_TAX_RATE_PJ.getTax();
+				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance()
+						.subtract(amountWithdraw)
+						.subtract(amountWithdraw.multiply(tax)));
+				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			} else {
+				client.getCheckingAccount().setBalance(client.getCheckingAccount().getBalance()
+						.subtract(amountWithdraw));
+				bankView.showSuccessfulTransferMessage(currentClient.getCheckingAccount().getBalance());
+			}
+		} catch (InsufficientFundsExceptions e) {
+			bankView.showInsufficientFundsMessage();
+		} catch (InputMismatchException e) {
+			bankView.showInvalidInputForAccountMessage();
+		} catch (InvalidAmountException e) {
+			bankView.showInvalidAmountMessage();
 		}
 	}
 
