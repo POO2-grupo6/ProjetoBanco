@@ -6,7 +6,6 @@ import java.util.Objects;
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
 import sinqia.account.InvestmentAccount;
-import sinqia.account.SavingsAccount;
 import sinqia.exceptions.PasswordMismatchException;
 
 public abstract class Client {
@@ -57,13 +56,10 @@ public abstract class Client {
 		getAccounts()[1] = investmentAccount;
 	}
 
-	public SavingsAccount getSavingsAccount (){
-		return (SavingsAccount) getAccounts()[2];
-	}
-
-	public void setSavingsAccount (SavingsAccount savingsAccount){
-		getAccounts()[2] = savingsAccount;
-	}
+//	public SavingsAccount getSavingsAccount (){
+//		return (SavingsAccount) getAccounts()[2];
+//	}
+//	Client não pode ter getSavingsAccount porque isso é específico de pessoa física
 
 	public void setPassword(String password) {
 		this.password = password;

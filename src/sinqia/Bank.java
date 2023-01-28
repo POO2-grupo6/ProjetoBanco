@@ -116,7 +116,7 @@ public class Bank {
 
 		String clientMenu = scanner.nextLine().toUpperCase();
 		switch (clientMenu) {
-			case "1":  // checkBalance();
+			case "1":  // ver saldo
 				long accountNumber = client.getCheckingAccount().getAccountNumber();
 				BigDecimal balance = client.getCheckingAccount().getBalance();
 				bankView.showAccountBalance(accountNumber, balance);
@@ -131,14 +131,16 @@ public class Bank {
 			case "3":
 				System.out.println("Ok, indo para Conta Poupança..");
 				accessSavingsAccount((NaturalPerson) client);
-				// loadClientMenu(client);
+				if (((NaturalPerson) client).getSavingsAccount() == null) {
+					loadClientMenu(client);
+				}
 				break;
-			case "4":  // withdraw();
+			case "4":  // sacar
 				manageWithdraw(client, client.getCheckingAccount());
 				loadClientMenu(client);
 				break;
-			case "5":  // deposit();
-				manageDeposit(client, client.getCheckingAccount());
+			case "5":  // depositar
+				manageDeposit(client.getCheckingAccount());
 				loadClientMenu(client);
 				break;
 			case "6":
@@ -187,7 +189,7 @@ public class Bank {
 		}
 	}
 
-	private void manageDeposit(Client client, Account account) {
+	private void manageDeposit(Account account) {
 		try {
 			BigDecimal amount = bankView.getAmountFromUser();
 			account.addToBalance(amount);
@@ -201,17 +203,11 @@ public class Bank {
 	}
 
 	private void manageTransfer(Client client) throws TransferException, InsufficientFundsExceptions {
-	
-//		Client clientDestinyTransfer = findClient(String.valueOf(destinyAccount));
-//		if (client.getCheckingAccount().getAccountNumber() == clientDestinyTransfer.getCheckingAccount().getAccountNumber()) {
-//			throw new TransferException();
-//		}
-
 		try {
-			long destinationAccount = bankView.transferScreenAccount();
+			long destinationAccount = bankView.getDestinationAccountNumberFromUser();
 			
 			Account account = findAccountByAccountNumber(destinationAccount);
-			BigDecimal amountTransfer = bankView.transferScreenAmount();
+			BigDecimal amountTransfer = bankView.getAmountFromUser();
 
 			if (client.getCheckingAccount().getBalance().compareTo(amountTransfer) < 0) {
 				throw new InsufficientFundsExceptions();
@@ -232,7 +228,7 @@ public class Bank {
 			bankView.showInsufficientFundsMessage();
 		} catch (AccountNotFoundException e) {
 			bankView.showAccountNotFoundMessage();
-		} catch (InputMismatchException e) {
+		} catch (InputMismatchException | NumberFormatException e) {
 			bankView.showInvalidInputForAccountMessage();
 		}
 	}
@@ -253,7 +249,6 @@ public class Bank {
 		
 		
 		try {
-//			BigDecimal amountWithdraw = bankView.withdrawScreenAmount();
 			BigDecimal amount = bankView.getAmountFromUser();
 			client.withdraw(account, amount);
 			bankView.showSuccessfulWithdrawMessage(account.getBalance());
@@ -305,9 +300,11 @@ public class Bank {
 		long accountNumber = client.getSavingsAccount().getAccountNumber();
 		BigDecimal balance = client.getSavingsAccount().getBalance();
 
-		int option = bankView.showSavingsAccountMenu(client);
+		bankView.showSavingsAccountMenu(client);
+		int option = bankView.getOptionFromUser();
+
 		switch (option) {
-			case 1:   // checkBalance();
+			case 1:   // ver saldo
 				bankView.showAccountBalance(accountNumber, balance);
 				loadSavingsAccountMenu(client);
 				break;
@@ -321,12 +318,12 @@ public class Bank {
 				System.out.println("Ok, Indo para Conta Corrente..");
 				loadClientMenu(client);
 				break;
-			case 4:  // withdraw();
+			case 4:  // sacar
 				manageWithdraw(client, client.getSavingsAccount());
 				loadSavingsAccountMenu(client);
 				break;
-			case 5:  // deposit();
-				manageDeposit(client, client.getSavingsAccount());
+			case 5:  // depositar
+				manageDeposit(client.getSavingsAccount());
 				loadSavingsAccountMenu(client);
 				break;
 			case 6:
@@ -405,6 +402,9 @@ public class Bank {
 				loadClientMenu(client);
 				break;
 			case 5:
+				loadMainMenu();
+				break;
+			case 6:
 				if(client instanceof NaturalPerson) {
 					loadClientMenu(client);
 				} else {
@@ -428,21 +428,19 @@ public class Bank {
 	}
 
 	private void registerNewClient(Client client) {
-		long num = (long) clients.size() + 1;
-
 		try {
 			System.out.print("Insira o nome: ");
-			String name = bankView.getNotBlankInputFromUser();
+			String name = bankView.getNonBlankInputFromUser();
 
 			if (client instanceof NaturalPerson) {
 				System.out.print("Insira o CPF: ");
 			} else if (client instanceof JuridicalPerson) {
 				System.out.print("Insira o CNPJ: ");
 			}
-			String registrationId = bankView.getNotBlankInputFromUser();
+			String registrationId = bankView.getNonBlankInputFromUser();
 
 			System.out.print("Crie uma senha: ");
-			String password = bankView.getNotBlankInputFromUser();
+			String password = bankView.getNonBlankInputFromUser();
 
 			client.setName(name);
 			client.setPassword(password);

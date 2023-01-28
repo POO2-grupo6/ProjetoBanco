@@ -82,13 +82,6 @@ public class BankView {
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
-	
-	public BigDecimal withdrawScreenAmount(){
-		System.out.print("Insira o valor para saque: R$ ");
-		BigDecimal amount = scanner.nextBigDecimal();
-		//scanner.nextLine();
-		return amount;
-	}
 
 	public void showInsufficientFundsMessage() {
 		System.out.println("Saldo insuficiente.");
@@ -122,21 +115,6 @@ public class BankView {
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
-	
-	public BigDecimal transferScreenAmount(){
-		System.out.print("Insira o valor de transferência: R$ ");
-		BigDecimal amount = scanner.nextBigDecimal();
-		//scanner.nextLine();
-		return amount;
-	}
-		
-	public long transferScreenAccount() {
-		System.out.print("Insira a conta destino: ");
-		long account = scanner.nextLong();
-		scanner.nextLine();
-		return account;
-		// return Long.parseLong(scanner.nextLine());
-	}
 
 	public void showInvalidAmountInputMessage() {
 		System.out.println("Por favor, informe valores com o seguinte formato de exemplo: 6.543,21.");
@@ -154,13 +132,12 @@ public class BankView {
 		System.out.println("Por favor, informe apenas números.");
 	}
 
-	public int showInvestmentAccountDoesNotExistMessage() {
+	public void showInvestmentAccountDoesNotExistMessage() {
 		System.out.println("Você ainda não possui uma conta investimento!\nDeseja abrir uma?");
 		System.out.println("1 - Sim\n2 - Não");
-		return Integer.parseInt(scanner.nextLine());
 	}
 
-	public String getNotBlankInputFromUser() {
+	public String getNonBlankInputFromUser() {
 		String string = scanner.nextLine();
 
 		if (string.isBlank()) {
@@ -177,12 +154,6 @@ public class BankView {
 	public void showInvestmentAccountMenu(Client client) throws InterruptedException {
 		Thread.sleep(1000);
 		System.out.println();
-		System.out.println("Escolha uma opção:");
-		System.out.println("1 - Ver saldo\n"
-				+ "2 - Resgatar\n"
-				+ "3 - Investir\n"
-				+ "4 - Acessar conta corrente");
-		System.out.println();
 		System.out.print("=".repeat(18 - client.getName().length() / 2));
 		System.out.print(" Olá, " + client.getName() + " ");
 		System.out.print("=".repeat(18 - client.getName().length() / 2));
@@ -193,12 +164,14 @@ public class BankView {
 		System.out.println("|          2 - Resgatar                    |");
 		System.out.println("|          3 - Investir                    |");
 		System.out.println("|          4 - Acessar conta corrente      |");
+		System.out.println("|          5 - Deslogar                    |");
 		if(client instanceof NaturalPerson) {
-			System.out.println("|          5 - Acessar conta poupança      |");
+			System.out.println("|          6 - Acessar conta poupança      |");
 		}
+		System.out.println("============================================");
 	}
 
-	public int showSavingsAccountMenu(Client client) throws InterruptedException {
+	public void showSavingsAccountMenu(Client client) throws InterruptedException {
 		Thread.sleep(1000);
 		System.out.println();
 		System.out.print("=".repeat(18 - client.getName().length() / 2));
@@ -215,8 +188,6 @@ public class BankView {
 		System.out.println("|          6 - Transferir                  |");
 		System.out.println("|          7 - Deslogar                    |");
 		System.out.println("============================================");
-
-		return scanner.nextInt();
 	}
 
 	public void promptUserToOpenAccount() {
