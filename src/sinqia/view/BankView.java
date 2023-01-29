@@ -77,8 +77,8 @@ public class BankView {
 		return amount;
 	}
 
-	public void showSuccessfulWithdrawMessage(BigDecimal newBalance) {
-		System.out.println("Saque realizado com sucesso!");
+	public void showSuccessfulOperationMessage(BigDecimal newBalance) {
+		System.out.println("Operação realizado com sucesso!");
 		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
 		System.out.println();
 	}
@@ -90,30 +90,6 @@ public class BankView {
 	public long getDestinationAccountNumberFromUser() {
 		System.out.print("Informe a numeração da conta de destino: ");
 		return Long.parseLong(scanner.nextLine());  
-	}
-
-	public void showSuccessfulDepositMessage(BigDecimal newBalance) {
-		System.out.println("Depósito realizado com sucesso!");
-		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
-		System.out.println();
-	}
-	
-	public void showSuccessfulInvestmentMessage(BigDecimal newBalance) {
-		System.out.println("Investimento realizado com sucesso!");
-		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
-		System.out.println();
-	}
-	
-	public void showSuccessfulRedemptionMessage(BigDecimal newBalance) {
-		System.out.println("Resgate realizado com sucesso!");
-		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
-		System.out.println();
-	}
-	
-	public void showSuccessfulTransferMessage(BigDecimal newBalance) {
-		System.out.println("Transferência realizada com sucesso!");
-		System.out.format("O novo saldo da conta é de R$ %,.2f.", newBalance);
-		System.out.println();
 	}
 
 	public void showInvalidAmountInputMessage() {
