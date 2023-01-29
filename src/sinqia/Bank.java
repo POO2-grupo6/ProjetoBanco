@@ -1,12 +1,8 @@
 package sinqia;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
@@ -25,17 +21,18 @@ import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.InvalidAmountException;
 import sinqia.exceptions.PasswordMismatchException;
 import sinqia.exceptions.TransferException;
+import sinqia.repository.IRepository;
 import sinqia.view.BankView;
 
 public class Bank {
 	private BankView bankView;
-	private Set<Client> clients;
+	private IRepository repository;
 	private Client currentClient;
 	private long numberOfAccountsOpened = 0;
 
-	public Bank(BankView bankView) {
+	public Bank(IRepository repository, BankView bankView) {
+		this.repository = repository;
 		this.bankView = bankView;
-		clients = new HashSet<>();
 	}
 
 	public void loadMainMenu() throws InterruptedException {
@@ -53,7 +50,7 @@ public class Bank {
 				login();
 				break;
 			case "4":
-				listClients();
+				repository.listClients();
 				this.loadMainMenu();
 				break;
 			case "5":
@@ -66,13 +63,13 @@ public class Bank {
 	}
 
 	private void login() throws InterruptedException {
-		if (clients.isEmpty()) {
+		if (repository.isEmpty()) {
 			System.out.println("Ainda não há clientes cadastrados.");
 			this.loadMainMenu();
 		} else {
 			try {
 				List<String> loginCredentials = bankView.getClientCredentials();
-				currentClient = findClient(loginCredentials.get(0));
+				currentClient = repository.findClient(loginCredentials.get(0));
 				currentClient.validatePassword(loginCredentials.get(1));
 				this.loadCheckingAccountMenu(currentClient);
 			} catch (ClientNotFoundException | PasswordMismatchException e) {
@@ -80,16 +77,6 @@ public class Bank {
 				this.loadMainMenu();
 			}
 		}
-	}
-
-	private Client findClient(String registrationId) throws ClientNotFoundException {
-		for (Client client : clients) {
-			if (client.getRegistrationId().equals(registrationId)) {
-				return client;
-			}
-		}
-
-		throw new ClientNotFoundException();
 	}
 
 	private void manageDeposit(Account account) {
@@ -117,7 +104,7 @@ public class Bank {
 				throw new TransferException();
 			}
 
-			Account destinationAccount = findAccountByAccountNumber(destinationAccountNumber);
+			Account destinationAccount = repository.findAccountByAccountNumber(destinationAccountNumber);
 			if (!(destinationAccount instanceof IAcceptsTransfer)) {
 				throw new AccountDoesNotAcceptTransferException();
 			}
@@ -435,7 +422,7 @@ public class Bank {
 			client.setPassword(password);
 			client.setRegistrationId(registrationId);
 
-			boolean clientRegisteredSuccessfully = clients.add(client);
+			boolean clientRegisteredSuccessfully = repository.save(client);
 
 			if (clientRegisteredSuccessfully) {
 				activateCheckingAccount(client);
@@ -446,38 +433,5 @@ public class Bank {
 		} catch (BlankFieldException e) {
 			bankView.showFieldCanNotBeBlankMessage();
 		}
-	}
-
-	private void listClients() {
-		if (clients.isEmpty()) {
-			System.out.println("Ainda não há clientes cadastrados.");
-			System.out.println("Venha ser o nosso primeiro cliente! =)");
-			return;
-		}
-
-		for (Client client : clients) {
-			System.out.println("--------------------");
-			System.out.println("Nome: " + client.getName());
-			System.out.println("Número da Conta Corrente para transferência: " + client.getCheckingAccount().getAccountNumber()); // Aqui pode ser o número da conta
-			if (client instanceof NaturalPerson && ((NaturalPerson) client).getSavingsAccount() != null){
-				System.out.println("Numero da Conta Poupança para transferência: " + ((NaturalPerson) client).getSavingsAccount().getAccountNumber());
-			}
-		}
-	}
-
-	private Account findAccountByAccountNumber(long accountNumber) {
-		for (Client client : clients) {
-			Account accountFound = Arrays.stream(client.getAccounts()).
-					                      filter(Objects::nonNull).
-					                      filter(account -> account.getAccountNumber() == accountNumber).
-					                      findAny().
-					                      orElse(null);
-
-			if (accountFound != null) {
-				return accountFound;
-			}
-		}
-
-		throw new AccountNotFoundException();
 	}
 }
