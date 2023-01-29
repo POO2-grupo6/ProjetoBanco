@@ -326,7 +326,10 @@ public class Bank {
 				break;
 			case 6:
 				if(client instanceof NaturalPerson) {
-					loadCheckingAccountMenu(client);
+					accessSavingsAccount((NaturalPerson) client);
+					if (((NaturalPerson) client).getSavingsAccount() == null) {
+						loadInvestmentAccountMenu(client);
+					}
 				} else {
 					System.out.println("Comando inválido.");
 				}
