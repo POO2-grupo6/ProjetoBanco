@@ -442,7 +442,10 @@ public class Bank {
 		for (Client client : clients) {
 			System.out.println("--------------------");
 			System.out.println("Nome: " + client.getName());
-			System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
+			System.out.println("Número da Conta Corrente para transferência: " + client.getCheckingAccount().getAccountNumber()); // Aqui pode ser o número da conta
+			if (client instanceof NaturalPerson && ((NaturalPerson) client).getSavingsAccount() != null){
+				System.out.println("Numero da Conta Poupança para transferência: " + ((NaturalPerson) client).getSavingsAccount().getAccountNumber());
+			}
 		}
 	}
 
