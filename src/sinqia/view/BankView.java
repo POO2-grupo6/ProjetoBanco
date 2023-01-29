@@ -197,4 +197,12 @@ public class BankView {
 		System.out.println("|          7 - Deslogar                    |");
 		System.out.println("============================================");
 	}
+
+    public void showAccountDoesNotAcceptTransferMessage() {
+		System.out.println("A conta de destino não recebe recursos via transferência.");
+    }
+
+	public void showDestinationAndOriginAccountCanNotBeTheSameMessage() {
+		System.out.println("Você não pode transferir para a mesma conta!");
+	}
 }

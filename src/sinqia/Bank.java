@@ -10,12 +10,14 @@ import java.util.Set;
 
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
+import sinqia.account.IAcceptsTransfer;
 import sinqia.account.IPaysInterest;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
 import sinqia.client.JuridicalPerson;
 import sinqia.client.NaturalPerson;
+import sinqia.exceptions.AccountDoesNotAcceptTransferException;
 import sinqia.exceptions.AccountNotFoundException;
 import sinqia.exceptions.BlankFieldException;
 import sinqia.exceptions.ClientNotFoundException;
@@ -111,9 +113,19 @@ public class Bank {
 	private void manageTransfer(Client client, Account originAccount) throws TransferException, InsufficientFundsExceptions {
 		try {
 			long destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+			if (destinationAccountNumber == originAccount.getAccountNumber()) {
+				throw new TransferException();
+			}
 
 			Account destinationAccount = findAccountByAccountNumber(destinationAccountNumber);
+			if (!(destinationAccount instanceof IAcceptsTransfer)) {
+				throw new AccountDoesNotAcceptTransferException();
+			}
+
 			BigDecimal amount = bankView.getAmountFromUser();
+			if (destinationAccount instanceof IPaysInterest) {
+				destinationAccount.addToBalance(((IPaysInterest) destinationAccount).calculateInterest(amount));
+			}
 
 			client.transfer(originAccount, destinationAccount, amount);
 			bankView.showSuccessfulOperationMessage(originAccount.getBalance());
@@ -123,6 +135,10 @@ public class Bank {
 			bankView.showAccountNotFoundMessage();
 		} catch (InputMismatchException | NumberFormatException e) {
 			bankView.showInvalidInputForAccountMessage();
+		} catch (TransferException e) {
+			bankView.showDestinationAndOriginAccountCanNotBeTheSameMessage();
+		} catch (AccountDoesNotAcceptTransferException e) {
+			bankView.showAccountDoesNotAcceptTransferMessage();
 		}
 	}
 

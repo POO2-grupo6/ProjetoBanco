@@ -4,7 +4,7 @@ import sinqia.enums.EInterestRates;
 
 import java.math.BigDecimal;
 
-public class SavingsAccount extends Account implements IOperations, IPaysInterest {
+public class SavingsAccount extends Account implements IOperations, IPaysInterest, IAcceptsTransfer {
 	public SavingsAccount(long accountNumber) {
 		super(accountNumber);
 	}
