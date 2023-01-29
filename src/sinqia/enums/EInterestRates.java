@@ -7,7 +7,7 @@ public enum EInterestRates {
     SAVINGS_INTEREST_RATE_PF(BigDecimal.valueOf(0.01)),
     INVESTMENT_INTEREST_RATE_PF(BigDecimal.valueOf(0.015));
 
-	private BigDecimal rate;
+	private final BigDecimal rate;
 	
 	EInterestRates(BigDecimal rate) {
 		this.rate = rate;
@@ -16,7 +16,4 @@ public enum EInterestRates {
 	public BigDecimal getRate() {
 		return rate;
 	}
-
-	
 }
-

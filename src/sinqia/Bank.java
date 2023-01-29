@@ -10,6 +10,7 @@ import java.util.Set;
 
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
+import sinqia.account.IPaysInterest;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
@@ -33,10 +34,6 @@ public class Bank {
 	public Bank(BankView bankView) {
 		this.bankView = bankView;
 		clients = new HashSet<>();
-	}
-
-	public Set<Client> getClients() {
-		return clients;
 	}
 
 	public void loadMainMenu() throws InterruptedException {
@@ -98,8 +95,8 @@ public class Bank {
 			BigDecimal amount = bankView.getAmountFromUser();
 			account.addToBalance(amount);
 
-			if (account instanceof SavingsAccount) {  // seria melhor usar uma interface em vez de usar a classe concreta
-				account.addToBalance(((SavingsAccount) account).calculateInterest(amount));
+			if (account instanceof IPaysInterest) {
+				account.addToBalance(((IPaysInterest) account).calculateInterest(amount));
 			}
 
 			BigDecimal newBalance = account.getBalance();
@@ -243,7 +240,6 @@ public class Bank {
 				}
 				break;
 			case 3:
-//				System.out.println("Ok, Indo para Conta Corrente..");
 				loadCheckingAccountMenu(client);
 				break;
 			case 4:  // sacar
@@ -441,9 +437,9 @@ public class Bank {
 		}
 
 		for (Client client : clients) {
+			System.out.println("--------------------");
 			System.out.println("Nome: " + client.getName());
 			System.out.println("Chave para transferência: " + client.getRegistrationId()); // Aqui pode ser o número da conta
-			System.out.println("----------");
 		}
 	}
 

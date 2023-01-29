@@ -56,11 +56,6 @@ public abstract class Client {
 		getAccounts()[1] = investmentAccount;
 	}
 
-//	public SavingsAccount getSavingsAccount (){
-//		return (SavingsAccount) getAccounts()[2];
-//	}
-//	Client não pode ter getSavingsAccount porque isso é específico de pessoa física
-
 	public void setPassword(String password) {
 		this.password = password;
 	}

@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 
 import sinqia.exceptions.InsufficientFundsExceptions;
 
-public class InvestmentAccount extends Account implements IInterest {
+public class InvestmentAccount extends Account implements IPaysInterest {
 	private BigDecimal interestRate;
+
 	public InvestmentAccount(long accountNumber, BigDecimal interestRate) {
 		super(accountNumber);
 		this.interestRate = interestRate;
@@ -20,9 +21,8 @@ public class InvestmentAccount extends Account implements IInterest {
 		destination.balance = destination.balance.add(amount);
     }
 
+	@Override
 	public BigDecimal calculateInterest(BigDecimal value) {
 		return value.multiply(interestRate);
 	}
-
-
 }

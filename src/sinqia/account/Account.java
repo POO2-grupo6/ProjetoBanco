@@ -13,6 +13,14 @@ public class Account {
         balance = BigDecimal.ZERO;
     }
 
+    public long getAccountNumber() {
+        return accountNumber;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
     public void addToBalance (BigDecimal amount){
         balance = balance.add(amount);
     }
@@ -23,21 +31,5 @@ public class Account {
         }
 
         balance = balance.subtract(amount);
-    }
-
-    public long getAccountNumber() {
-        return accountNumber;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setAccountNumber(long accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
     }
 }
