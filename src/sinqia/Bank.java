@@ -22,7 +22,11 @@ import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.InvalidAmountException;
 import sinqia.exceptions.PasswordMismatchException;
 import sinqia.exceptions.TransferException;
+import sinqia.view.AccountMenu;
 import sinqia.view.BankView;
+import sinqia.view.CheckingAccountMenu;
+import sinqia.view.InvestmentAccountMenu;
+import sinqia.view.SavingsAccountMenu;
 
 public class Bank {
 	private BankView bankView;
@@ -95,7 +99,7 @@ public class Bank {
 
 	private void manageDeposit(Account account) {
 		try {
-			BigDecimal amount = bankView.getAmountFromUser();
+			BigDecimal amount = AccountMenu.getAmountFromUser();
 			account.addToBalance(amount);
 
 			if (account instanceof SavingsAccount) {  // seria melhor usar uma interface em vez de usar a classe concreta
@@ -103,29 +107,29 @@ public class Bank {
 			}
 
 			BigDecimal newBalance = account.getBalance();
-			bankView.showSuccessfulOperationMessage(newBalance);
+			AccountMenu.showSuccessfulOperationMessage(newBalance);
 		} catch (InputMismatchException e) {
-			bankView.showInvalidAmountInputMessage();
+			AccountMenu.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			bankView.showInvalidAmountMessage();
+			AccountMenu.showInvalidAmountMessage();
 		}
 	}
 
 	private void manageTransfer(Client client, Account originAccount) throws TransferException, InsufficientFundsExceptions {
 		try {
-			long destinationAccountNumber = bankView.getDestinationAccountNumberFromUser();
+			long destinationAccountNumber = AccountMenu.getDestinationAccountNumberFromUser();
 
 			Account destinationAccount = findAccountByAccountNumber(destinationAccountNumber);
-			BigDecimal amount = bankView.getAmountFromUser();
+			BigDecimal amount = AccountMenu.getAmountFromUser();
 
 			client.transfer(originAccount, destinationAccount, amount);
-			bankView.showSuccessfulOperationMessage(originAccount.getBalance());
+			AccountMenu.showSuccessfulOperationMessage(originAccount.getBalance());
 		} catch (InsufficientFundsExceptions e) {
-			bankView.showInsufficientFundsMessage();
+			AccountMenu.showInsufficientFundsMessage();
 		} catch (AccountNotFoundException e) {
-			bankView.showAccountNotFoundMessage();
+			AccountMenu.showAccountNotFoundMessage();
 		} catch (InputMismatchException | NumberFormatException e) {
-			bankView.showInvalidInputForAccountMessage();
+			AccountMenu.showInvalidInputForAccountMessage();
 		}
 	}
 
@@ -145,53 +149,53 @@ public class Bank {
 
 
 		try {
-			BigDecimal amount = bankView.getAmountFromUser();
+			BigDecimal amount = AccountMenu.getAmountFromUser();
 			client.withdraw(account, amount);
-			bankView.showSuccessfulOperationMessage(account.getBalance());
+			AccountMenu.showSuccessfulOperationMessage(account.getBalance());
 		} catch (InsufficientFundsExceptions e) {
-			bankView.showInsufficientFundsMessage();
+			AccountMenu.showInsufficientFundsMessage();
 		} catch (InputMismatchException e) {
-			bankView.showInvalidInputForAccountMessage();
+			AccountMenu.showInvalidInputForAccountMessage();
 		} catch (InvalidAmountException e) {
-			bankView.showInvalidAmountMessage();
+			AccountMenu.showInvalidAmountMessage();
 		}
 	}
 
 	private void manageInvestment(Client client) {
 		try {
-			BigDecimal amount = bankView.getAmountFromUser();
+			BigDecimal amount = AccountMenu.getAmountFromUser();
 
 			client.getCheckingAccount().withdraw(amount);
 			client.getInvestmentAccount().addToBalance(amount);
 			client.getInvestmentAccount().addToBalance(client.getInvestmentAccount().calculateInterest(amount));
 
-			bankView.showSuccessfulOperationMessage(client.getInvestmentAccount().getBalance());
+			AccountMenu.showSuccessfulOperationMessage(client.getInvestmentAccount().getBalance());
 		} catch (InputMismatchException e) {
-			bankView.showInvalidAmountInputMessage();
+			AccountMenu.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			bankView.showInvalidAmountMessage();
+			AccountMenu.showInvalidAmountMessage();
 		} catch (InsufficientFundsExceptions e) {
-			bankView.showInsufficientFundsMessage();
+			AccountMenu.showInsufficientFundsMessage();
 		}
 	}
 
 	private void manageInvestmentRedemption(Client client) {
 		try {
-			BigDecimal amount = bankView.getAmountFromUser();
+			BigDecimal amount = AccountMenu.getAmountFromUser();
 			client.getInvestmentAccount().redeem(client.getCheckingAccount(), amount);
-			bankView.showSuccessfulOperationMessage(client.getInvestmentAccount().getBalance());
+			AccountMenu.showSuccessfulOperationMessage(client.getInvestmentAccount().getBalance());
 		} catch (InputMismatchException e) {
-			bankView.showInvalidAmountInputMessage();
+			AccountMenu.showInvalidAmountInputMessage();
 		} catch (InvalidAmountException e) {
-			bankView.showInvalidAmountMessage();
+			AccountMenu.showInvalidAmountMessage();
 		} catch (InsufficientFundsExceptions e) {
-			bankView.showInsufficientFundsMessage();
+			AccountMenu.showInsufficientFundsMessage();
 		}
 	}
 
 	private void promptClientToOpenSavingsAccountIfItDoesNotExist(NaturalPerson client) {
 		if (client.getSavingsAccount() == null) {
-			bankView.promptUserToOpenAccount();
+			AccountMenu.promptUserToOpenAccount();
 
 			try {
 				int option = bankView.getOptionFromUser();
@@ -210,9 +214,9 @@ public class Bank {
 		if (client.getSavingsAccount() == null) {
 			client.setSavingsAccount(new SavingsAccount(numberOfAccountsOpened + 1));
 			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+			AccountMenu.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
-			bankView.showAccountAlreadyExistsMessage();
+			AccountMenu.showAccountAlreadyExistsMessage();
 		}
 	}
 
@@ -228,12 +232,14 @@ public class Bank {
 		long accountNumber = client.getSavingsAccount().getAccountNumber();
 		BigDecimal balance = client.getSavingsAccount().getBalance();
 
-		bankView.showSavingsAccountMenu(client.getName());
+		SavingsAccountMenu menu = new SavingsAccountMenu();
+		menu.show(client.getName());
+
 		int option = bankView.getOptionFromUser();
 
 		switch (option) {
 			case 1:   // ver saldo
-				bankView.showAccountBalance(accountNumber, balance);
+				AccountMenu.showAccountBalance(accountNumber, balance);
 				loadSavingsAccountMenu(client);
 				break;
 			case 2:
@@ -243,7 +249,6 @@ public class Bank {
 				}
 				break;
 			case 3:
-//				System.out.println("Ok, Indo para Conta Corrente..");
 				loadCheckingAccountMenu(client);
 				break;
 			case 4:  // sacar
@@ -269,7 +274,7 @@ public class Bank {
 
 	private void promptClientToOpenInvestmentAccountIfItDoesNotExist(Client client) {
 		if (client.getInvestmentAccount() == null) {
-			bankView.promptUserToOpenAccount();
+			AccountMenu.promptUserToOpenAccount();
 
 			try {
 				int option = bankView.getOptionFromUser();
@@ -288,9 +293,9 @@ public class Bank {
 		if (client.getInvestmentAccount() == null) {
 			client.setInvestmentAccount(new InvestmentAccount(numberOfAccountsOpened + 1, client.getInvestmentInterestRate()));
 			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+			AccountMenu.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
-			bankView.showAccountAlreadyExistsMessage();
+			AccountMenu.showAccountAlreadyExistsMessage();
 		}
 	}
 
@@ -306,12 +311,14 @@ public class Bank {
 		long accountNumber = client.getInvestmentAccount().getAccountNumber();
 		BigDecimal balance = client.getInvestmentAccount().getBalance();
 
-		bankView.showInvestmentAccountMenu(client);
+		InvestmentAccountMenu menu = new InvestmentAccountMenu();
+		menu.show(client);
+
 		int option = bankView.getOptionFromUser();
 
 		switch (option) {
 			case 1:
-				bankView.showAccountBalance(accountNumber, balance);
+				AccountMenu.showAccountBalance(accountNumber, balance);
 				loadInvestmentAccountMenu(client);
 				break;
 			case 2:
@@ -341,17 +348,13 @@ public class Bank {
 		}
 	}
 
-	private boolean checkIfInvestmentAccountIsActive(Client client) {
-		return client.getInvestmentAccount() != null;
-	}
-
 	private void activateCheckingAccount(Client client) {
 		if (client.getCheckingAccount() == null) {
 			client.setCheckingAccount(new CheckingAccount(numberOfAccountsOpened + 1));
 			numberOfAccountsOpened++;
-			bankView.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
+			AccountMenu.showAccountSuccessfullyActivatedMessage(numberOfAccountsOpened);
 		} else {
-			bankView.showAccountAlreadyExistsMessage();
+			AccountMenu.showAccountAlreadyExistsMessage();
 		}
 	}
 
@@ -359,12 +362,13 @@ public class Bank {
 		long accountNumber = client.getCheckingAccount().getAccountNumber();
 		BigDecimal balance = client.getCheckingAccount().getBalance();
 
-		bankView.showCheckingAccountMenu(client.getName());
-		int option = bankView.getOptionFromUser();
+		CheckingAccountMenu menu = new CheckingAccountMenu();
+		menu.show(client.getName());
 
+		int option = bankView.getOptionFromUser();
 		switch (option) {
 			case 1:  // ver saldo
-				bankView.showAccountBalance(accountNumber, balance);
+				AccountMenu.showAccountBalance(accountNumber, balance);
 				loadCheckingAccountMenu(client);
 				break;
 			case 2:
