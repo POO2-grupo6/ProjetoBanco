@@ -3,7 +3,7 @@ package sinqia.client;
 import java.math.BigDecimal;
 
 import sinqia.account.Account;
-import sinqia.account.ICanOpenSavingsAccount;
+import sinqia.interfaces.ICanOpenSavingsAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.enums.EInterestRates;
 

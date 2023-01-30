@@ -1,6 +1,6 @@
 package sinqia;
 
-import sinqia.repository.IRepository;
+import sinqia.interfaces.IRepository;
 import sinqia.repository.Repository;
 import sinqia.view.BankView;
 

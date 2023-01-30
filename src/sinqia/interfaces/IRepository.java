@@ -1,4 +1,4 @@
-package sinqia.repository;
+package sinqia.interfaces;
 
 import sinqia.account.Account;
 import sinqia.client.Client;

@@ -1,6 +1,8 @@
 package sinqia.account;
 
 import sinqia.exceptions.InsufficientFundsExceptions;
+import sinqia.interfaces.IAcceptsTransfer;
+import sinqia.interfaces.IOperations;
 
 import java.math.BigDecimal;
 

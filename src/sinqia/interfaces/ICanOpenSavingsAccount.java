@@ -1,4 +1,6 @@
-package sinqia.account;
+package sinqia.interfaces;
+
+import sinqia.account.SavingsAccount;
 
 public interface ICanOpenSavingsAccount {
     SavingsAccount getSavingsAccount();

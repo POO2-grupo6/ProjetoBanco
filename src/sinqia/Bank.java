@@ -6,9 +6,9 @@ import java.util.List;
 
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
-import sinqia.account.IAcceptsTransfer;
-import sinqia.account.ICanOpenSavingsAccount;
-import sinqia.account.IPaysInterest;
+import sinqia.interfaces.IAcceptsTransfer;
+import sinqia.interfaces.ICanOpenSavingsAccount;
+import sinqia.interfaces.IPaysInterest;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.client.Client;
@@ -22,7 +22,7 @@ import sinqia.exceptions.InsufficientFundsExceptions;
 import sinqia.exceptions.InvalidAmountException;
 import sinqia.exceptions.PasswordMismatchException;
 import sinqia.exceptions.TransferException;
-import sinqia.repository.IRepository;
+import sinqia.interfaces.IRepository;
 import sinqia.view.BankView;
 
 public class Bank {

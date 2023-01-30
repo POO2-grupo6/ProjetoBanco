@@ -5,6 +5,7 @@ import sinqia.client.Client;
 import sinqia.client.NaturalPerson;
 import sinqia.exceptions.AccountNotFoundException;
 import sinqia.exceptions.ClientNotFoundException;
+import sinqia.interfaces.IRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;

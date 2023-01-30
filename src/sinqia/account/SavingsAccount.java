@@ -1,6 +1,9 @@
 package sinqia.account;
 
 import sinqia.enums.EInterestRates;
+import sinqia.interfaces.IAcceptsTransfer;
+import sinqia.interfaces.IOperations;
+import sinqia.interfaces.IPaysInterest;
 
 import java.math.BigDecimal;
 

@@ -3,6 +3,7 @@ package sinqia.account;
 import java.math.BigDecimal;
 
 import sinqia.exceptions.InsufficientFundsExceptions;
+import sinqia.interfaces.IPaysInterest;
 
 public class InvestmentAccount extends Account implements IPaysInterest {
 	private BigDecimal interestRate;
