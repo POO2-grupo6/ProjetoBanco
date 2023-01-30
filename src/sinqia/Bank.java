@@ -7,6 +7,7 @@ import java.util.List;
 import sinqia.account.Account;
 import sinqia.account.CheckingAccount;
 import sinqia.account.IAcceptsTransfer;
+import sinqia.account.ICanOpenSavingsAccount;
 import sinqia.account.IPaysInterest;
 import sinqia.account.InvestmentAccount;
 import sinqia.account.SavingsAccount;
@@ -69,9 +70,14 @@ public class Bank {
 		} else {
 			try {
 				List<String> loginCredentials = bankView.getClientCredentials();
-				currentClient = repository.findClient(loginCredentials.get(0));
-				currentClient.validatePassword(loginCredentials.get(1));
-				this.loadCheckingAccountMenu(currentClient);
+				Client client = repository.findClient(loginCredentials.get(0));
+				client.validatePassword(loginCredentials.get(1));
+
+				if (client instanceof ICanOpenSavingsAccount) {
+					this.loadCheckingAccountMenuWithSavingsAccount(client);
+				} else {
+					this.loadCheckingAccountMenuWithoutSavingsAccount(client);
+				}
 			} catch (ClientNotFoundException | PasswordMismatchException e) {
 				System.out.println(e.getMessage());
 				this.loadMainMenu();
@@ -243,7 +249,7 @@ public class Bank {
 				}
 				break;
 			case 3:
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
 				break;
 			case 4:  // sacar
 				manageWithdraw(client, client.getSavingsAccount());
@@ -322,7 +328,11 @@ public class Bank {
 				loadInvestmentAccountMenu(client);
 				break;
 			case 4:
-				loadCheckingAccountMenu(client);
+				if (client instanceof ICanOpenSavingsAccount) {
+					loadCheckingAccountMenuWithSavingsAccount(client);
+				} else {
+					loadCheckingAccountMenuWithoutSavingsAccount(client);
+				}
 				break;
 			case 5:
 				loadMainMenu();
@@ -357,49 +367,88 @@ public class Bank {
 		}
 	}
 
-	private void loadCheckingAccountMenu(Client client) throws ClientNotFoundException, InterruptedException {
+	private void loadCheckingAccountMenuWithSavingsAccount(Client client) throws ClientNotFoundException, InterruptedException {
 		long accountNumber = client.getCheckingAccount().getAccountNumber();
 		BigDecimal balance = client.getCheckingAccount().getBalance();
 
-		bankView.showCheckingAccountMenu(client.getName());
+		bankView.showCheckingAccountMenuWithSavingsAccount(client.getName());
 		int option = bankView.getOptionFromUser();
 
 		switch (option) {
 			case 1:  // ver saldo
 				bankView.showAccountBalance(accountNumber, balance);
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
 				break;
 			case 2:
 				accessInvestmentAccount(client);
 				if (client.getInvestmentAccount() == null) {
-					loadCheckingAccountMenu(client);
+					loadCheckingAccountMenuWithSavingsAccount(client);
 				}
 				break;
 			case 3:
 //				System.out.println("Ok, indo para Conta Poupança..");  // para desacoplar o programa do frontend, não é legal colocar System.out no programa em si, teria que ficar nas classes que interagem com o usuário
 				accessSavingsAccount((NaturalPerson) client);
 				if (((NaturalPerson) client).getSavingsAccount() == null) {
-					loadCheckingAccountMenu(client);
+					loadCheckingAccountMenuWithSavingsAccount(client);
 				}
 				break;
 			case 4:  // sacar
 				manageWithdraw(client, client.getCheckingAccount());
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
 				break;
 			case 5:  // depositar
 				manageDeposit(client.getCheckingAccount());
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
 				break;
 			case 6:
 				manageTransfer(client, client.getCheckingAccount());
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
 				break;
 			case 7:
 				loadMainMenu();
 				break;
 			default:
 				bankView.showInvalidOptionMessage();
-				loadCheckingAccountMenu(client);
+				loadCheckingAccountMenuWithSavingsAccount(client);
+		}
+	}
+
+	private void loadCheckingAccountMenuWithoutSavingsAccount(Client client) throws ClientNotFoundException, InterruptedException {
+		long accountNumber = client.getCheckingAccount().getAccountNumber();
+		BigDecimal balance = client.getCheckingAccount().getBalance();
+
+		bankView.showCheckingAccountMenuWithoutSavingsAccount(client.getName());
+		int option = bankView.getOptionFromUser();
+
+		switch (option) {
+			case 1:  // ver saldo
+				bankView.showAccountBalance(accountNumber, balance);
+				loadCheckingAccountMenuWithoutSavingsAccount(client);
+				break;
+			case 2:
+				accessInvestmentAccount(client);
+				if (client.getInvestmentAccount() == null) {
+					loadCheckingAccountMenuWithoutSavingsAccount(client);
+				}
+				break;
+			case 3:  // sacar
+				manageWithdraw(client, client.getCheckingAccount());
+				loadCheckingAccountMenuWithoutSavingsAccount(client);
+				break;
+			case 4:  // depositar
+				manageDeposit(client.getCheckingAccount());
+				loadCheckingAccountMenuWithoutSavingsAccount(client);
+				break;
+			case 5:
+				manageTransfer(client, client.getCheckingAccount());
+				loadCheckingAccountMenuWithoutSavingsAccount(client);
+				break;
+			case 6:
+				loadMainMenu();
+				break;
+			default:
+				bankView.showInvalidOptionMessage();
+				loadCheckingAccountMenuWithoutSavingsAccount(client);
 		}
 	}
 

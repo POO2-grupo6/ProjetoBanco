@@ -3,10 +3,11 @@ package sinqia.client;
 import java.math.BigDecimal;
 
 import sinqia.account.Account;
+import sinqia.account.ICanOpenSavingsAccount;
 import sinqia.account.SavingsAccount;
 import sinqia.enums.EInterestRates;
 
-public class NaturalPerson extends Client {
+public class NaturalPerson extends Client implements ICanOpenSavingsAccount {
 	private Account[] accounts = new Account[3];
 
 	public NaturalPerson() {
@@ -20,10 +21,12 @@ public class NaturalPerson extends Client {
 		return accounts;
 	}
 
+	@Override
 	public SavingsAccount getSavingsAccount() {
 		return (SavingsAccount) accounts[2];
 	}
 
+	@Override
 	public void setSavingsAccount(SavingsAccount savingsAccount) {
 		accounts[2] = savingsAccount;
 	}
