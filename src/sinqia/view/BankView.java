@@ -113,7 +113,7 @@ public class BankView {
 		System.out.println("1 - Sim\n2 - Não");
 	}
 
-	public String getNonBlankInputFromUser() {
+	private String getNonBlankInputFromUser() {
 		String string = scanner.nextLine();
 
 		if (string.isBlank()) {
@@ -222,5 +222,43 @@ public class BankView {
 
 	public void showDestinationAndOriginAccountCanNotBeTheSameMessage() {
 		System.out.println("Você não pode transferir para a mesma conta!");
+	}
+
+	public String[] getNaturalPersonRegistrationData() {
+		System.out.print("Insira o nome: ");
+		String name = getNonBlankInputFromUser();
+
+		System.out.print("Insira o CPF: ");
+		String registrationId = getNonBlankInputFromUser();
+
+		System.out.print("Crie uma senha: ");
+		String password = getNonBlankInputFromUser();
+
+		return new String[]{name, registrationId, password};
+	}
+
+	public String[] getJuridicalPersonRegistrationData() {
+		System.out.print("Insira o nome: ");
+		String name = getNonBlankInputFromUser();
+
+		System.out.print("Insira o CNPJ: ");
+		String registrationId = getNonBlankInputFromUser();
+
+		System.out.print("Crie uma senha: ");
+		String password = getNonBlankInputFromUser();
+
+		return new String[]{name, registrationId, password};
+	}
+
+	public void showNoClientsRegisteredYetMessage() {
+		System.out.println("Ainda não há clientes cadastrados.");
+	}
+
+	public void showFarewellMessage() {
+		System.out.println("Até mais!");
+	}
+
+	public void showExceptionMessage(String message) {
+		System.out.println(message);
 	}
 }

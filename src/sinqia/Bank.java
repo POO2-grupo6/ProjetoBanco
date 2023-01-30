@@ -55,17 +55,17 @@ public class Bank {
 				this.loadMainMenu();
 				break;
 			case "5":
-				System.out.println("Até mais!");
+				bankView.showFarewellMessage();
 				break;
 			default:
-				System.out.println("Opção inválida.");
+				bankView.showInvalidOptionMessage();
 				loadMainMenu();
 		}
 	}
 
 	private void login() throws InterruptedException {
 		if (repository.isEmpty()) {
-			System.out.println("Ainda não há clientes cadastrados.");
+			bankView.showNoClientsRegisteredYetMessage();
 			this.loadMainMenu();
 		} else {
 			try {
@@ -79,7 +79,7 @@ public class Bank {
 					this.loadCheckingAccountMenuWithoutSavingsAccount(client);
 				}
 			} catch (ClientNotFoundException | PasswordMismatchException e) {
-				System.out.println(e.getMessage());
+				bankView.showExceptionMessage(e.getMessage());
 				this.loadMainMenu();
 			}
 		}
@@ -148,7 +148,6 @@ public class Bank {
 //		} catch (InvalidAmountException e) {
 //			bankView.showInvalidAmountMessage();
 //		}
-
 
 		try {
 			BigDecimal amount = bankView.getAmountFromUser();
@@ -344,11 +343,12 @@ public class Bank {
 						loadInvestmentAccountMenu(client);
 					}
 				} else {
-					System.out.println("Comando inválido.");
+					bankView.showInvalidOptionMessage();
+					loadInvestmentAccountMenu(client);
 				}
 				break;
 			default:
-				System.out.println("Comando inválido");
+				bankView.showInvalidOptionMessage();
 				loadInvestmentAccountMenu(client);
 		}
 	}
@@ -454,22 +454,19 @@ public class Bank {
 
 	private void registerNewClient(Client client) {
 		try {
-			System.out.print("Insira o nome: ");
-			String name = bankView.getNonBlankInputFromUser();
+			String[] registrationData;
 
 			if (client instanceof NaturalPerson) {
-				System.out.print("Insira o CPF: ");
+				registrationData = bankView.getNaturalPersonRegistrationData();
 			} else if (client instanceof JuridicalPerson) {
-				System.out.print("Insira o CNPJ: ");
+				registrationData = bankView.getJuridicalPersonRegistrationData();
+			} else {
+				throw new RuntimeException();
 			}
-			String registrationId = bankView.getNonBlankInputFromUser();
 
-			System.out.print("Crie uma senha: ");
-			String password = bankView.getNonBlankInputFromUser();
-
-			client.setName(name);
-			client.setPassword(password);
-			client.setRegistrationId(registrationId);
+			client.setName(registrationData[0]);
+			client.setRegistrationId(registrationData[1]);
+			client.setPassword(registrationData[2]);
 
 			boolean clientRegisteredSuccessfully = repository.save(client);
 
