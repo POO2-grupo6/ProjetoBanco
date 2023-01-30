@@ -37,3 +37,16 @@ Na modelagem feita pelo grupo, um banco possui uma coleção de clientes, e cada
 
 ![banco-cliente-conta](https://user-images.githubusercontent.com/17331645/215548320-abd3616c-0e23-4723-afa9-cbc99c205277.png)
 
+### Funcionamento
+
+Inicialmente o programa dá as opções de registrar um novo cliente ou de realizar login. Há ainda a opção de listar os clientes cadastrados, para fins de ajudar no desenvolvimento:
+  <br>
+![1](https://user-images.githubusercontent.com/17331645/215552001-f304a6c5-4f0b-49bd-822d-326638c7cb71.png)
+  
+Caso a opção de registrar um novo cliente seja escolhida, são pedidos os dados do cliente. Os campos não podem ficar em branco, e não pode haver 2 clientes com o mesmo CPF ou o mesmo CNPJ. Caso o registro seja concluído com sucesso, uma conta corrente é automaticamente aberta para o cliente recémregistrado. Cada conta possui uma numeração, que é determinada sequencialmente (começanco de 1):
+  ![2](https://user-images.githubusercontent.com/17331645/215554703-5ccafdd7-d6d4-40f1-a8e2-06e30120e768.png)
+
+Uma vez registrado, o cliente pode efetuar login. Caso as credenciais inseridas estejam corretas, são mostradas as operações disponíveis para a conta corrente do cliente. Caso o cliente deseje operar em outra conta, o cliente deve escolher qual conta operar. Caso a conta ainda não exista, será dada a opção ao cliente abrir a conta em questão, e caso ele abra a conta, as operações disponíveis para aquela conta são exibidas:  
+  ![4](https://user-images.githubusercontent.com/17331645/215556818-3dbc5635-da70-48b6-9bc8-9f1059ef97be.png)
+
+  
