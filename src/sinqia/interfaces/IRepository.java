@@ -1,13 +1,12 @@
 package sinqia.interfaces;
 
 import sinqia.account.Account;
-import sinqia.client.Client;
 import sinqia.exceptions.ClientNotFoundException;
 
-public interface IRepository {
-    boolean save(Client client);
+public interface IRepository<T> {
+    boolean save(T client);
 
-    Client findClient(String registrationId) throws ClientNotFoundException;
+    T findClient(String registrationId) throws ClientNotFoundException;
 
     Account findAccountByAccountNumber(long accountNumber);
 

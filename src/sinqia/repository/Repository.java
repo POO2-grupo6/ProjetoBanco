@@ -12,17 +12,17 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Repository implements IRepository {
-    private Set<Client> clients = new HashSet<>();
+public class Repository<T extends Client> implements IRepository<T> {
+    private Set<T> clients = new HashSet<>();
 
     @Override
-    public boolean save(Client client) {
+    public boolean save(T client) {
         return clients.add(client);
     }
 
     @Override
-    public Client findClient(String registrationId) throws ClientNotFoundException {
-        for (Client client : clients) {
+    public T findClient(String registrationId) throws ClientNotFoundException {
+        for (T client : clients) {
             if (client.getRegistrationId().equals(registrationId)) {
                 return client;
             }
@@ -51,7 +51,7 @@ public class Repository implements IRepository {
 
     @Override
     public Account findAccountByAccountNumber(long accountNumber) {
-        for (Client client : clients) {
+        for (T client : clients) {
             Account accountFound = Arrays.stream(client.getAccounts()).
                     filter(Objects::nonNull).
                     filter(account -> account.getAccountNumber() == accountNumber).

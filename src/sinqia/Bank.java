@@ -27,11 +27,11 @@ import sinqia.view.BankView;
 
 public class Bank {
 	private BankView bankView;
-	private IRepository repository;
+	private IRepository<Client> repository;
 	private Client currentClient;
 	private long numberOfAccountsOpened = 0;
 
-	public Bank(IRepository repository, BankView bankView) {
+	public Bank(IRepository<Client> repository, BankView bankView) {
 		this.repository = repository;
 		this.bankView = bankView;
 	}
