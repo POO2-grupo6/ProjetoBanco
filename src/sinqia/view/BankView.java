@@ -7,6 +7,7 @@ import sinqia.exceptions.InvalidAmountException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -176,7 +177,14 @@ public class BankView {
 	}
 
 	public int getOptionFromUser() {
-		return Integer.parseInt(scanner.nextLine());
+		int selectedOption = 0;
+		try {
+			selectedOption = Integer.parseInt(scanner.nextLine());
+		} 
+			catch (InputMismatchException | NumberFormatException e) {
+			showInvalidInputForAccountMessage();
+		}	
+		return selectedOption;
 	}
 
 	public void showCheckingAccountMenuWithSavingsAccount(String name) throws InterruptedException {
